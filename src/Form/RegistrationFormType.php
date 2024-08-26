@@ -43,7 +43,6 @@ class RegistrationFormType extends AbstractType
             ->add('nom')
             ->add('prenom')
             ->add('telephone')
-            ->add('noParticipant')
             ->add('administrateur')
             ->add('actif')
             ->add('submit', SubmitType::class, [
