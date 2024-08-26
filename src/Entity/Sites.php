@@ -11,7 +11,7 @@ class Sites
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $noSite = null;
+    private ?int $id = null;
 
 
     #[ORM\Column(length: 30)]
@@ -19,9 +19,9 @@ class Sites
 
 
 
-    public function getNoSite(): ?int
+    public function getId(): ?int
     {
-        return $this->noSite;
+        return $this->id;
     }
 
 

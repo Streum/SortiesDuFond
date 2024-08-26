@@ -17,12 +17,12 @@ class Inscriptions
 
     #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: Participant::class, inversedBy: 'inscriptions')]
-    #[ORM\JoinColumn(referencedColumnName: 'no_participant', nullable: false)]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Participant $noParticipant = null;
 
     #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: Sorties::class, inversedBy: 'inscriptions')]
-    #[ORM\JoinColumn(referencedColumnName: 'no_sortie', nullable: false)]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Sorties $noSortie = null;
 
 

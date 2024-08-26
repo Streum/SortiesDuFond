@@ -19,7 +19,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $noParticipant = null;
+    private ?int $id = null;
 
     #[ORM\Column(length: 180)]
     private ?string $email = null;
@@ -58,13 +58,13 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Inscriptions>
      */
-    #[ORM\OneToMany(targetEntity: Inscriptions::class, mappedBy: 'noParticipant')]
+    #[ORM\OneToMany(targetEntity: Inscriptions::class, mappedBy: 'id')]
     private Collection $inscriptions;
 
     /**
      * @var Collection<int, Sorties>
      */
-    #[ORM\OneToMany(targetEntity: Sorties::class, mappedBy: 'noParticipant')]
+    #[ORM\OneToMany(targetEntity: Sorties::class, mappedBy: 'id')]
     private Collection $sorties;
 
     public function __construct()
@@ -74,9 +74,9 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
 
-    public function getNoParticipant(): ?int
+    public function getId(): ?int
     {
-        return $this->noParticipant;
+        return $this->id;
     }
 
 

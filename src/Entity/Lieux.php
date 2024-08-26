@@ -13,7 +13,7 @@ class Lieux
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $noLieu = null;
+    private ?int $id = null;
 
     #[ORM\Column(length: 30)]
     private ?string $nomLieu = null;
@@ -27,17 +27,17 @@ class Lieux
     #[ORM\Column(nullable: true)]
     private ?float $longitude = null;
 
-    #[ORM\ManyToOne(inversedBy: 'noLieux')]
-    #[ORM\JoinColumn(referencedColumnName: 'no_ville', nullable: false)]
+    #[ORM\ManyToOne(inversedBy: 'id')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Villes $noVille = null;
 
 
 
 
 
-    public function getNoLieu(): ?int
+    public function getId(): ?int
     {
-        return $this->noLieu;
+        return $this->id;
     }
 
 

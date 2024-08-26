@@ -14,7 +14,7 @@ class Sorties
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $noSortie = null;
+    private ?int $id = null;
 
 
     #[ORM\Column(length: 30)]
@@ -46,19 +46,19 @@ class Sorties
     /**
      * @var Collection<int, Inscriptions>
      */
-    #[ORM\OneToMany(targetEntity: Inscriptions::class, mappedBy: 'noSortie')]
+    #[ORM\OneToMany(targetEntity: Inscriptions::class, mappedBy: 'id')]
     private Collection $inscriptions;
 
     #[ORM\ManyToOne(inversedBy: 'sorties')]
-    #[ORM\JoinColumn(referencedColumnName: 'no_etat', nullable: false)]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Etats $noEtat = null;
 
     #[ORM\ManyToOne(inversedBy: 'sorties')]
-    #[ORM\JoinColumn(referencedColumnName: 'no_lieu', nullable: false)]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Lieux $noLieu = null;
 
     #[ORM\ManyToOne(inversedBy: 'sorties')]
-    #[ORM\JoinColumn(referencedColumnName: 'no_participant', nullable: false)]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Participant $noParticipant = null;
 
     public function __construct()
@@ -68,9 +68,9 @@ class Sorties
 
 
 
-    public function getNoSortie(): ?int
+    public function getId(): ?int
     {
-        return $this->noSortie;
+        return $this->id;
     }
 
     public function setNoSortie(int $noSortie): static
