@@ -13,9 +13,6 @@ class Lieux
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column]
     private ?int $noLieu = null;
 
     #[ORM\Column(length: 30)]
@@ -31,36 +28,19 @@ class Lieux
     private ?float $longitude = null;
 
     #[ORM\ManyToOne(inversedBy: 'noLieux')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(referencedColumnName: 'no_ville', nullable: false)]
     private ?Villes $noVille = null;
 
-    /**
-     * @var Collection<int, Sorties>
-     */
-    #[ORM\OneToMany(targetEntity: Sorties::class, mappedBy: 'noLieu')]
-    private Collection $sorties;
 
-    public function __construct()
-    {
-        $this->sorties = new ArrayCollection();
-    }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+
 
     public function getNoLieu(): ?int
     {
         return $this->noLieu;
     }
 
-    public function setNoLieu(int $noLieu): static
-    {
-        $this->noLieu = $noLieu;
 
-        return $this;
-    }
 
     public function getNomLieu(): ?string
     {
@@ -122,33 +102,4 @@ class Lieux
         return $this;
     }
 
-    /**
-     * @return Collection<int, Sorties>
-     */
-    public function getSorties(): Collection
-    {
-        return $this->sorties;
-    }
-
-    public function addSorty(Sorties $sorty): static
-    {
-        if (!$this->sorties->contains($sorty)) {
-            $this->sorties->add($sorty);
-            $sorty->setNoLieu($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSorty(Sorties $sorty): static
-    {
-        if ($this->sorties->removeElement($sorty)) {
-            // set the owning side to null (unless already changed)
-            if ($sorty->getNoLieu() === $this) {
-                $sorty->setNoLieu(null);
-            }
-        }
-
-        return $this;
-    }
 }

@@ -14,10 +14,8 @@ class Sorties
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column]
     private ?int $noSortie = null;
+
 
     #[ORM\Column(length: 30)]
     private ?string $nom = null;
@@ -52,15 +50,15 @@ class Sorties
     private Collection $inscriptions;
 
     #[ORM\ManyToOne(inversedBy: 'sorties')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(referencedColumnName: 'no_etat', nullable: false)]
     private ?Etats $noEtat = null;
 
     #[ORM\ManyToOne(inversedBy: 'sorties')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(referencedColumnName: 'no_lieu', nullable: false)]
     private ?Lieux $noLieu = null;
 
     #[ORM\ManyToOne(inversedBy: 'sorties')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(referencedColumnName: 'no_participant', nullable: false)]
     private ?Participant $noParticipant = null;
 
     public function __construct()
@@ -68,10 +66,7 @@ class Sorties
         $this->inscriptions = new ArrayCollection();
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+
 
     public function getNoSortie(): ?int
     {
@@ -181,17 +176,6 @@ class Sorties
         return $this;
     }
 
-    public function getOrganisateur(): ?int
-    {
-        return $this->organisateur;
-    }
-
-    public function setOrganisateur(int $organisateur): static
-    {
-        $this->organisateur = $organisateur;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Inscriptions>

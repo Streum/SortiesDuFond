@@ -3,42 +3,31 @@
 namespace App\Entity;
 
 use App\Repository\InscriptionsRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: InscriptionsRepository::class)]
 class Inscriptions
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateInscription = null;
 
-    /**
-     * @var Collection<int, Participant>
-     */
-    #[ORM\ManyToOne(inversedBy: 'inscriptions')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Participant $noParticipant;
 
-    #[ORM\ManyToOne(inversedBy: 'inscriptions')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\Id]
+    #[ORM\ManyToOne(targetEntity: Participant::class, inversedBy: 'inscriptions')]
+    #[ORM\JoinColumn(referencedColumnName: 'no_participant', nullable: false)]
+    private ?Participant $noParticipant = null;
+
+    #[ORM\Id]
+    #[ORM\ManyToOne(targetEntity: Sorties::class, inversedBy: 'inscriptions')]
+    #[ORM\JoinColumn(referencedColumnName: 'no_sortie', nullable: false)]
     private ?Sorties $noSortie = null;
 
-    public function __construct()
-    {
-        $this->noParticipant = new ArrayCollection();
-    }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+
+
 
     public function getDateInscription(): ?\DateTimeInterface
     {
@@ -52,29 +41,19 @@ class Inscriptions
         return $this;
     }
 
-    /**
-     * @return Collection<int, Participant>
-     */
-    public function getNoParticipant(): Collection
+    public function getNoParticipant(): ?Participant
     {
         return $this->noParticipant;
     }
 
-    public function addNoParticipant(Participant $noParticipant): static
+    public function setNoParticipant(?Participant $noParticipant): static
     {
-        if (!$this->noParticipant->contains($noParticipant)) {
-            $this->noParticipant->add($noParticipant);
-        }
+        $this->noParticipant = $noParticipant;
 
         return $this;
     }
 
-    public function removeNoParticipant(Participant $noParticipant): static
-    {
-        $this->noParticipant->removeElement($noParticipant);
 
-        return $this;
-    }
 
     public function getNoSortie(): ?Sorties
     {
