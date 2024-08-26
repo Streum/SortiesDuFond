@@ -22,8 +22,9 @@ class Inscriptions
     /**
      * @var Collection<int, Participant>
      */
-    #[ORM\OneToMany(targetEntity: Participant::class, mappedBy: 'inscriptions')]
-    private Collection $noParticipant;
+    #[ORM\ManyToOne(inversedBy: 'inscriptions')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Participant $noParticipant;
 
     #[ORM\ManyToOne(inversedBy: 'inscriptions')]
     #[ORM\JoinColumn(nullable: false)]
