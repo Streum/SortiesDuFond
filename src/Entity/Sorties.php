@@ -43,8 +43,7 @@ class Sorties
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $urlPhoto = null;
 
-    #[ORM\Column]
-    private ?int $organisateur = null;
+
 
     /**
      * @var Collection<int, Inscriptions>
