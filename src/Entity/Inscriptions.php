@@ -9,11 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: InscriptionsRepository::class)]
 class Inscriptions
 {
-
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateInscription = null;
-
 
     #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: Participant::class, inversedBy: 'inscriptions')]
@@ -24,10 +21,6 @@ class Inscriptions
     #[ORM\ManyToOne(targetEntity: Sorties::class, inversedBy: 'inscriptions')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Sorties $noSortie = null;
-
-
-
-
 
     public function getDateInscription(): ?\DateTimeInterface
     {
@@ -52,8 +45,6 @@ class Inscriptions
 
         return $this;
     }
-
-
 
     public function getNoSortie(): ?Sorties
     {

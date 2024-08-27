@@ -57,7 +57,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Inscriptions>
      */
-    #[ORM\OneToMany(mappedBy: 'participant', targetEntity: Inscriptions::class)]
+    #[ORM\OneToMany(mappedBy: 'noParticipant', targetEntity: Inscriptions::class)]
     private Collection $inscriptions;
 
     /**

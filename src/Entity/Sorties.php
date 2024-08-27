@@ -16,7 +16,6 @@ class Sorties
     #[ORM\Column]
     private ?int $id = null;
 
-
     #[ORM\Column(length: 30)]
     private ?string $nom = null;
 
@@ -38,12 +37,10 @@ class Sorties
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $urlPhoto = null;
 
-
-
     /**
      * @var Collection<int, Inscriptions>
      */
-    #[ORM\OneToMany(targetEntity: Inscriptions::class, mappedBy: 'id')]
+    #[ORM\OneToMany(mappedBy: 'noSortie', targetEntity: Inscriptions::class)]
     private Collection $inscriptions;
 
     #[ORM\ManyToOne(inversedBy: 'sorties')]
@@ -63,18 +60,9 @@ class Sorties
         $this->inscriptions = new ArrayCollection();
     }
 
-
-
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function setNoSortie(int $noSortie): static
-    {
-        $this->noSortie = $noSortie;
-
-        return $this;
     }
 
     public function getNom(): ?string
@@ -149,18 +137,6 @@ class Sorties
         return $this;
     }
 
-    public function getEtatSortie(): ?int
-    {
-        return $this->etatSortie;
-    }
-
-    public function setEtatSortie(?int $etatSortie): static
-    {
-        $this->etatSortie = $etatSortie;
-
-        return $this;
-    }
-
     public function getUrlPhoto(): ?string
     {
         return $this->urlPhoto;
@@ -172,7 +148,6 @@ class Sorties
 
         return $this;
     }
-
 
     /**
      * @return Collection<int, Inscriptions>
