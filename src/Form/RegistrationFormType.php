@@ -3,7 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Participant;
-use Doctrine\DBAL\Types\StringType;
+use App\Entity\Sites;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -43,7 +44,7 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('pseudo', PasswordType::class, [
+            ->add('pseudo', TextType::class, [
                 'attr' => ['class' => 'form-control']
             ])
             ->add('nom', TextType::class, [
@@ -54,6 +55,10 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('telephone', TextType::class, [
                 'attr' => ['class' => 'form-control']
+            ])
+            ->add('site', EntityType::class, [
+                'class' => Sites::class,
+                'choice_label' => 'nomSite',
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Enregistrer',
