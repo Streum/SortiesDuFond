@@ -2,6 +2,16 @@ body {
     background-color: #bfd1ec;
 }
 
+
+.example-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1em auto;
+    max-width: 800px;
+    font: 18px/1.5 sans-serif;
+}
+
 .container_filtre {
     display: flex;
     justify-content: space-around;
