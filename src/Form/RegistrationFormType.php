@@ -55,7 +55,6 @@ class RegistrationFormType extends AbstractType
             ->add('telephone', TextType::class, [
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('actif')
             ->add('submit', SubmitType::class, [
                 'label' => 'Enregistrer',
             ])
