@@ -24,7 +24,6 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
-
     #[ORM\Column(length: 30)]
     private ?string $pseudo = null;
 
@@ -37,11 +36,11 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 15, nullable: true)]
     private ?string $telephone = null;
 
-    #[ORM\Column(type: Types::BINARY)]
-    private $administrateur;
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private bool $administrateur = false;
 
-    #[ORM\Column(type: Types::BINARY)]
-    private $actif;
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private bool $actif = false;
 
     /**
      * @var list<string> The user roles
@@ -58,13 +57,13 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Inscriptions>
      */
-    #[ORM\OneToMany(targetEntity: Inscriptions::class, mappedBy: 'id')]
+    #[ORM\OneToMany(mappedBy: 'participant', targetEntity: Inscriptions::class)]
     private Collection $inscriptions;
 
     /**
      * @var Collection<int, Sorties>
      */
-    #[ORM\OneToMany(targetEntity: Sorties::class, mappedBy: 'id')]
+    #[ORM\OneToMany(mappedBy: 'participant', targetEntity: Sorties::class)]
     private Collection $sorties;
 
     public function __construct()
@@ -73,13 +72,10 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
         $this->sorties = new ArrayCollection();
     }
 
-
     public function getId(): ?int
     {
         return $this->id;
     }
-
-
 
     public function getPseudo(): ?string
     {
@@ -129,31 +125,25 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getAdministrateur()
-    {
-        return $this->administrateur;
-    }
-
-    public function setAdministrateur($administrateur): static
-    {
-        $this->administrateur = $administrateur;
-
-        return $this;
-    }
-
-    public function getActif()
+    public function isActif(): bool
     {
         return $this->actif;
     }
 
-    public function setActif($actif): static
+    public function setActif(bool $actif): void
     {
         $this->actif = $actif;
-
-        return $this;
     }
 
+    public function isAdministrateur(): bool
+    {
+        return $this->administrateur;
+    }
 
+    public function setAdministrateur(bool $administrateur): void
+    {
+        $this->administrateur = $administrateur;
+    }
 
     public function getEmail(): ?string
     {
@@ -237,7 +227,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->inscriptions->contains($inscription)) {
             $this->inscriptions->add($inscription);
-            $inscription->addNoParticipant($this);
+            $inscription->setParticipant($this);
         }
 
         return $this;
@@ -246,7 +236,10 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeInscription(Inscriptions $inscription): static
     {
         if ($this->inscriptions->removeElement($inscription)) {
-            $inscription->removeNoParticipant($this);
+            // set the owning side to null (unless already changed)
+            if ($inscription->getParticipant() === $this) {
+                $inscription->setParticipant(null);
+            }
         }
 
         return $this;
@@ -260,22 +253,22 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->sorties;
     }
 
-    public function addSorty(Sorties $sorty): static
+    public function addSortie(Sorties $sortie): static
     {
-        if (!$this->sorties->contains($sorty)) {
-            $this->sorties->add($sorty);
-            $sorty->setNoParticipant($this);
+        if (!$this->sorties->contains($sortie)) {
+            $this->sorties->add($sortie);
+            $sortie->setParticipant($this);
         }
 
         return $this;
     }
 
-    public function removeSorty(Sorties $sorty): static
+    public function removeSortie(Sorties $sortie): static
     {
-        if ($this->sorties->removeElement($sorty)) {
+        if ($this->sorties->removeElement($sortie)) {
             // set the owning side to null (unless already changed)
-            if ($sorty->getNoParticipant() === $this) {
-                $sorty->setNoParticipant(null);
+            if ($sortie->getParticipant() === $this) {
+                $sortie->setParticipant(null);
             }
         }
 

@@ -35,9 +35,6 @@ class Sorties
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $descriptionInfos = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $etatSortie = null;
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $urlPhoto = null;
 
