@@ -43,23 +43,6 @@
                 </div>
             </nav>
         {% endblock %}
-        {% block body %}
-            <div class="filtrer_les_sorties">
-                <p>Site :</p>
-                <select name="Villes">
-                    <option value="rien" selected="true">Sélectionnez votre ville</option>
-                    <option value="saint_herblain">Saint Herblain</option>
-                    <option value="Nantes">Nantes</option>
-                </select>
-
-                <p>Le nom de la sortie contient :</p>
-                <input type="search" id="site_search" />
-
-                <p>Entre </p>
-                <input type="date" id="start" name="trip-start" value="2018-07-22" min="2018-01-01" max="2018-12-31" />
-                <p>et </p>
-                <input type="date" id="start" name="trip-start" value="2018-07-22" min="2018-01-01" max="2018-12-31" />
-            </div>
-        {% endblock %}
+        {% block body %}{% endblock %}
     </body>
 </html>

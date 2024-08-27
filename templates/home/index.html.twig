@@ -12,4 +12,98 @@
     <h1>Sorties du fond</h1>
     <img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExeDdlNnMyZ3VrOXd4dnlsNWRwNzJwbmdoeDIwNjF1dWRzaDR0ajFhbyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/kwCJA19mepUJSbAebj/giphy.webp" alt="">
 </div>
+
+        <div class="container_filtre">
+            <div class="filtrer_les_sorties">
+                <p>Site :</p>
+                <select name="Villes">
+                    <option value="rien" selected="true">Sélectionnez votre ville</option>
+                    <option value="rennes">Rennes</option>
+                    <option value="nantes">Nantes</option>
+                    <option value="niort">Niort</option>
+                    <option value="quimper">Quimper</option>
+                </select>
+
+                <p>Le nom de la sortie contient : <input type="search" id="site_search" /></p>
+
+            </div>
+
+            <div>
+                <p>Entre {{ "now"|date("d/m/Y") }}</p>
+                <input type="date" id="start" name="trip-start" min="2024-01-01" max="2024-12-31" />
+                <p>et </p>
+                <input type="date" id="start" name="trip-start" min="2024-01-01" max="2024-12-31" />
+            </div>
+            <div class="btn_check">
+                <fieldset>
+                    <legend>Sur quelle sortie souhaites tu faire ta recherche :</legend>
+
+                    <div>
+                        <input type="checkbox" id="organisateur" name="organisateur" checked />
+                        <label for="organisateur">Sorties dont je suis l'organisateur/trice.</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="inscrit" name="inscrit" />
+                        <label for="inscrit">Sortie auquelles je suis inscrit/e.</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="non_inscrit" name="non_inscrit" />
+                        <label for="non_inscrit">Sortie auquelles je ne suis pas inscrit/e.</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="passe" name="passe" />
+                        <label for="passe">Sortie passées.</label>
+                    </div>
+                </fieldset>
+            </div>
+            <div>
+                <input class="bouton" type="button" value="Rechercher" />
+            </div>
+
+        </div>
+
+    <h1>Sorties index</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Date Debut</th>
+            <th>Date Fin</th>
+            <th>Durée</th>
+            <th>NbInscriptionsMax</th>
+            <th>DescriptionInfos</th>
+            <th>EtatSortie</th>
+            <th>UrlPhoto</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for sortie in sorties %}
+            <tr>
+                <td>{{ sortie.nom }}</td>
+                <td>{{ sortie.dateDebut ? sortie.dateDebut|date('d-m-Y H:i') : '' }}</td>
+                <td>{{ sortie.dateCloture ? sortie.dateCloture|date('d-m-Y H:i') : '' }}</td>
+                <td>{{ sortie.duree }}</td>
+                <td>{{ sortie.nbInscriptionsMax }}</td>
+                <td>{{ sortie.descriptionInfos }}</td>
+                <td>{{ sortie.noEtat.libelle }}</td>
+                <td>{{ sortie.urlPhoto }}</td>
+                <td>
+                    <a href="{{ path('app_sorties_show', {'id': sortie.id}) }}">show</a>
+                    <a href="{{ path('app_sorties_edit', {'id': sortie.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="10">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+     <a href="{{ path('app_sorties_new') }}"><input class="bouton" type="button" value="Create new"></a>
 {% endblock %}
