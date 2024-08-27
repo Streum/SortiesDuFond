@@ -68,6 +68,7 @@ class VillesFixtures extends Fixture implements FixtureGroupInterface
 (NULL, '2', 'Passage Pommeraye', 'Rue de la Fosse', '47.214', '-1.558'),
 (NULL, '2', 'Planète Sauvage', 'La Chevalerie', '47.176', '-1.733'),
 (NULL, '3', 'Aquarium de Niort', 'Avenue de la Rochelle', '46.313', '-0.461');
+    ***
      */
 
     /*
