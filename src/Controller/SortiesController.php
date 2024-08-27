@@ -11,10 +11,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/sorties')]
+#[Route('/sorties', name: 'app_sorties')]
 class SortiesController extends AbstractController
 {
-    #[Route('/', name: 'app_sorties_index', methods: ['GET'])]
+    #[Route('/', name: '_index', methods: ['GET'])]
     public function index(SortiesRepository $sortiesRepository): Response
     {
         return $this->render('sorties/index.html.twig', [
@@ -22,7 +22,7 @@ class SortiesController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_sorties_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: '_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $sortie = new Sorties();
@@ -42,7 +42,7 @@ class SortiesController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_sorties_show', methods: ['GET'])]
+    #[Route('/{id}', name: '_show', methods: ['GET'])]
     public function show(Sorties $sortie): Response
     {
         return $this->render('sorties/show.html.twig', [
@@ -50,7 +50,7 @@ class SortiesController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_sorties_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: '_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Sorties $sortie, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(SortiesType::class, $sortie);
@@ -68,7 +68,7 @@ class SortiesController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_sorties_delete', methods: ['POST'])]
+    #[Route('/{id}', name: '_delete', methods: ['POST'])]
     public function delete(Request $request, Sorties $sortie, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$sortie->getId(), $request->getPayload()->getString('_token'))) {
