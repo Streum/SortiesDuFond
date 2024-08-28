@@ -2,11 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Inscriptions;
+use App\Entity\Participant;
 use App\Entity\Sorties;
 use App\Form\SortiesType;
 use App\Repository\SortiesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -14,6 +17,11 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/sorties', name: 'app_sorties')]
 class SortiesController extends AbstractController
 {
+
+    public function __construct(private Security $security, private SortiesRepository $sortiesRepository)
+    {
+    }
+
     #[Route('/', name: '_index', methods: ['GET'])]
     public function index(SortiesRepository $sortiesRepository): Response
     {
@@ -30,6 +38,10 @@ class SortiesController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user = $this->security->getUser();
+
+            $sortie->setNoParticipant($user);
+
             $entityManager->persist($sortie);
             $entityManager->flush();
 
@@ -78,4 +90,47 @@ class SortiesController extends AbstractController
 
         return $this->redirectToRoute('app_sorties_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/{id}/inscription', name: '_inscription', methods: ['GET', 'POST'])]
+    public function registration(Request $request, EntityManagerInterface $entityManager, $id): Response
+    {
+        $inscription = new Inscriptions();
+        $now = new \DateTime();
+        $user = $this->getUser();
+
+        if (!$user instanceof Participant) {
+            throw $this->createAccessDeniedException('Vous devez être connecté pour vous inscrire.');
+        }
+
+        $sortie = $this->sortiesRepository->findOneBySomeField($id);
+
+        if (!$sortie) {
+            throw $this->createNotFoundException('La sortie n\'existe pas.');
+        }
+
+        $inscriptionExistante = $entityManager->getRepository(Inscriptions::class)->findOneBy([
+            'noParticipant' => $user,
+            'noSortie' => $sortie,
+        ]);
+
+        if ($inscriptionExistante) {
+            $this->addFlash('warning', 'Vous êtes déjà inscrit à cette sortie.');
+            return $this->redirectToRoute('app_sortie_show', ['id' => $id]);
+        }
+
+        if ($user && $sortie){
+            $inscription->setNoParticipant($user);
+            $inscription->setDateInscription($now);
+            $inscription->setNoSortie($sortie);
+            $entityManager->persist($inscription);
+            $entityManager->flush();
+        } else {
+            throw $this->createNotFoundException('Sortie inexistante');
+        }
+
+        $this->addFlash('success', 'Vous êtes inscrit à la sortie.');
+
+        return $this->redirectToRoute('app_sorties_index', [], Response::HTTP_SEE_OTHER);
+    }
+
 }

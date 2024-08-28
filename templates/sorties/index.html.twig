@@ -4,7 +4,6 @@
 
 {% block body %}
     <h1>Liste des sorties</h1>
-
     <table class="table">
         <thead>
             <tr>
@@ -14,7 +13,7 @@
                 <th>Durée</th>
                 <th>Inscriptions Max</th>
                 <th>Description</th>
-                <th>État</th>
+                <th>Organisateur</th>
                 <th>Photo</th>
                 <th>Actions</th>
             </tr>
@@ -28,7 +27,7 @@
                 <td>{{ sortie.duree }}</td>
                 <td>{{ sortie.nbInscriptionsMax }}</td>
                 <td>{{ sortie.descriptionInfos }}</td>
-                <td>{{ sortie.noEtat.libelle }}</td>
+                <td>{{ sortie.noParticipant.pseudo }}</td>
                 <td>{{ sortie.urlPhoto }}</td>
                 <td>
                     <a href="{{ path('app_sorties_show', {'id': sortie.id}) }}" class="btn btn-primary">Détails</a>
