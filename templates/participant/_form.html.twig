@@ -1,4 +1,19 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
+
+    {{ form_start(form) }}
+    {{ form_row(form.pseudo) }}
+    {{ form_row(form.nom) }}
+    {{ form_row(form.prenom) }}
+    {{ form_row(form.telephone) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.plainPassword) }}
+    {{ form_row(form.site) }}
+    {% if is_granted('ROLE_ADMIN') %}
+        {{ form_row(form.actif) }}
+        {{ form_row(form.roles) }}
+        {{ form_row(form.sorties) }}
+        {{ form_row(form.inscriptions) }}
+    {% endif %}
+
     <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+    {{ form_end(form, {'render_rest': false}) }}
+
