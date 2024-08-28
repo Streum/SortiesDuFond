@@ -84,4 +84,17 @@ class VillesFixtures extends Fixture implements FixtureGroupInterface
 (NULL, '1', '11', '1', 'Les Machines de l’île en action', '2024-09-09 10:30:00', '2024-09-09 12:30:00', '120', '30', 'Voir les éléphants géants et les machines fantastiques en action.', '/images/machines.jpg'),
 (NULL, '1', '12', '1', 'Balade sur l’Île de Versailles', '2024-09-10 11:00:00', '2024-09-10 13:00:00', '120', '25', 'Une balade tranquille sur l’Île de Versailles à Nantes.', '/images/versailles.jpg');
      */
+    /*
+ *
+ *
+INSERT INTO `etats` (`id`, `libelle`) VALUES
+(1, 'Créée'),
+(2, 'Ouverte'),
+(3, 'Cloturée'),
+(4, 'Activité en cours'),
+(5, 'passée'),
+(6, 'Annulée');
+ *
+ *INSERT INTO `sites` (`id`, `nom_site`) VALUES (NULL, 'Rennes'), (NULL, 'Nantes'), (NULL, 'Niort'), (NULL, 'Quimper');
+ */
 }
