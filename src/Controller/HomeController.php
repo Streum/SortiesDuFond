@@ -15,5 +15,9 @@ class HomeController extends AbstractController
         return $this->render('home/index.html.twig', [
             'sorties' => $sortiesRepository->findAll(),
         ]);
+    }#[Route('/administration', name: 'app_admin')]
+    public function administration(): Response
+    {
+        return $this->render('participant/admin.html.twig');
     }
 }
