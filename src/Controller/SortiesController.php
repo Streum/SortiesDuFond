@@ -7,6 +7,7 @@ use App\Form\SortiesType;
 use App\Repository\SortiesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -14,6 +15,11 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/sorties', name: 'app_sorties')]
 class SortiesController extends AbstractController
 {
+
+    public function __construct(private Security $security)
+    {
+    }
+
     #[Route('/', name: '_index', methods: ['GET'])]
     public function index(SortiesRepository $sortiesRepository): Response
     {
@@ -30,6 +36,10 @@ class SortiesController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user = $this->security->getUser();
+
+            $sortie->setNoParticipant($user);
+
             $entityManager->persist($sortie);
             $entityManager->flush();
 
