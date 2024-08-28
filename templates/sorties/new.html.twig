@@ -3,9 +3,27 @@
 {% block title %}New Sorties{% endblock %}
 
 {% block body %}
-    <h1>Create new Sorties</h1>
+    <h1 class="d-flex justify-content-center">Créer une sortie</h1>
 
-    {{ include('sorties/_form.html.twig') }}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                {{ form_start(form) }}
 
-    <a href="{{ path('app_sorties_index') }}" class="btn btn-primary">back to list</a>
+                {{ form_row(form.nom) }}
+                {{ form_row(form.dateDebut) }}
+                {{ form_row(form.dateCloture) }}
+                {{ form_row(form.duree) }}
+                {{ form_row(form.nbInscriptionsMax) }}
+                {{ form_row(form.descriptionInfos) }}
+                {{ form_row(form.urlPhoto) }}
+                {{ form_row(form.noLieu) }}
+                <div class="d-flex justify-content-center">
+                    {{ form_widget(form.submit) }}
+                    <a class="btn btn-primary ms-2" href="{{ path('app_sorties_index') }}">Liste des sorties</a>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}

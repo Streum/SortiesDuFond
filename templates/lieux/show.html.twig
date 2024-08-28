@@ -3,36 +3,38 @@
 {% block title %}Lieux{% endblock %}
 
 {% block body %}
-    <h1>Lieux</h1>
+    <h1 class="d-flex justify-content-center">Lieu</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ lieux.id }}</td>
-            </tr>
-            <tr>
-                <th>NomLieu</th>
-                <td>{{ lieux.nomLieu }}</td>
-            </tr>
-            <tr>
-                <th>Rue</th>
-                <td>{{ lieux.rue }}</td>
-            </tr>
-            <tr>
-                <th>Latitude</th>
-                <td>{{ lieux.latitude }}</td>
-            </tr>
-            <tr>
-                <th>Longitude</th>
-                <td>{{ lieux.longitude }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-3">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <th>Nom du lieu</th>
+                        <td>{{ lieux.nomLieu }}</td>
+                    </tr>
+                    <tr>
+                        <th>Rue</th>
+                        <td>{{ lieux.rue }}</td>
+                    </tr>
+                    <tr>
+                        <th>Latitude</th>
+                        <td>{{ lieux.latitude }}</td>
+                    </tr>
+                    <tr>
+                        <th>Longitude</th>
+                        <td>{{ lieux.longitude }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-    <a href="{{ path('app_lieux_index') }}">back to list</a>
+<div class="d-flex justify-content-center">
+    <a class="btn btn-primary ms-2" href="{{ path('app_lieux_index') }}">Liste des lieux</a>
+    <a class="btn btn-primary ms-2" href="{{ path('app_lieux_edit', {'id': lieux.id}) }}">Modifier</a>
+</div>
 
-    <a href="{{ path('app_lieux_edit', {'id': lieux.id}) }}">edit</a>
-
-    {{ include('lieux/_delete_form.html.twig') }}
 {% endblock %}

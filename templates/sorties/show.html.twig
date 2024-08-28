@@ -3,52 +3,55 @@
 {% block title %}Sorties{% endblock %}
 
 {% block body %}
-    <h1>Sorties</h1>
+    <h1 class="d-flex justify-content-center">Sorties</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Nom</th>
-                <td>{{ sortie.nom }}</td>
-            </tr>
-            <tr>
-                <th>Date de Début</th>
-                <td>{{ sortie.dateDebut ? sortie.dateDebut|date('d-m-Y H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Date de Clôture</th>
-                <td>{{ sortie.dateCloture ? sortie.dateCloture|date('d-m-Y H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Durée</th>
-                <td>{{ sortie.duree }}</td>
-            </tr>
-            <tr>
-                <th>Inscriptions Max</th>
-                <td>{{ sortie.nbInscriptionsMax }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ sortie.descriptionInfos }}</td>
-            </tr>
-            <tr>
-                <th>État de la Sortie</th>
-                <td>{{ sortie.noEtat.libelle }}</td>
-            </tr>
-            <tr>
-                <th>Photo</th>
-                <td>{{ sortie.urlPhoto }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <th>Nom</th>
+                        <td>{{ sortie.nom }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date de Début</th>
+                        <td>{{ sortie.dateDebut ? sortie.dateDebut|date('d-m-Y H:i:s') : '' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date de Clôture</th>
+                        <td>{{ sortie.dateCloture ? sortie.dateCloture|date('d-m-Y H:i:s') : '' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Durée</th>
+                        <td>{{ sortie.duree }}</td>
+                    </tr>
+                    <tr>
+                        <th>Inscriptions Max</th>
+                        <td>{{ sortie.nbInscriptionsMax }}</td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td>{{ sortie.descriptionInfos }}</td>
+                    </tr>
+                    <tr>
+                        <th>État de la Sortie</th>
+                        <td>{{ sortie.noEtat.libelle }}</td>
+                    </tr>
+                    <tr>
+                        <th>Photo</th>
+                        <td>{{ sortie.urlPhoto }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-    <a href="{{ path('app_sorties_index') }}" class="btn btn-primary">Retour à la liste</a>
-
-    <a href="{{ path('app_sorties_edit', {'id': sortie.id}) }}" class="btn btn-primary">Modifier</a>
-
-    <a href="{{ path('app_sorties_inscription', {'id': sortie.id}) }}" class="btn btn-primary">S'inscrire</a>
-
-    <a href="#" class="btn btn-primary">Se désinscrire</a>
-
-    {{ include('sorties/_delete_form.html.twig') }}
+<div class="d-flex justify-content-center">
+    <a href="{{ path('app_sorties_index') }}" class="btn btn-primary ms-2">Liste des sorties</a>
+    <a href="{{ path('app_sorties_edit', {'id': sortie.id}) }}" class="btn btn-success ms-2">Modifier</a>
+    <a href="{{ path('app_sorties_inscription', {'id': sortie.id}) }}" class="btn btn-primary ms-2">S'inscrire</a>
+    <a href="#" class="btn btn-primary ms-2">Se désinscrire</a>
+</div>
 {% endblock %}

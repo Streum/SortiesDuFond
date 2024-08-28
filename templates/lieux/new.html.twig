@@ -3,9 +3,25 @@
 {% block title %}New Lieux{% endblock %}
 
 {% block body %}
-    <h1>Create new Lieux</h1>
+    <h1 class="d-flex justify-content-center">Créer un lieu</h1>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                {{ form_start(form) }}
+                {{ form_row(form.nomLieu) }}
+                <div class="row">
+                    <div class="col">{{ form_row(form.latitude) }}</div>
+                    <div class="col">{{ form_row(form.longitude) }}</div>
+                </div>
+                {{ form_row(form.rue) }}
+                {{ form_row(form.noVille) }}
+                <div class="d-flex justify-content-center">
+                    <button class="btn btn-primary ms-2" href="{{ path('app_lieux_new') }}">Créer</button>
+                    <a class="btn btn-primary ms-2" href="{{ path('app_lieux_index') }}">Retour à la liste</a>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
 
-    {{ include('lieux/_form.html.twig') }}
-
-    <a href="{{ path('app_lieux_index') }}">back to list</a>
 {% endblock %}

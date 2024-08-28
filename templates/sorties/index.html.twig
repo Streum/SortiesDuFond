@@ -3,44 +3,52 @@
 {% block title %}Sorties index{% endblock %}
 
 {% block body %}
-    <h1>Liste des sorties</h1>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Nom</th>
-                <th>Date Début</th>
-                <th>Date Fin</th>
-                <th>Durée</th>
-                <th>Inscriptions Max</th>
-                <th>Description</th>
-                <th>Organisateur</th>
-                <th>Photo</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for sortie in sorties %}
-            <tr>
-                <td>{{ sortie.nom }}</td>
-                <td>{{ sortie.dateDebut ? sortie.dateDebut|date('d-m-Y H:i') : '' }}</td>
-                <td>{{ sortie.dateCloture ? sortie.dateCloture|date('d-m-Y H:i') : '' }}</td>
-                <td>{{ sortie.duree }}</td>
-                <td>{{ sortie.nbInscriptionsMax }}</td>
-                <td>{{ sortie.descriptionInfos }}</td>
-                <td>{{ sortie.noParticipant.pseudo }}</td>
-                <td>{{ sortie.urlPhoto }}</td>
-                <td>
-                    <a href="{{ path('app_sorties_show', {'id': sortie.id}) }}" class="btn btn-primary">Détails</a>
-                    <a href="{{ path('app_sorties_edit', {'id': sortie.id}) }}" class="btn btn-primary">Modifier</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="10">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <h1 class="d-flex justify-content-center">Liste des sorties</h1>
 
-    <a href="{{ path('app_sorties_new') }}" class="btn btn-primary">Nouvelle sortie</a>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Début</th>
+                        <th>Durée</th>
+                        <th>Inscriptions</th>
+                        <th>Description</th>
+                        <th>Organisateur</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for sortie in sorties %}
+                        <tr>
+                            <td>{{ sortie.nom }}</td>
+                            <td>{{ sortie.dateDebut ? sortie.dateDebut|date('d-m-Y H:i') : '' }}</td>
+                            <td>{{ sortie.duree }}</td>
+                            <td>??/{{ sortie.nbInscriptionsMax }}</td>
+                            <td>{{ sortie.descriptionInfos }}</td>
+                            <td>{{ sortie.noParticipant.pseudo }}</td>
+                            <td>
+                                <a href="{{ path('app_sorties_show', {'id': sortie.id}) }}" class="btn btn-primary">Détails</a>
+                            </td>
+                            <td>
+                                <a href="{{ path('app_sorties_edit', {'id': sortie.id}) }}" class="btn btn-primary">Modifier</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="10">no records found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center">
+        <a href="{{ path('app_sorties_new') }}" class="btn btn-primary">Nouvelle sortie</a>
+    </div>
 {% endblock %}
