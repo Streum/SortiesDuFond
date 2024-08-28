@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration{% endblock %}
+
+{% block body %}
+    <h1>Admin Dashboard</h1>
+
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>Gestion Utilisateurs</th>
+            <td> <a href="{{ path('app_participant_index') }}" class="btn btn-primary">Gérer</a></td>
+        </tr>
+        <tr>
+            <th>Gestion sorties</th>
+            <td> <a href="{{ path('app_sorties_index') }}" class="btn btn-primary">Gérer</a></td>
+        </tr>
+
+
+
+        </tbody>
+    </table>
+
+    {% endblock %}

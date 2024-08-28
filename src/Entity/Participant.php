@@ -42,7 +42,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     private bool $administrateur = false;
 
     #[ORM\Column(type: Types::BOOLEAN)]
-    private bool $actif = false;
+    private bool $actif = true;
 
     /**
      * @var list<string> The user roles
@@ -65,7 +65,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Sorties>
      */
-    #[ORM\OneToMany(mappedBy: 'participant', targetEntity: Sorties::class)]
+    #[ORM\OneToMany(mappedBy: 'noParticipant', targetEntity: Sorties::class)]
     private Collection $sorties;
 
     #[ORM\ManyToOne(inversedBy: 'noParticipant')]
@@ -233,7 +233,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->inscriptions->contains($inscription)) {
             $this->inscriptions->add($inscription);
-            $inscription->setParticipant($this);
+            $inscription->setNoParticipant($this);
         }
 
         return $this;
@@ -243,8 +243,8 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->inscriptions->removeElement($inscription)) {
             // set the owning side to null (unless already changed)
-            if ($inscription->getParticipant() === $this) {
-                $inscription->setParticipant(null);
+            if ($inscription->getNoParticipant() === $this) {
+                $inscription->setNoParticipant(null);
             }
         }
 
@@ -263,7 +263,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->sorties->contains($sortie)) {
             $this->sorties->add($sortie);
-            $sortie->setParticipant($this);
+            $sortie->setNoParticipant($this);
         }
 
         return $this;
@@ -273,8 +273,8 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->sorties->removeElement($sortie)) {
             // set the owning side to null (unless already changed)
-            if ($sortie->getParticipant() === $this) {
-                $sortie->setParticipant(null);
+            if ($sortie->getNoParticipant() === $this) {
+                $sortie->setNoParticipant(null);
             }
         }
 

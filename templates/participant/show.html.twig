@@ -7,30 +7,55 @@
 
     <table class="table">
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ participant.id }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ participant.email }}</td>
-            </tr>
-            <tr>
-                <th>Pseudo</th>
-                <td>{{ participant.pseudo }}</td>
-            </tr>
-            <tr>
-                <th>Nom</th>
-                <td>{{ participant.nom }}</td>
-            </tr>
-            <tr>
-                <th>Prenom</th>
-                <td>{{ participant.prenom }}</td>
-            </tr>
-            <tr>
-                <th>Telephone</th>
-                <td>{{ participant.telephone }}</td>
-            </tr>
+        <tr>
+            <th>Email</th>
+            <td>{{ participant.email }}</td>
+        </tr>
+        <tr>
+            <th>Pseudo</th>
+            <td>{{ participant.pseudo }}</td>
+        </tr>
+        <tr>
+            <th>Nom</th>
+            <td>{{ participant.nom }}</td>
+        </tr>
+        <tr>
+            <th>Prenom</th>
+            <td>{{ participant.prenom }}</td>
+        </tr>
+        <tr>
+            <th>Telephone</th>
+            <td>{{ participant.telephone }}</td>
+        </tr>
+        <tr>
+            <th>Sorties Organisées</th>
+            <td>
+                {% if participant.sorties|length > 0 %}
+                    <select class="form-select" >
+                        {% for sortie in participant.sorties %}
+                            <option>{{ sortie.nom }}</option>
+                        {% endfor %}
+                    </select>
+                {% else %}
+                    Aucune sortie associée
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Sorties auxquelles vous êtes inscrit</th>
+            <td>
+                {% if participant.inscriptions|length > 0 %}
+                    <select class="form-select" >
+                        {% for inscription in participant.inscriptions %}
+                            <option>{{ inscription.getNoSortie().nom }}</option>
+                        {% endfor %}
+                    </select>
+                {% else %}
+                    Aucune sortie associée
+                {% endif %}
+            </td>
+        </tr>
+        {% if is_granted('ROLE_ADMIN') %}
             <tr>
                 <th>Administrateur</th>
                 <td>{{ participant.administrateur ? 'Yes' : 'No' }}</td>
@@ -41,15 +66,13 @@
             </tr>
             <tr>
                 <th>Roles</th>
-                <td>{{ participant.roles ? participant.roles|json_encode : '' }}</td>
+                <td>{{ participant.roles|json_encode(constant('JSON_PRETTY_PRINT')) }}</td>
             </tr>
-
+        {% endif %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_participant_index') }}" class="btn btn-primary">back to list</a>
-
-    <a href="{{ path('app_participant_edit', {'id': participant.id}) }}" class="btn btn-primary">edit</a>
-
+    <a href="{{ path('app_participant_index') }}" class="btn btn-primary">Back to list</a>
+    <a href="{{ path('app_participant_edit', {'id': participant.id}) }}" class="btn btn-primary">Edit</a>
     {{ include('participant/_delete_form.html.twig') }}
 {% endblock %}
