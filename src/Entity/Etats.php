@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
+use App\EntityListener\EtatsListener;
 use App\Repository\EtatsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EtatsRepository::class)]
+#[ORM\EntityListeners([EtatsListener::class])]
 class Etats
 {
     #[ORM\Id]
