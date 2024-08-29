@@ -41,7 +41,7 @@ class SortiesController extends AbstractController
     }
 
     #[Route('/new', name: '_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, SortiesRepository $sortiesRepository): Response
     {
         $sortie = new Sorties();
         $form = $this->createForm(SortiesType::class, $sortie);
@@ -51,6 +51,8 @@ class SortiesController extends AbstractController
             $user = $this->security->getUser();
 
             $sortie->setNoParticipant($user);
+            $duree = $sortiesRepository->calculateDuration($sortie->getDateDebut(), $sortie->getDateCloture());
+            $sortie->setDuree($duree);
 
             $entityManager->persist($sortie);
             $entityManager->flush();

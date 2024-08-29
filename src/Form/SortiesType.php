@@ -31,9 +31,6 @@ class SortiesType extends AbstractType
                 'label' => 'Date de fin',
                 'widget' => 'single_text',
             ])
-            ->add('duree', IntegerType::class, [
-                'label' => 'Durée',
-            ])
             ->add('nbInscriptionsMax', IntegerType::class, [
                 'label' => 'Nombre d\'inscriptions',
             ])

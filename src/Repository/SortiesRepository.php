@@ -16,18 +16,6 @@ class SortiesRepository extends ServiceEntityRepository
         parent::__construct($registry, Sorties::class);
     }
 
-    public function updateStatus()
-    {
-        $now = new \DateTime();
-        $sorties = $this->findAll();
-
-        foreach ($sorties as $sortie) {
-            if ($now < $sortie->getDateDebut()){
-                
-            }
-        }
-
-    }
 
     //    /**
     //     * @return Sorties[] Returns an array of Sorties objects
@@ -44,13 +32,23 @@ class SortiesRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-        public function findOneBySomeField($value): ?Sorties
-        {
-            return $this->createQueryBuilder('s')
-                ->andWhere('s.id = :val')
-                ->setParameter('val', $value)
-                ->getQuery()
-                ->getOneOrNullResult()
-            ;
-        }
+    public function findOneBySomeField($value): ?Sorties
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.id = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function calculateDuration($dateDebut, $dateFin)
+    {
+        $duree = date_diff($dateDebut, $dateFin);
+
+        $minutes = $duree->days * 24 * 60;
+        $minutes += $duree->h * 60;
+        $minutes += $duree->i;
+
+        return $minutes;
+    }
 }
