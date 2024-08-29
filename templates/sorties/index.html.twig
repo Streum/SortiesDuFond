@@ -27,7 +27,7 @@
                             <td>{{ sortie.nom }}</td>
                             <td>{{ sortie.dateDebut ? sortie.dateDebut|date('d-m-Y H:i') : '' }}</td>
                             <td>{{ sortie.duree }}</td>
-                            <td>??/{{ sortie.nbInscriptionsMax }}</td>
+                            <td>{{ cpt[sortie.id] }}/{{ sortie.nbInscriptionsMax }}</td>
                             <td>{{ sortie.descriptionInfos }}</td>
                             <td>{{ sortie.noParticipant.pseudo }}</td>
                             <td>

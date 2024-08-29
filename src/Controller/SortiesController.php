@@ -6,6 +6,7 @@ use App\Entity\Inscriptions;
 use App\Entity\Participant;
 use App\Entity\Sorties;
 use App\Form\SortiesType;
+use App\Repository\InscriptionsRepository;
 use App\Repository\SortiesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,15 +19,24 @@ use Symfony\Component\Routing\Attribute\Route;
 class SortiesController extends AbstractController
 {
 
-    public function __construct(private Security $security, private SortiesRepository $sortiesRepository)
+    public function __construct(private Security $security, private SortiesRepository $sortiesRepository, private InscriptionsRepository $inscriptionsRepository)
     {
     }
 
     #[Route('/', name: '_index', methods: ['GET'])]
     public function index(SortiesRepository $sortiesRepository): Response
     {
+        $sorties = $sortiesRepository->findAll();
+        $cptBySortie = [];
+
+        foreach ($sorties as $sortie) {
+            $inscriptions = $sortie->getInscriptions();
+            $cptBySortie[$sortie->getId()] = count($inscriptions);
+        }
+
         return $this->render('sorties/index.html.twig', [
-            'sorties' => $sortiesRepository->findAll(),
+            'sorties' => $sorties,
+            'cpt' => $cptBySortie,
         ]);
     }
 
@@ -57,8 +67,12 @@ class SortiesController extends AbstractController
     #[Route('/{id}', name: '_show', methods: ['GET'])]
     public function show(Sorties $sortie): Response
     {
+        $inscriptions = $sortie->getInscriptions();
+        $cpt = $inscriptions->count();
         return $this->render('sorties/show.html.twig', [
             'sortie' => $sortie,
+            'inscriptions' => $inscriptions,
+            'cpt' => $cpt,
         ]);
     }
 
@@ -129,6 +143,44 @@ class SortiesController extends AbstractController
         }
 
         $this->addFlash('success', 'Vous êtes inscrit à la sortie.');
+
+        return $this->redirectToRoute('app_sorties_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/desinscription', name: '_desinscription', methods: ['GET','POST'])]
+    public function unregistration(Request $request, EntityManagerInterface $entityManager, $id): Response
+    {
+        $user = $this->getUser();
+
+        // Vérification si l'utilisateur est connecté et est un Participant
+        if (!$user instanceof Participant) {
+            throw $this->createAccessDeniedException('Vous devez être connecté pour vous désinscrire.');
+        }
+
+        // Récupération de la sortie via l'id
+        $sortie = $this->sortiesRepository->findOneBySomeField($id);
+
+        // Vérification si la sortie existe
+        if (!$sortie) {
+            throw $this->createNotFoundException('La sortie n\'existe pas.');
+        }
+
+        // Vérification de l'existence d'une inscription pour cet utilisateur et cette sortie
+        $inscriptionExistante = $entityManager->getRepository(Inscriptions::class)->findOneBy([
+            'noParticipant' => $user,
+            'noSortie' => $sortie,
+        ]);
+
+        if (!$inscriptionExistante) {
+            $this->addFlash('warning', 'Vous n\'êtes pas inscrit à cette sortie.');
+            return $this->redirectToRoute('app_sortie_show', ['id' => $id]);
+        }
+
+        // Suppression de l'inscription existante
+        $entityManager->remove($inscriptionExistante);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Vous avez été désinscrit de la sortie.');
 
         return $this->redirectToRoute('app_sorties_index', [], Response::HTTP_SEE_OTHER);
     }

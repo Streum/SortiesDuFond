@@ -27,8 +27,8 @@
                         <td>{{ sortie.duree }}</td>
                     </tr>
                     <tr>
-                        <th>Inscriptions Max</th>
-                        <td>{{ sortie.nbInscriptionsMax }}</td>
+                        <th>Nombre d'inscrits</th>
+                        <td>{{ cpt }}/{{ sortie.nbInscriptionsMax }}</td>
                     </tr>
                     <tr>
                         <th>Description</th>
@@ -42,16 +42,33 @@
                         <th>Photo</th>
                         <td>{{ sortie.urlPhoto }}</td>
                     </tr>
+                    <tr>
+                        <th>
+                            <label for="participant">Participants</label>
+                        </th>
+                        <td>
+                            {% if cpt > 0 %}
+                            <select name="participant" id="participant">
+                                {% for inscription in inscriptions %}
+                                    <option value="{{ inscription.noParticipant.id }}">{{ inscription.noParticipant.pseudo }}</option>
+                                {% endfor %}
+                            </select>
+                            {% else %}
+                            <p>Aucun participant</p>
+                            {% endif %}
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-<div class="d-flex justify-content-center">
-    <a href="{{ path('app_sorties_index') }}" class="btn btn-primary ms-2">Liste des sorties</a>
-    <a href="{{ path('app_sorties_edit', {'id': sortie.id}) }}" class="btn btn-success ms-2">Modifier</a>
-    <a href="{{ path('app_sorties_inscription', {'id': sortie.id}) }}" class="btn btn-primary ms-2">S'inscrire</a>
-    <a href="#" class="btn btn-primary ms-2">Se désinscrire</a>
-</div>
+    <div class="d-flex justify-content-center">
+        <a href="{{ path('app_sorties_index') }}" class="btn btn-primary ms-2">Liste des sorties</a>
+        <a href="{{ path('app_sorties_edit', {'id': sortie.id}) }}" class="btn btn-success ms-2">Modifier</a>
+        <a href="{{ path('app_sorties_inscription', {'id': sortie.id}) }}" class="btn btn-primary ms-2">S'inscrire</a>
+        <a href="{{ path('app_sorties_desinscription', {'id': sortie.id}) }}" class="btn btn-primary ms-2">Se
+            désinscrire</a>
+    </div>
 {% endblock %}
