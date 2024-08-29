@@ -71,8 +71,9 @@
         {% endif %}
         </tbody>
     </table>
-
+    {% if is_granted('ROLE_ADMIN') %}
     <a href="{{ path('app_participant_index') }}" class="btn btn-primary">Back to list</a>
-    <a href="{{ path('app_participant_edit', {'id': participant.id}) }}" class="btn btn-primary">Edit</a>
+    {% endif %}
+    <a href="{{ path('app_participant_edit_profil')}}" class="btn btn-primary">Edit</a>
     {{ include('participant/_delete_form.html.twig') }}
 {% endblock %}
