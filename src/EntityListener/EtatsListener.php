@@ -8,12 +8,11 @@ use App\Repository\SortiesRepository;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 class EtatsListener
 {
-    public function __construct(private readonly EtatsRepository $etatsRepository,
-                                private readonly SortiesRepository $sortiesRepository)
+    public function __construct(private readonly EtatsRepository $etatsRepository)
     {}
 
     public function defaultStatus(Sorties $sorties, LifecycleEventArgs $event){
-        $etat = $this->etatsRepository->findOneBySomeField(1);
+        $etat = $this->etatsRepository->findOneById(1);
         $sorties->setNoEtat($etat);
     }
 

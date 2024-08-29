@@ -6,6 +6,7 @@ use App\Entity\Inscriptions;
 use App\Entity\Participant;
 use App\Entity\Sorties;
 use App\Form\SortiesType;
+use App\Repository\EtatsRepository;
 use App\Repository\InscriptionsRepository;
 use App\Repository\SortiesRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,9 +20,9 @@ use Symfony\Component\Routing\Attribute\Route;
 class SortiesController extends AbstractController
 {
     public function __construct(
-        private Security $security,
-        private SortiesRepository $sortiesRepository,
-        private InscriptionsRepository $inscriptionsRepository
+        private readonly Security $security,
+        private readonly SortiesRepository $sortiesRepository,
+        private readonly EtatsRepository $etatsRepository,
     ) {}
 
     #[Route('/', name: '_index', methods: ['GET'])]
@@ -68,11 +69,12 @@ class SortiesController extends AbstractController
     }
 
     #[Route('/{id}', name: '_show', methods: ['GET'])]
-    public function show(Sorties $sortie, InscriptionsRepository $inscriptionsRepository): Response
+    public function show(Sorties $sortie, InscriptionsRepository $inscriptionsRepository, EtatsRepository $etatsRepository): Response
     {
         $user = $this->getUser(); // Utilisateur connecté
         $inscriptions = $sortie->getInscriptions(); // Toutes les inscriptions de la sortie
         $cpt = $inscriptions->count(); // Compteur d'inscriptions
+        $etat = $etatsRepository->updateEtats($sortie);
 
         // Vérifie si l'utilisateur est connecté et s'il est inscrit à la sortie
         $isInscrit = false;
@@ -90,6 +92,7 @@ class SortiesController extends AbstractController
             'inscriptions' => $inscriptions,
             'cpt' => $cpt,
             'isInscrit' => $isInscrit, // Passe la variable à la vue
+            'etat' => $etat,
         ]);
     }
 

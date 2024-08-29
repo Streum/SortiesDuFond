@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Etats;
+use App\Entity\Sorties;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -11,9 +13,39 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class EtatsRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $em)
     {
         parent::__construct($registry, Etats::class);
+        $this->em = $em;
+    }
+
+    public function updateEtats(Sorties $sorties){
+        $now = new \DateTime();
+
+        $etatCree = $this->findOneById(1);
+        $etatEnCours = $this->findOneById(4);
+        $etatPasse = $this->findOneById(5);
+
+        $newEtat = null;
+
+        if ($now < $sorties->getDateDebut()) {
+            $newEtat = $etatCree;
+        }
+
+        if ($now > $sorties->getDateDebut()){
+            $sorties->setNoEtat($etatEnCours);
+            $newEtat = $etatEnCours;
+        }
+
+        if($now > $sorties->getDateCloture()){
+            $sorties->setNoEtat($etatPasse);
+            $newEtat = $etatPasse;
+        }
+
+        $this->em->flush();
+
+        return $newEtat;
     }
 
     //    /**
@@ -31,7 +63,7 @@ class EtatsRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-        public function findOneBySomeField($value): ?Etats
+        public function findOneById($value): ?Etats
         {
             return $this->createQueryBuilder('e')
                 ->andWhere('e.id = :val')
