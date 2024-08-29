@@ -116,5 +116,11 @@ class ParticipantController extends AbstractController
         }
 
         return $this->redirectToRoute('app_participant_index', [], Response::HTTP_SEE_OTHER);
+    } #[Route('/administration/participant/actif/{id}', name: 'app_participant_actif', methods: ['POST', 'GET'])]
+    public function setActif(Request $request, Participant $participant, EntityManagerInterface $entityManager): Response
+    {
+            $participant->setActif(!$participant->isActif());
+            $entityManager->flush();
+        return $this->redirectToRoute('app_participant_index', [], Response::HTTP_SEE_OTHER);
     }
 }

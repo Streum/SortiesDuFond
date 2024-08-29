@@ -33,8 +33,15 @@
                 <td>{{ participant.actif ? 'Yes' : 'No' }}</td>
                 <td>{{ participant.roles ? participant.roles|json_encode : '' }}</td>
                 <td>
-                    <a href="{{ path('app_participant_show', {'id': participant.id}) }}" class="btn btn-primary">show</a>
-                    <a href="{{ path('app_participant_edit', {'id': participant.id}) }}" class="btn btn-primary">edit</a>
+                    <a href="{{ path('app_participant_show', {'id': participant.id}) }}" class="btn btn-primary">Details</a>
+                    <a href="{{ path('app_participant_edit', {'id': participant.id}) }}" class="btn btn-primary">Edit</a>
+                    {%  if participant.actif %}
+                        <a href="{{ path('app_participant_actif', {'id': participant.id}) }}" class="btn btn-warning">Désactiver</a>
+                        {% else %}
+                            <a href="{{ path('app_participant_actif', {'id': participant.id}) }}" class="btn btn-success">Activer</a>
+                    {% endif %}
+
+                    {{ include('participant/_delete_form.html.twig') }}
                 </td>
             </tr>
         {% else %}
