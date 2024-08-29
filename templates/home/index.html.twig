@@ -12,17 +12,15 @@
         <section class="filters">
             <div class="filter-group">
 
-            </div>
             <p>Choisir une ville</p>
                 <select>
+                    {% for ville in villes %}
+                        <option>{{ ville.nomVille }}</option>
 
-                {% for ville in villes %}
-                    <option>{{ ville.nomVille }}</option>
-
-                {% endfor %}
+                    {% endfor %}
                 </select>
-            <p>Le nom de la sortie contient : <input type="search" id="site_search" /></p>
 
+                <p>Le nom de la sortie contient : <input type="search" id="site_search" /></p>
 
                 <label for="site_search">Nom de la sortie contient :</label>
                 <input type="search" id="site_search" placeholder="Rechercher...">
@@ -31,31 +29,32 @@
                 <input type="date" id="start-date" name="start-date">
                 <label for="end-date">et</label>
                 <input type="date" id="end-date" name="end-date">
+
+
+                <fieldset class="checkbox-group">
+                    <legend>Filtrer par :</legend>
+                    <div>
+                        <input type="checkbox" id="organisateur" name="organisateur" checked>
+                        <label for="organisateur">Sorties dont je suis l'organisateur/trice</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="inscrit" name="inscrit">
+                        <label for="inscrit">Sorties auxquelles je suis inscrit/e</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="non_inscrit" name="non_inscrit">
+                        <label for="non_inscrit">Sorties auxquelles je ne suis pas inscrit/e</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="passe" name="passe">
+                        <label for="passe">Sorties passées</label>
+                    </div>
+                </fieldset>
+                <button class="btn btn-primary ms-2">Rechercher</button>
             </div>
-
-            <fieldset class="checkbox-group">
-                <legend>Filtrer par :</legend>
-                <div>
-                    <input type="checkbox" id="organisateur" name="organisateur" checked>
-                    <label for="organisateur">Sorties dont je suis l'organisateur/trice</label>
-                </div>
-
-                <div>
-                    <input type="checkbox" id="inscrit" name="inscrit">
-                    <label for="inscrit">Sorties auxquelles je suis inscrit/e</label>
-                </div>
-
-                <div>
-                    <input type="checkbox" id="non_inscrit" name="non_inscrit">
-                    <label for="non_inscrit">Sorties auxquelles je ne suis pas inscrit/e</label>
-                </div>
-
-                <div>
-                    <input type="checkbox" id="passe" name="passe">
-                    <label for="passe">Sorties passées</label>
-                </div>
-            </fieldset>
-            <button class="button">Rechercher</button>
         </section>
 
         <section class="sorties-list">

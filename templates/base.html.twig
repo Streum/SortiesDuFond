@@ -18,49 +18,53 @@
     </head>
     <body>
         {% block navbar %}
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <a class="navbar-brand" href="{{path('app_home')}}">Sortir.com</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ path('app_admin')}}">Administration</a>
-                            </li>
-                        {% endif %}
+            <nav class="navbar navbar-expand-lg bg-body-tertiary">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="{{path('app_home')}}">Sortir.com</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                        <div class="navbar-nav">
+                            <ul class="navbar-nav">
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ path('app_admin')}}">Administration</a>
+                                    </li>
+                                {% endif %}
 
-                        {% if not is_granted('ROLE_USER') %}
+                                {% if not is_granted('ROLE_USER') %}
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{path('app_login')}}">Connexion</a>
+                                    </li>
+                                {% endif %}
 
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{path('app_login')}}">Connexion</a>
-                            </li>
-                        {% endif %}
+                                {% if is_granted('ROLE_USER') %}
+                                    <li class="nav-item active">
+                                        <a class="nav-link" href="{{path('app_home')}}">Accueil</a>
+                                    </li>
 
-                        {% if is_granted('ROLE_USER') %}
-                            <li class="nav-item active">
-                                <a class="nav-link" href="{{path('app_home')}}">Accueil</a>
-                            </li>
+                                    {#
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{path('app_register')}}">Inscription</a>
+                                    </li>
+                                    #}
 
-                           {#
-                           <li class="nav-item">
-                                <a class="nav-link" href="{{path('app_register')}}">Inscription</a>
-                            </li>
-                           #}
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{path('app_sorties_index')}}">Sorties</a>
+                                    </li>
 
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{path('app_sorties_index')}}">Sorties</a>
-                            </li>
-                        <li class="nav-item">
-                                <a class="nav-link" href="{{ path('app_user')}}">Mon Profil</a>
-                        </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
-                        </li>
-                            {% endif %}
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ path('app_user')}}">Mon Profil</a>
+                                    </li>
 
-                    </ul>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
+                                    </li>
+                                 {% endif %}
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </nav>
         {% endblock %}
