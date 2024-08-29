@@ -42,22 +42,29 @@
                         <th>Photo</th>
                         <td>{{ sortie.urlPhoto }}</td>
                     </tr>
+                    </tbody>
+                </table>
+                <h2>Liste des participants inscrits</h2>
+                <table class="table">
+                    <thead>
                     <tr>
-                        <th>
-                            <label for="participant">Participants</label>
-                        </th>
-                        <td>
-                            {% if cpt > 0 %}
-                            <select name="participant" id="participant">
-                                {% for inscription in inscriptions %}
-                                    <option value="{{ inscription.noParticipant.id }}">{{ inscription.noParticipant.pseudo }}</option>
-                                {% endfor %}
-                            </select>
-                            {% else %}
-                            <p>Aucun participant</p>
-                            {% endif %}
-                        </td>
+                        <th>Pseudo</th>
+                        <th>Nom</th>
                     </tr>
+                    </thead>
+                    <tbody>
+                    {% if inscriptions is not empty %}
+                        {% for inscription in inscriptions %}
+                            <tr>
+                                <td>{{ inscription.noParticipant.pseudo }}</td>
+                                <td>{{ inscription.noParticipant.nom }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="2">Aucun participant</td>
+                        </tr>
+                    {% endif %}
                     </tbody>
                 </table>
             </div>
@@ -67,8 +74,14 @@
     <div class="d-flex justify-content-center">
         <a href="{{ path('app_sorties_index') }}" class="btn btn-primary ms-2">Liste des sorties</a>
         <a href="{{ path('app_sorties_edit', {'id': sortie.id}) }}" class="btn btn-success ms-2">Modifier</a>
-        <a href="{{ path('app_sorties_inscription', {'id': sortie.id}) }}" class="btn btn-primary ms-2">S'inscrire</a>
-        <a href="{{ path('app_sorties_desinscription', {'id': sortie.id}) }}" class="btn btn-primary ms-2">Se
-            désinscrire</a>
+
+        {# Affichage conditionnel des boutons d'inscription #}
+        {% if isInscrit %}
+            {# Bouton "Se désinscrire" visible seulement si l'utilisateur est inscrit #}
+            <a href="{{ path('app_sorties_desinscription', {'id': sortie.id}) }}" class="btn btn-danger ms-2">Se désinscrire</a>
+        {% else %}
+            {# Bouton "S'inscrire" visible seulement si l'utilisateur n'est pas inscrit #}
+            <a href="{{ path('app_sorties_inscription', {'id': sortie.id}) }}" class="btn btn-primary ms-2">S'inscrire</a>
+        {% endif %}
     </div>
 {% endblock %}
