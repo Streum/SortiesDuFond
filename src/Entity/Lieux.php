@@ -6,6 +6,7 @@ use App\Repository\LieuxRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: LieuxRepository::class)]
 class Lieux
@@ -18,22 +19,20 @@ class Lieux
     #[ORM\Column(length: 30)]
     private ?string $nomLieu = null;
 
-    #[ORM\Column(length: 30, nullable: true)]
+    #[ORM\Column(length: 50, nullable: true)]
     private ?string $rue = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Range(min: -90, max: 90, notInRangeMessage: 'Vous devez entrer une valeur entre {{ min }} et {{ max }}')]
     private ?float $latitude = null;
 
+    #[Assert\Range(min: -180, max: 180, notInRangeMessage: 'Vous devez entrer une valeur entre {{ min }} et {{ max }}')]
     #[ORM\Column(nullable: true)]
     private ?float $longitude = null;
 
     #[ORM\ManyToOne(inversedBy: 'id')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Villes $noVille = null;
-
-
-
-
 
     public function getId(): ?int
     {

@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: SortiesRepository::class)]
 class Sorties
@@ -20,15 +21,19 @@ class Sorties
     private ?string $nom = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Assert\GreaterThan('now', message: 'La date spécifiée est déjà passée.')]
     private ?\DateTimeInterface $dateDebut = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Assert\GreaterThan('+30 minutes', message: 'La date spécifiée n\'est pas valide.')]
     private ?\DateTimeInterface $dateCloture = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Positive]
     private ?int $duree = null;
 
     #[ORM\Column]
+    #[Assert\Positive(message: 'Le nombre de participants doit être supérieur à 0.')]
     private ?int $nbInscriptionsMax = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
