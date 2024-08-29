@@ -41,12 +41,7 @@ class SortiesType extends AbstractType
                 'class' => Lieux::class,
                 'choice_label' => 'nomLieu',
                 'label' => 'Lieu',
-            ])
-        ->add('submit', SubmitType::class, [
-            'label' => 'Créer',
-            'attr' => ['class' => 'btn btn-success ms-2'],
-        ]);
-
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

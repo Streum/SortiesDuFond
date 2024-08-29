@@ -18,7 +18,7 @@
                 {{ form_row(form.urlPhoto) }}
                 {{ form_row(form.noLieu) }}
                 <div class="d-flex justify-content-center">
-                    {{ form_widget(form.submit) }}
+                    <button class="btn btn-success ms-2" href="{{ path('app_sorties_new') }}">Créer</button>
                     <a class="btn btn-primary ms-2" href="{{ path('app_sorties_index') }}">Liste des sorties</a>
                 </div>
                 {{ form_end(form) }}

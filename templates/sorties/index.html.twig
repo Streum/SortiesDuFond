@@ -15,7 +15,7 @@
                         <th>Début</th>
                         <th>Durée</th>
                         <th>Inscriptions</th>
-                        <th>Description</th>
+                        <th>Lieu</th>
                         <th>Organisateur</th>
                         <th></th>
                         <th></th>
@@ -28,7 +28,7 @@
                             <td>{{ sortie.dateDebut ? sortie.dateDebut|date('d-m-Y H:i') : '' }}</td>
                             <td>{{ sortie.duree }}</td>
                             <td>{{ cpt[sortie.id] }}/{{ sortie.nbInscriptionsMax }}</td>
-                            <td>{{ sortie.descriptionInfos }}</td>
+                            <td>{{ sortie.noLieu.nomLieu }} - {{ sortie.noLieu.noVille.nomVille }}</td>
                             <td>{{ sortie.noParticipant.pseudo }}</td>
                             <td>
                                 <a href="{{ path('app_sorties_show', {'id': sortie.id}) }}" class="btn btn-primary">Détails</a>
