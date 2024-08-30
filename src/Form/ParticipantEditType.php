@@ -11,6 +11,7 @@ use Symfony\Component\Form\AbstractType;
 
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -23,6 +24,12 @@ class ParticipantEditType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('photo', FileType::class, [
+                'label' => 'Photo de profil',
+                'mapped' => false,  // Ne pas lier ce champ directement à l'entité
+                'required' => false,
+                'attr' => ['accept' => 'image/*']  // Pour accepter uniquement les fichiers image
+            ])
             ->add('email', EmailType::class, [
                 'label' => 'Email',
                 'attr' => ['class' => 'form-control']
