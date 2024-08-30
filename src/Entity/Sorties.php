@@ -99,14 +99,17 @@ class Sorties
         $this->dateDebut = $dateDebut;
 
         return $this;
-    } public function getDateCreation(): ?\DateTimeInterface
+    }
+
+    public function getDateCreation(): ?\DateTimeInterface
     {
         return $this->dateCreationSortie;
     }
+
     #[ORM\PrePersist]
     public function setDateCreation(): static
     {
-        $this->dateCreationSortie = new \DateTime() ;
+        $this->dateCreationSortie = new \DateTime();
 
         return $this;
     }
@@ -245,6 +248,23 @@ class Sorties
 
         $dateFin = (clone $this->dateDebut)->modify('+' . $this->duree . ' minutes');
         return $dateFin;
+    }
+
+
+    // Nouvelle méthode pour vérifier les conditions d'inscription
+    public function peutSInscrire(): bool
+    {
+        // Vérifie si la date de clôture est dépassée
+        if ($this->dateClotureInscription <= new \DateTime()) {
+            return false;
+        }
+
+        // Vérifie si le nombre maximum de participants est atteint
+        if ($this->inscriptions->count() >= $this->nbInscriptionsMax) {
+            return false;
+        }
+
+        return true;
     }
 
 }

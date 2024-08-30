@@ -141,6 +141,12 @@ class SortiesController extends AbstractController
             throw $this->createNotFoundException('La sortie n\'existe pas.');
         }
 
+        // Vérifie si l'inscription est possible
+        if (!$sortie->peutSInscrire()) {
+            $this->addFlash('error', 'Les inscriptions pour cette sortie sont fermées.');
+            return $this->redirectToRoute('app_sorties_show', ['id' => $id]);
+        }
+
         $inscriptionExistante = $entityManager->getRepository(Inscriptions::class)->findOneBy([
             'noParticipant' => $user,
             'noSortie' => $sortie,
