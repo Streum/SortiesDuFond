@@ -16,11 +16,11 @@
                     </tr>
                     <tr>
                         <th>Date de Début</th>
-                        <td>{{ sortie.dateDebut ? sortie.dateDebut|date('d-m-Y H:i:s') : '' }}</td>
+                        <td>{{ sortie.dateDebut ? sortie.dateDebut|date('d-m-Y H:i') : '' }}</td>
                     </tr>
                     <tr>
-                        <th>Date de Clôture</th>
-                        <td>{{ sortie.dateClotureInscription ? sortie.dateClotureInscription|date('d-m-Y H:i:s') : '' }}</td>
+                        <th>Date de Fin</th>
+                        <td>{{ sortie.dateFin ? sortie.dateFin|date('d-m-Y H:i') : '' }}</td>
                     </tr>
                     <tr>
                         <th>Durée</th>
@@ -46,9 +46,13 @@
                         <th>État</th>
                         <td>{{ etat.libelle }}</td>
                     </tr>
+                    <tr>
+                        <th>Date limite d'inscription</th>
+                        <td>{{ sortie.dateClotureInscription ? sortie.dateClotureInscription|date('d-m-Y H:i') : '' }}</td>
+                    </tr>
                     </tbody>
                 </table>
-                <h2>Liste des participants inscrits</h2>
+                <h2>Liste des participants</h2>
                 <table class="table">
                     <thead>
                     <tr>

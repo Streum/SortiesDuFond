@@ -12,11 +12,12 @@
 
                 {{ form_row(form.nom) }}
                 {{ form_row(form.dateDebut) }}
-                {{ form_row(form.dateClotureInscription) }}
+                {{ form_row(form.duree) }}
                 {{ form_row(form.nbInscriptionsMax) }}
                 {{ form_row(form.descriptionInfos) }}
                 {{ form_row(form.urlPhoto) }}
                 {{ form_row(form.noLieu) }}
+                {{ form_row(form.dateClotureInscription) }}
                 <div class="d-flex justify-content-center">
                     <button class="btn btn-success ms-2" href="{{ path('app_sorties_new') }}">Créer</button>
                     <a class="btn btn-primary ms-2" href="{{ path('app_sorties_index') }}">Liste des sorties</a>
