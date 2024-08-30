@@ -53,8 +53,6 @@ class SortiesController extends AbstractController
             $user = $this->security->getUser();
 
             $sortie->setNoParticipant($user);
-            $duree = $sortiesRepository->calculateDuration($sortie->getDateDebut(), $sortie->getDateClotureInscription());
-            $sortie->setDuree($duree);
 
             $entityManager->persist($sortie);
             $entityManager->flush();
@@ -75,6 +73,8 @@ class SortiesController extends AbstractController
         $inscriptions = $sortie->getInscriptions(); // Toutes les inscriptions de la sortie
         $cpt = $inscriptions->count(); // Compteur d'inscriptions
         $etat = $etatsRepository->updateEtats($sortie);
+
+        //dd($sortie->getDateFin());
 
         // Vérifie si l'utilisateur est connecté et s'il est inscrit à la sortie
         $isInscrit = false;
