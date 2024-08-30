@@ -6,6 +6,7 @@ use App\Entity\Participant;
 use App\Form\ParticipantAdminEditType;
 use App\Form\ParticipantEditType;
 use App\Form\ParticipantType;
+use App\Repository\InscriptionsRepository;
 use App\Repository\ParticipantRepository;
 use App\Repository\SortiesRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -214,18 +215,63 @@ class ParticipantController extends AbstractController
 
 
     #[Route('/administration/participant/delete/{id}', name: 'app_participant_delete', methods: ['POST'])]
-    public function delete(Request $request, Participant $participant, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$participant->getId(), $request->getPayload()->getString('_token'))) {
+    public function delete(
+        Request $request,
+        Participant $participant,
+        EntityManagerInterface $entityManager,
+        SortiesRepository $sortiesRepository,
+        InscriptionsRepository $inscriptionsRepository
+    ): Response {
+        // Vérification du token CSRF
+        if ($this->isCsrfTokenValid('delete' . $participant->getId(), $request->request->get('_token'))) {
+
+
+            // Supprimer les inscriptions du participant
+            $inscriptions = $inscriptionsRepository->findBy(['noParticipant' => $participant]);
+            foreach ($inscriptions as $inscription) {
+                $entityManager->remove($inscription);
+            }
+
+            // Supprimer les sorties organisées par le participant
+            $sorties = $sortiesRepository->findBy(['noParticipant' => $participant]);
+            foreach ($sorties as $sortie) {
+                $entityManager->remove($sortie);
+            }
+
+            // Supprimer le participant
             $entityManager->remove($participant);
             $entityManager->flush();
         }
 
         return $this->redirectToRoute('app_participant_index', [], Response::HTTP_SEE_OTHER);
-    } #[Route('/administration/participant/actif/{id}', name: 'app_participant_actif', methods: ['POST', 'GET'])]
-    public function setActif(Request $request, Participant $participant, EntityManagerInterface $entityManager): Response
+    }
+
+ #[Route('/administration/participant/actif/{id}', name: 'app_participant_actif', methods: ['POST', 'GET'])]
+    public function setActif(
+        Request $request,
+        Participant $participant,
+        EntityManagerInterface $entityManager,
+        SortiesRepository $sortiesRepository,
+        InscriptionsRepository $inscriptionsRepository
+ ): Response
     {
             $participant->setActif(!$participant->isActif());
+            if($participant->isActif() == false){
+
+                // Supprimer les inscriptions du participant
+                $inscriptions = $inscriptionsRepository->findBy(['noParticipant' => $participant]);
+                foreach ($inscriptions as $inscription) {
+                    $entityManager->remove($inscription);
+                }
+
+                // Supprimer les sorties organisées par le participant
+                $sorties = $sortiesRepository->findBy(['noParticipant' => $participant]);
+                foreach ($sorties as $sortie) {
+                    $entityManager->remove($sortie);
+                }
+
+            }
+
             $entityManager->flush();
         return $this->redirectToRoute('app_participant_index', [], Response::HTTP_SEE_OTHER);
     }
