@@ -11,6 +11,8 @@ use App\Repository\SortiesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -59,6 +61,24 @@ class ParticipantController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Gestion de l'upload de la photo
+            /** @var UploadedFile $photoFile */
+            $photoFile = $form->get('photo')->getData();
+
+            if ($photoFile) {
+                $newFilename = uniqid().'.'.$photoFile->guessExtension();
+
+                try {
+                    $photoFile->move(
+                        $this->getParameter('photos_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // Gérer l'erreur si le fichier ne peut pas être déplacé
+                }
+
+                $participant->setPhoto($newFilename);
+            }
             // Vérifiez si le mot de passe a été modifié
             if ($form->get('plainPassword')->getData()) {
                 $participant->setPassword(
@@ -112,6 +132,26 @@ class ParticipantController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+
+            // Gestion de l'upload de la photo
+            /** @var UploadedFile $photoFile */
+            $photoFile = $form->get('photo')->getData();
+
+            if ($photoFile) {
+                $newFilename = uniqid().'.'.$photoFile->guessExtension();
+
+                try {
+                    $photoFile->move(
+                        $this->getParameter('photos_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // Gérer l'erreur si le fichier ne peut pas être déplacé
+                }
+
+                $participant->setPhoto($newFilename);
+            }
             $participant->setPassword(
                 $userPasswordHasher->hashPassword(
                     $participant,
@@ -139,6 +179,24 @@ class ParticipantController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Gestion de l'upload de la photo
+            /** @var UploadedFile $photoFile */
+            $photoFile = $form->get('photo')->getData();
+
+            if ($photoFile) {
+                $newFilename = uniqid().'.'.$photoFile->guessExtension();
+
+                try {
+                    $photoFile->move(
+                        $this->getParameter('photos_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // Gérer l'erreur si le fichier ne peut pas être déplacé
+                }
+
+                $participant->setPhoto($newFilename);
+            }
             // Mettre à jour le champ `administrateur` en fonction du rôle
             $isAdmin = in_array('ROLE_ADMIN', $participant->getRoles(), true);
             $participant->setAdministrateur($isAdmin);
