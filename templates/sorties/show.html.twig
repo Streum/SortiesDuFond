@@ -34,6 +34,7 @@
                         <th>Description</th>
                         <td>{{ sortie.descriptionInfos }}</td>
                     </tr>
+
                     <tr>
                         <th>État de la Sortie</th>
                         <td>{{ sortie.noEtat.libelle }}</td>
@@ -49,15 +50,21 @@
                         </td>
                     </tr>
                     <tr>
-                        <th>État</th>
-                        <td>{{ etat.libelle }}</td>
-                    </tr>
-                    <tr>
                         <th>Date limite d'inscription</th>
                         <td>{{ sortie.dateClotureInscription ? sortie.dateClotureInscription|date('d-m-Y H:i') : '' }}</td>
                     </tr>
                     </tbody>
                 </table>
+
+                <div class="d-flex justify-content-center">
+                    {% if sortie.noEtat.libelle == 'Créée' %}
+                        <a href="{{ path('app_sorties_publication', {'id': sortie.id} ) }}"
+                           class="btn btn-success ms-2">Publier</a>
+                    {% endif %}
+                    <a href="{{ path('app_sorties_index') }}" class="btn btn-primary ms-2">Liste des sorties</a>
+
+                </div>
+
                 <h2>Liste des participants</h2>
                 <table class="table">
                     <thead>

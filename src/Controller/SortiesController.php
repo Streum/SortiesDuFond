@@ -20,10 +20,12 @@ use Symfony\Component\Routing\Attribute\Route;
 class SortiesController extends AbstractController
 {
     public function __construct(
-        private readonly Security $security,
+        private readonly Security          $security,
         private readonly SortiesRepository $sortiesRepository,
-        private readonly EtatsRepository $etatsRepository,
-    ) {}
+        private readonly EtatsRepository   $etatsRepository,
+    )
+    {
+    }
 
     #[Route('/', name: '_index', methods: ['GET'])]
     public function index(SortiesRepository $sortiesRepository): Response
@@ -69,14 +71,11 @@ class SortiesController extends AbstractController
     #[Route('/{id}', name: '_show', methods: ['GET'])]
     public function show(Sorties $sortie, InscriptionsRepository $inscriptionsRepository, EtatsRepository $etatsRepository): Response
     {
-        $user = $this->getUser(); // Utilisateur connecté
-        $inscriptions = $sortie->getInscriptions(); // Toutes les inscriptions de la sortie
-        $cpt = $inscriptions->count(); // Compteur d'inscriptions
+        $user = $this->getUser();
+        $inscriptions = $sortie->getInscriptions();
+        $cpt = $inscriptions->count();
         $etat = $etatsRepository->updateEtats($sortie);
 
-        //dd($sortie->getDateFin());
-
-        // Vérifie si l'utilisateur est connecté et s'il est inscrit à la sortie
         $isInscrit = false;
         if ($user instanceof Participant) {
             $inscriptionExistante = $inscriptionsRepository->findOneBy([
@@ -91,7 +90,7 @@ class SortiesController extends AbstractController
             'sortie' => $sortie,
             'inscriptions' => $inscriptions,
             'cpt' => $cpt,
-            'isInscrit' => $isInscrit, // Passe la variable à la vue
+            'isInscrit' => $isInscrit,
             'etat' => $etat,
         ]);
     }
@@ -117,7 +116,7 @@ class SortiesController extends AbstractController
     #[Route('/{id}', name: '_delete', methods: ['POST'])]
     public function delete(Request $request, Sorties $sortie, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$sortie->getId(), $request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $sortie->getId(), $request->get('_token'))) {
             $entityManager->remove($sortie);
             $entityManager->flush();
         }
@@ -201,4 +200,16 @@ class SortiesController extends AbstractController
 
         return $this->redirectToRoute('app_sorties_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/{id}/publier', name: '_publication', methods: ['GET', 'POST'])]
+    public function publishSortie(Sorties $sortie, Request $request, EntityManagerInterface $entityManager, EtatsRepository $etatsRepository, $id): Response
+    {
+
+        $etat = $etatsRepository->openStatus($sortie);
+
+        return $this->redirectToRoute('app_sorties_index', [
+            'etat' => $etat,
+        ], Response::HTTP_SEE_OTHER);
+    }
+
 }
