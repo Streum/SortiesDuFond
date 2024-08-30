@@ -75,6 +75,12 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $photo = null;
 
+    /**
+     * @var Collection<int, InscriptionGroupePrive>
+     */
+    #[ORM\OneToMany(targetEntity: InscriptionGroupePrive::class, mappedBy: 'noParticipant')]
+    private Collection $inscriptionGroupePrives;
+
     public function getPhoto(): ?string
     {
         return $this->photo;
@@ -91,6 +97,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->inscriptions = new ArrayCollection();
         $this->sorties = new ArrayCollection();
+        $this->inscriptionGroupePrives = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -304,6 +311,36 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     public function setSite(?Sites $site): static
     {
         $this->site = $site;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, InscriptionGroupePrive>
+     */
+    public function getInscriptionGroupePrives(): Collection
+    {
+        return $this->inscriptionGroupePrives;
+    }
+
+    public function addInscriptionGroupePrife(InscriptionGroupePrive $inscriptionGroupePrife): static
+    {
+        if (!$this->inscriptionGroupePrives->contains($inscriptionGroupePrife)) {
+            $this->inscriptionGroupePrives->add($inscriptionGroupePrife);
+            $inscriptionGroupePrife->setNoParticipant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInscriptionGroupePrife(InscriptionGroupePrive $inscriptionGroupePrife): static
+    {
+        if ($this->inscriptionGroupePrives->removeElement($inscriptionGroupePrife)) {
+            // set the owning side to null (unless already changed)
+            if ($inscriptionGroupePrife->getNoParticipant() === $this) {
+                $inscriptionGroupePrife->setNoParticipant(null);
+            }
+        }
 
         return $this;
     }

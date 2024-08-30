@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Groupes{% endblock %}
+
+{% block body %}
+    <h1>Groupes Privés</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Label</th>
+                <td>{{ groupe_prive.label }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ groupe_prive.description }}</td>
+            </tr>
+            <tr>
+                <th>Participants</th>
+                <td>{{ groupe_prive.description }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a class="btn btn-success ms-2" href="{{ path('app_groupe_prive_index') }}">Mes Groupes</a>
+
+    <a class="btn btn-success ms-2" href="{{ path('app_groupe_prive_edit', {'id': groupe_prive.id}) }}">Modifier</a>
+    <a class="btn btn-success ms-2" href="{{ path('app_groupe_prive_addParticipants', {'id': groupe_prive.id}) }}">Ajouter des Participants</a>
+
+    {{ include('groupe_prive/_delete_form.html.twig') }}
+{% endblock %}
