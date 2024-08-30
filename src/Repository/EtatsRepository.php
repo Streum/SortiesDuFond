@@ -24,11 +24,9 @@ class EtatsRepository extends ServiceEntityRepository
         $now = new \DateTime();
 
         $etatCree = $this->findOneById(1);
-        $etatOuvert = $this->findOneById(2);
         $etatCloture = $this->findOneById(3);
         $etatEnCours = $this->findOneById(4);
         $etatPasse = $this->findOneById(5);
-        $etatAnnuler = $this->findOneById(6);
 
         $newEtat = null;
 
@@ -50,6 +48,15 @@ class EtatsRepository extends ServiceEntityRepository
         $this->em->flush();
 
         return $newEtat;
+    }
+
+    public function openStatus(Sorties $sorties){
+        $etatOuvert = $this->findOneById(2);
+        $sorties->setNoEtat($etatOuvert);
+
+        $this->em->flush();
+
+        return $etatOuvert;
     }
 
     //    /**
