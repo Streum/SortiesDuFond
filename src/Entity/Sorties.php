@@ -25,15 +25,18 @@ class Sorties
     private ?\DateTimeInterface $dateCreationSortie = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Assert\GreaterThan('now', message: 'La date spécifiée est déjà passée.')]
+    #[Assert\GreaterThan('+30 minutes', message: 'La date spécifiée n\'est pas valide.')]
     private ?\DateTimeInterface $dateDebut = null;
 
+    private ?\DateTimeInterface $dateFinSortie = null;
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Assert\GreaterThan('+30 minutes', message: 'La date spécifiée n\'est pas valide.')]
+    //#[Assert\GreaterThan('now', message: 'La date spécifiée n\'est pas valide.')]
+    #[Assert\LessThan(propertyPath: "dateDebut", message: 'La date limite d\'inscription ne peut pas être postérieure au début de la sortie.')]
     private ?\DateTimeInterface $dateClotureInscription = null;
 
     #[ORM\Column(nullable: true)]
-    #[Assert\Positive]
+    #[Assert\GreaterThan(30, message: "La sortie doit faire au moins 30 minutes.")]
     private ?int $duree = null;
 
     #[ORM\Column]
@@ -232,6 +235,16 @@ class Sorties
         $this->noParticipant = $noParticipant;
 
         return $this;
+    }
+
+    public function getDateFin(): ?\DateTimeInterface
+    {
+        if ($this->dateDebut === null || $this->duree === null) {
+            return null;
+        }
+
+        $dateFin = (clone $this->dateDebut)->modify('+' . $this->duree . ' minutes');
+        return $dateFin;
     }
 
 }

@@ -21,12 +21,11 @@ class SortiesType extends AbstractType
                 'label' => 'Nom',
             ])
             ->add('dateDebut', null, [
-                'label' => 'Date de début',
+                'label' => 'Date de début de la sortie',
                 'widget' => 'single_text',
             ])
-            ->add('dateClotureInscription', null, [
-                'label' => 'Date de fin',
-                'widget' => 'single_text',
+            ->add('duree', IntegerType::class, [
+                'label' => 'Durée de la sortie (en minutes)',
             ])
             ->add('nbInscriptionsMax', IntegerType::class, [
                 'label' => 'Nombre d\'inscriptions',
@@ -41,6 +40,10 @@ class SortiesType extends AbstractType
                 'class' => Lieux::class,
                 'choice_label' => 'nomLieu',
                 'label' => 'Lieu',
+            ])
+            ->add('dateClotureInscription', null, [
+                'label' => 'Date limite d\'inscription',
+                'widget' => 'single_text',
             ]);
     }
 
