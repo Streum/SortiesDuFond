@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: SortiesRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Sorties
 {
     #[ORM\Id]
@@ -21,12 +22,15 @@ class Sorties
     private ?string $nom = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $dateCreationSortie = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Assert\GreaterThan('now', message: 'La date spécifiée est déjà passée.')]
     private ?\DateTimeInterface $dateDebut = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Assert\GreaterThan('+30 minutes', message: 'La date spécifiée n\'est pas valide.')]
-    private ?\DateTimeInterface $dateCloture = null;
+    private ?\DateTimeInterface $dateClotureInscription = null;
 
     #[ORM\Column(nullable: true)]
     #[Assert\Positive]
@@ -92,16 +96,26 @@ class Sorties
         $this->dateDebut = $dateDebut;
 
         return $this;
+    } public function getDateCreation(): ?\DateTimeInterface
+    {
+        return $this->dateCreationSortie;
+    }
+    #[ORM\PrePersist]
+    public function setDateCreation(): static
+    {
+        $this->dateCreationSortie = new \DateTime() ;
+
+        return $this;
     }
 
-    public function getDateCloture(): ?\DateTimeInterface
+    public function getDateClotureInscription(): ?\DateTimeInterface
     {
-        return $this->dateCloture;
+        return $this->dateClotureInscription;
     }
 
-    public function setDateCloture(\DateTimeInterface $dateCloture): static
+    public function setDateClotureInscription(\DateTimeInterface $dateClotureInscription): static
     {
-        $this->dateCloture = $dateCloture;
+        $this->dateClotureInscription = $dateClotureInscription;
 
         return $this;
     }

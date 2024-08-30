@@ -53,7 +53,7 @@ class SortiesController extends AbstractController
             $user = $this->security->getUser();
 
             $sortie->setNoParticipant($user);
-            $duree = $sortiesRepository->calculateDuration($sortie->getDateDebut(), $sortie->getDateCloture());
+            $duree = $sortiesRepository->calculateDuration($sortie->getDateDebut(), $sortie->getDateClotureInscription());
             $sortie->setDuree($duree);
 
             $entityManager->persist($sortie);

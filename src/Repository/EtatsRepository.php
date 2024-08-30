@@ -38,7 +38,7 @@ class EtatsRepository extends ServiceEntityRepository
             $newEtat = $etatEnCours;
         }
 
-        if($now > $sorties->getDateCloture()){
+        if($now > $sorties->getDateClotureInscription()){
             $sorties->setNoEtat($etatPasse);
             $newEtat = $etatPasse;
         }
