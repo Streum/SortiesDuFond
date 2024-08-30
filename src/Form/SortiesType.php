@@ -24,7 +24,7 @@ class SortiesType extends AbstractType
                 'label' => 'Date de début',
                 'widget' => 'single_text',
             ])
-            ->add('dateCloture', null, [
+            ->add('dateClotureInscription', null, [
                 'label' => 'Date de fin',
                 'widget' => 'single_text',
             ])
