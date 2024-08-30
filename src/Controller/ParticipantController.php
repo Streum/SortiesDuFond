@@ -9,15 +9,19 @@ use App\Form\ParticipantType;
 use App\Repository\InscriptionsRepository;
 use App\Repository\ParticipantRepository;
 use App\Repository\SortiesRepository;
+use App\Service\CsvUserImporter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Validator\Constraints\File;
 
 
 class ParticipantController extends AbstractController
@@ -275,4 +279,71 @@ class ParticipantController extends AbstractController
             $entityManager->flush();
         return $this->redirectToRoute('app_participant_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/administration/import', name: 'app_participant_import')]
+    public function import(Request $request, CsvUserImporter $csvUserImporter): Response
+    {
+        $form = $this->createFormBuilder()
+            ->add('csvFile', FileType::class, [
+                'label' => 'CSV File (CSV format only)',
+                'mapped' => false,
+                'required' => true,
+                'constraints' => [
+                    new File([
+                        'mimeTypes' => [
+                            'text/csv',
+                            'text/plain',
+                            'application/csv',
+                            'text/comma-separated-values',
+                            'application/vnd.ms-excel',  // Pour les fichiers .csv générés par Excel
+                            'text/x-csv',
+                            'application/x-csv',
+                            'text/x-comma-separated-values',
+                            'text/tab-separated-values',
+                        ],
+                        'mimeTypesMessage' => 'Please upload a valid CSV file',
+                        'maxSizeMessage' => 'The file is too large ({{ size }} {{ suffix }}). Maximum allowed size is {{ limit }} {{ suffix }}.',
+                    ])
+                ],
+            ])
+            ->add('import', SubmitType::class, ['label' => 'Import Users'])
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $csvFile = $form->get('csvFile')->getData();
+            $csvFilePath = $csvFile->getPathname();
+
+
+            if ($csvFile) {
+                $newFilename = 'users_import_'.uniqid().'.'.$csvFile->guessExtension();
+
+                try {
+                    $csvFile->move(
+                        $this->getParameter('csv_directory'),
+                        $newFilename
+                    );
+
+                    $csvUserImporter->importUsersFromCsv(
+                        $this->getParameter('csv_directory') . '/' . $newFilename
+                    );
+
+                    $this->addFlash('success', 'Users have been imported successfully.');
+
+                } catch (FileException $e) {
+                    $this->addFlash('error', 'There was an error uploading the file.');
+                }
+            }
+
+            return $this->redirectToRoute('app_participant_index');
+        }
+
+        return $this->render('participant/import.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
 }
+
