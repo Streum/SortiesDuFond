@@ -72,7 +72,7 @@ class VillesFixtures extends Fixture implements FixtureGroupInterface
      */
 
     /*
-     * INSERT INTO `sorties` (`id`, `no_etat_id`, `no_lieu_id`, `no_participant_id`, `nom`, `date_debut`, `date_cloture_inscription`, `date_creation`, `duree`, `nb_inscriptions_max`, `description_infos`, `url_photo`) VALUES
+     * INSERT INTO `sorties` (`id`, `no_etat_id`, `no_lieu_id`, `no_participant_id`, `nom`, `date_debut`, `date_cloture_inscription`, `date_creation_sortie`, `duree`, `nb_inscriptions_max`, `description_infos`, `url_photo`) VALUES
 (NULL, '1', '1', '1', 'Promenade au Parc du Thabor', '2023-08-01 10:00:00', '2023-07-25 12:00:00', '2023-07-01 09:00:00', '120', '20', 'Une belle promenade matinale au Parc du Thabor.', '/images/thabor.jpg'),
 (NULL, '1', '3', '1', 'Visite du Musée des Beaux-Arts', '2024-08-30 14:00:00', '2024-08-28 12:00:00', '2024-08-15 09:00:00', '120', '15', 'Découverte des œuvres classiques au Musée des Beaux-Arts.', '/images/musee.jpg'),
 (NULL, '1', '4', '1', 'Exploration du Château des Ducs de Bretagne', '2024-09-03 09:30:00', '2024-09-01 12:00:00', '2024-08-20 10:00:00', '120', '30', 'Visite historique du célèbre Château des Ducs.', '/images/chateau.jpg'),
