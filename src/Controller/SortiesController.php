@@ -5,12 +5,12 @@ namespace App\Controller;
 use App\Entity\Inscriptions;
 use App\Entity\Participant;
 use App\Entity\Sorties;
+use App\Form\AnnulationType;
 use App\Form\SortiesType;
 use App\Repository\EtatsRepository;
 use App\Repository\InscriptionsRepository;
 use App\Repository\SortiesRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -214,5 +214,41 @@ class SortiesController extends AbstractController
         ], Response::HTTP_SEE_OTHER);
     }
 
+    #[Route('/{id}/annuler', name: '_annuler', methods: ['GET', 'POST'])]
+    public function annuler(Sorties $sortie, Request $request, EntityManagerInterface $entityManager, EtatsRepository $etatsRepository): Response
+    {
+        $user = $this->getUser();
+
+        // Vérifier que l'utilisateur connecté est l'organisateur de la sortie
+        if ($user !== $sortie->getNoParticipant()) {
+            $this->addFlash('error', 'Vous n\'êtes pas autorisé à annuler cette sortie.');
+            return $this->redirectToRoute('app_sorties_index');
+        }
+
+        // Vérifier que la sortie n'a pas déjà commencé
+        if ($sortie->getDateDebut() <= new \DateTime()) {
+            $this->addFlash('error', 'Vous ne pouvez pas annuler une sortie déjà commencée.');
+            return $this->redirectToRoute('app_sorties_index');
+        }
+
+        // Créer et traiter le formulaire d'annulation
+        $form = $this->createForm(AnnulationType::class, $sortie);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $sortie->setMotifAnnulation($form->get('motifAnnulation')->getData());
+            $sortie->setNoEtat($etatsRepository->findOneById(6));  // Assure-toi d'avoir cette méthode dans ton entité
+            $entityManager->flush();
+
+            $this->addFlash('success', 'La sortie a été annulée avec succès.');
+            return $this->redirectToRoute('app_sorties_index');
+        }
+
+        return $this->render('sorties/annuler.html.twig', [
+            'sortie' => $sortie,
+            'form' => $form->createView(),
+        ]);
+    }
 
 }
+

@@ -36,6 +36,9 @@
                             <td>
                                 <a href="{{ path('app_sorties_edit', {'id': sortie.id}) }}" class="btn btn-primary">Modifier</a>
                             </td>
+                            <td>
+                                {{ include('sorties/_delete_form.html.twig') }}
+                            </td>
                         </tr>
                     {% else %}
                         <tr>

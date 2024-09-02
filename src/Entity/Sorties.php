@@ -25,22 +25,19 @@ class Sorties
     private ?\DateTimeInterface $dateCreationSortie = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Assert\GreaterThan('+30 minutes', message: 'La date spécifiée n\'est pas valide.')]
+    #[Assert\GreaterThan('+30 minutes', message: 'La date de début doit être au moins 30 minutes après maintenant.')]
     private ?\DateTimeInterface $dateDebut = null;
 
-    private ?\DateTimeInterface $dateFinSortie = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    //#[Assert\GreaterThan('now', message: 'La date spécifiée n\'est pas valide.')]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Assert\LessThan(propertyPath: "dateDebut", message: 'La date limite d\'inscription ne peut pas être postérieure au début de la sortie.')]
     private ?\DateTimeInterface $dateClotureInscription = null;
 
     #[ORM\Column(nullable: true)]
-    #[Assert\GreaterThan(30, message: "La sortie doit faire au moins 30 minutes.")]
+    #[Assert\GreaterThan(30, message: "La sortie doit durer au moins 30 minutes.")]
     private ?int $duree = null;
 
     #[ORM\Column]
-    #[Assert\Positive(message: 'Le nombre de participants doit être supérieur à 0.')]
+    #[Assert\Positive(message: 'Le nombre maximum de participants doit être supérieur à 0.')]
     private ?int $nbInscriptionsMax = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -67,6 +64,11 @@ class Sorties
     #[ORM\JoinColumn(nullable: false)]
     private ?Participant $noParticipant = null;
 
+    #[ORM\Column]
+    private ?bool $Annulee = false;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $motifAnnulation = null;
 
     public function __construct()
     {
@@ -77,7 +79,6 @@ class Sorties
     {
         return $this->id;
     }
-
 
     public function getNom(): ?string
     {
@@ -121,7 +122,7 @@ class Sorties
         return $this->dateClotureInscription;
     }
 
-    public function setDateClotureInscription(\DateTimeInterface $dateClotureInscription): static
+    public function setDateClotureInscription(?\DateTimeInterface $dateClotureInscription): static
     {
         $this->dateClotureInscription = $dateClotureInscription;
 
@@ -268,6 +269,32 @@ class Sorties
 
         return true;
     }
+
+    public function isAnnulee(): ?bool
+    {
+        return $this->Annulee;
+    }
+
+    public function setAnnulee(bool $Annulee): static
+    {
+        $this->Annulee = $Annulee;
+
+        return $this;
+    }
+
+    public function getMotifAnnulation(): ?string
+    {
+        return $this->motifAnnulation;
+    }
+
+    public function setMotifAnnulation(?string $motifAnnulation): static
+    {
+        $this->motifAnnulation = $motifAnnulation;
+
+        return $this;
+    }
+
+
 
 
 

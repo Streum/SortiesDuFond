@@ -39,6 +39,12 @@
                         <th>État de la Sortie</th>
                         <td>{{ sortie.noEtat.libelle }}</td>
                     </tr>
+                    {% if sortie.motifAnnulation %}
+                    <tr>
+                        <th>Motif annulation :</th>
+                        <td>{{ sortie.motifAnnulation }}</td>
+                    </tr>
+                    {% endif %}
                     <tr>
                         <th>Photo</th>
                         <td>
@@ -107,6 +113,8 @@
                 que la sortie est encore ouverte, que la date de clôture n'est pas dépassée,
                 et que la limite des inscriptions n'est pas atteinte #}
             <a href="{{ path('app_sorties_inscription', {'id': sortie.id}) }}" class="btn btn-primary ms-2">S'inscrire</a>
+            {{ include('sorties/_delete_form.html.twig') }}
+            <a href="{{ path('app_sorties_annuler', {'id': sortie.id}) }}" class="btn btn-primary ms-2">Annuler la sortie</a>
         {% endif %}
     </div>
 {% endblock %}

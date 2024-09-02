@@ -1,0 +1,28 @@
+{# templates/sorties/annuler.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Annuler la Sortie{% endblock %}
+
+{% block body %}
+    <h1 class="d-flex justify-content-center">Annuler la Sortie</h1>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h2>Annuler la sortie : {{ sortie.nom }}</h2>
+
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+
+                {# Ajout d'un bouton de soumission à l'intérieur du formulaire #}
+                <button class="btn btn-danger" type="submit">Valider l'annulation</button>
+                {{ form_end(form) }}
+
+                <div class="mt-4">
+                    <a href="{{ path('app_sorties_index') }}" class="btn btn-primary">Retour à la liste des sorties</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
