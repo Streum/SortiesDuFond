@@ -8,54 +8,29 @@
             <h1>Sorties du fond</h1>
 
         </header>
-
-        <section class="filters">
-            <div class="filter-group">
-
-            <p>Choisir une ville</p>
-                <select>
-                    {% for ville in villes %}
-                        <option>{{ ville.nomVille }}</option>
-
-                    {% endfor %}
-                </select>
-
-                <p>Le nom de la sortie contient : <input type="search" id="site_search" /></p>
-
-                <label for="site_search">Nom de la sortie contient :</label>
-                <input type="search" id="site_search" placeholder="Rechercher...">
-
-                <label for="start-date">Date entre :</label>
-                <input type="date" id="start-date" name="start-date">
-                <label for="end-date">et</label>
-                <input type="date" id="end-date" name="end-date">
-
-
-                <fieldset class="checkbox-group">
-                    <legend>Filtrer par :</legend>
-                    <div>
-                        <input type="checkbox" id="organisateur" name="organisateur" checked>
-                        <label for="organisateur">Sorties dont je suis l'organisateur/trice</label>
-                    </div>
-
-                    <div>
-                        <input type="checkbox" id="inscrit" name="inscrit">
-                        <label for="inscrit">Sorties auxquelles je suis inscrit/e</label>
-                    </div>
-
-                    <div>
-                        <input type="checkbox" id="non_inscrit" name="non_inscrit">
-                        <label for="non_inscrit">Sorties auxquelles je ne suis pas inscrit/e</label>
-                    </div>
-
-                    <div>
-                        <input type="checkbox" id="passe" name="passe">
-                        <label for="passe">Sorties passées</label>
-                    </div>
-                </fieldset>
-                <button class="btn btn-primary ms-2">Rechercher</button>
+        <div class="border border-2 border-dark rounded p-4">
+            {{ form_start(searchForm) }}
+            {{ form_row(searchForm.noLieu) }}
+            {{ form_row(searchForm.nom) }}
+            <div class="row">
+                <div class="col">{{ form_row(searchForm.dateDebut) }}</div>
+                <div class="col">{{ form_row(searchForm.dateFin) }}</div>
             </div>
-        </section>
+            <h2>Plus de filtres</h2>
+            <div class="row">
+                <div class="col">{{ form_row(searchForm.orga) }}</div>
+                <div class="col">{{ form_row(searchForm.isInscrit) }}</div>
+            </div>
+            <div class="row">
+                <div class="col">{{ form_row(searchForm.isNotInscrit) }}</div>
+                <div class="col">{{ form_row(searchForm.passee) }}</div>
+            </div>
+            <div class="row text-center">
+                {{ form_row(searchForm.Submit) }}
+            </div>
+            {{ form_end(searchForm) }}
+        </div>
+
 
         <section class="sorties-list">
             <h2>Sorties</h2>
@@ -63,8 +38,9 @@
                 <thead>
                 <tr>
                     <th>Nom</th>
+                    <th>Ville</th>
                     <th>Date Début</th>
-                    <th>Date Fin</th>
+
                     <th>Durée</th>
                     <th>Nb Max Inscriptions</th>
                     <th>Description</th>
@@ -77,8 +53,9 @@
                 {% for sortie in sorties %}
                     <tr>
                         <td>{{ sortie.nom }}</td>
+                        <td>{{ sortie.noLieu.noVille.nomVille }}</td>
                         <td>{{ sortie.dateDebut ? sortie.dateDebut|date('d-m-Y H:i') : '' }}</td>
-                        <td>{{ sortie.dateClotureInscription ? sortie.dateClotureInscription|date('d-m-Y H:i') : '' }}</td>
+                        {# {{ sortie.dateClotureInscription ? sortie.dateClotureInscription|date('d-m-Y H:i') : '' }} #}
                         <td>{{ sortie.duree }}</td>
                         <td>{{ sortie.nbInscriptionsMax }}</td>
                         <td>{{ sortie.descriptionInfos }}</td>

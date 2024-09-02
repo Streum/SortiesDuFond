@@ -23,7 +23,6 @@ class SortiesController extends AbstractController
     public function __construct(
         private readonly Security          $security,
         private readonly SortiesRepository $sortiesRepository,
-        private readonly EtatsRepository   $etatsRepository,
     )
     {
     }
