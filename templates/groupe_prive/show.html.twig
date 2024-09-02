@@ -17,7 +17,13 @@
             </tr>
             <tr>
                 <th>Participants</th>
-                <td>{{ groupe_prive.description }}</td>
+                <td>
+                    <ul>
+                        {% for inscrit in lesInscrits %}
+                            <li>{{ inscrit.nom }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
             </tr>
         </tbody>
     </table>
@@ -26,6 +32,7 @@
 
     <a class="btn btn-success ms-2" href="{{ path('app_groupe_prive_edit', {'id': groupe_prive.id}) }}">Modifier</a>
     <a class="btn btn-success ms-2" href="{{ path('app_groupe_prive_addParticipants', {'id': groupe_prive.id}) }}">Ajouter des Participants</a>
+    <a class="btn btn-danger ms-2" href="{{ path('app_groupe_prive_deleteParticipants', {'id': groupe_prive.id}) }}">Supprimer des Participants</a>
 
     {{ include('groupe_prive/_delete_form.html.twig') }}
 {% endblock %}

@@ -20,6 +20,10 @@ class GroupePrive
     #[ORM\Column(type: Types::TEXT)]
     private ?string $Description = null;
 
+    #[ORM\ManyToOne(inversedBy: 'groupePrives')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Participant $owner = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +49,18 @@ class GroupePrive
     public function setDescription(string $Description): static
     {
         $this->Description = $Description;
+
+        return $this;
+    }
+
+    public function getOwner(): ?Participant
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?Participant $owner): static
+    {
+        $this->owner = $owner;
 
         return $this;
     }

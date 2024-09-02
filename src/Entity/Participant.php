@@ -65,7 +65,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Sorties>
      */
-    #[ORM\OneToMany(mappedBy: 'noParticipant', targetEntity: Sorties::class)]
+    #[ORM\OneToMany(mappedBy: 'noParticipant', targetEntity: Sorties::class, orphanRemoval: true)]
     private Collection $sorties;
 
     #[ORM\ManyToOne(inversedBy: 'noParticipant')]
@@ -80,6 +80,12 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: InscriptionGroupePrive::class, mappedBy: 'noParticipant')]
     private Collection $inscriptionGroupePrives;
+
+    /**
+     * @var Collection<int, GroupePrive>
+     */
+    #[ORM\OneToMany(targetEntity: GroupePrive::class, mappedBy: 'owner', orphanRemoval: true)]
+    private Collection $groupePrives;
 
     public function getPhoto(): ?string
     {
@@ -98,6 +104,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
         $this->inscriptions = new ArrayCollection();
         $this->sorties = new ArrayCollection();
         $this->inscriptionGroupePrives = new ArrayCollection();
+        $this->groupePrives = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -339,6 +346,36 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($inscriptionGroupePrife->getNoParticipant() === $this) {
                 $inscriptionGroupePrife->setNoParticipant(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, GroupePrive>
+     */
+    public function getGroupePrives(): Collection
+    {
+        return $this->groupePrives;
+    }
+
+    public function addGroupePrife(GroupePrive $groupePrife): static
+    {
+        if (!$this->groupePrives->contains($groupePrife)) {
+            $this->groupePrives->add($groupePrife);
+            $groupePrife->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGroupePrife(GroupePrive $groupePrife): static
+    {
+        if ($this->groupePrives->removeElement($groupePrife)) {
+            // set the owning side to null (unless already changed)
+            if ($groupePrife->getOwner() === $this) {
+                $groupePrife->setOwner(null);
             }
         }
 

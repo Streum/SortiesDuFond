@@ -6,6 +6,8 @@ use App\Entity\Participant;
 use App\Form\ParticipantAdminEditType;
 use App\Form\ParticipantEditType;
 use App\Form\ParticipantType;
+use App\Repository\GroupePriveRepository;
+use App\Repository\InscriptionGroupePriveRepository;
 use App\Repository\InscriptionsRepository;
 use App\Repository\ParticipantRepository;
 use App\Repository\SortiesRepository;
@@ -224,22 +226,42 @@ class ParticipantController extends AbstractController
         Participant $participant,
         EntityManagerInterface $entityManager,
         SortiesRepository $sortiesRepository,
-        InscriptionsRepository $inscriptionsRepository
+        InscriptionsRepository $inscriptionsRepository,
+        InscriptionGroupePriveRepository $inscriptionGroupePriveRepository,
+        GroupePriveRepository $groupePriveRepository
     ): Response {
         // Vérification du token CSRF
         if ($this->isCsrfTokenValid('delete' . $participant->getId(), $request->request->get('_token'))) {
 
 
-            // Supprimer les inscriptions du participant
+            // Supprimer les inscriptions du participant (sorties)
             $inscriptions = $inscriptionsRepository->findBy(['noParticipant' => $participant]);
             foreach ($inscriptions as $inscription) {
                 $entityManager->remove($inscription);
+            }
+            // Supprimer les inscriptions du participant (groupes)
+            $inscriptionsGroupePrive = $inscriptionGroupePriveRepository->findBy(['noParticipant' => $participant]);
+            foreach ($inscriptionsGroupePrive as $inscriptionGP) {
+                $entityManager->remove($inscriptionGP);
             }
 
             // Supprimer les sorties organisées par le participant
             $sorties = $sortiesRepository->findBy(['noParticipant' => $participant]);
             foreach ($sorties as $sortie) {
                 $entityManager->remove($sortie);
+            }
+            // Supprimer les groupes crées par le participant
+
+            $groupes = $groupePriveRepository->findBy(['owner' => $participant]);
+            foreach ($groupes as $groupe) {
+
+                // Supprimer les inscriptions des groupes crées par le participant
+
+                $inscriptionsGP = $inscriptionGroupePriveRepository->findBy(['noGroupe' => $groupe]);
+                foreach ($inscriptionsGP as $inscriptionGP) {
+                    $entityManager->remove($inscriptionGP);
+                }
+                $entityManager->remove($groupe);
             }
 
             // Supprimer le participant
@@ -256,22 +278,44 @@ class ParticipantController extends AbstractController
         Participant $participant,
         EntityManagerInterface $entityManager,
         SortiesRepository $sortiesRepository,
-        InscriptionsRepository $inscriptionsRepository
+        InscriptionsRepository $inscriptionsRepository,
+        InscriptionGroupePriveRepository $inscriptionGroupePriveRepository,
+        GroupePriveRepository $groupePriveRepository,
  ): Response
     {
             $participant->setActif(!$participant->isActif());
             if($participant->isActif() == false){
 
-                // Supprimer les inscriptions du participant
+                // Supprimer les inscriptions du participant (sorties)
                 $inscriptions = $inscriptionsRepository->findBy(['noParticipant' => $participant]);
                 foreach ($inscriptions as $inscription) {
                     $entityManager->remove($inscription);
                 }
+                // Supprimer les inscriptions du participant (groupes)
+                $inscriptionsGroupePrive = $inscriptionGroupePriveRepository->findBy(['noParticipant' => $participant]);
+                foreach ($inscriptionsGroupePrive as $inscriptionGP) {
+                    $entityManager->remove($inscriptionGP);
+                }
+
 
                 // Supprimer les sorties organisées par le participant
                 $sorties = $sortiesRepository->findBy(['noParticipant' => $participant]);
                 foreach ($sorties as $sortie) {
                     $entityManager->remove($sortie);
+                }
+
+                // Supprimer les groupes crées par le participant
+
+                $groupes = $groupePriveRepository->findBy(['owner' => $participant]);
+                foreach ($groupes as $groupe) {
+
+                    // Supprimer les inscriptions des groupes crées par le participant
+
+                    $inscriptionsGP = $inscriptionGroupePriveRepository->findBy(['noGroupe' => $groupe]);
+                    foreach ($inscriptionsGP as $inscriptionGP) {
+                        $entityManager->remove($inscriptionGP);
+                    }
+                    $entityManager->remove($groupe);
                 }
 
             }

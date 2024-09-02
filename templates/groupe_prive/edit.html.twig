@@ -7,6 +7,7 @@
 
     {{ include('groupe_prive/_form.html.twig', {'button_label': 'Update'}) }}
     <a class="btn btn-success ms-2" href="{{ path('app_groupe_prive_addParticipants', {'id': groupe_prive.id}) }}">Ajouter des Participants</a>
+    <a class="btn btn-danger ms-2" href="{{ path('app_groupe_prive_deleteParticipants', {'id': groupe_prive.id}) }}">Supprimer des Participants</a>
     <a class="btn btn-success ms-2" href="{{ path('app_groupe_prive_index') }}">back to list</a>
 
     {{ include('groupe_prive/_delete_form.html.twig') }}
