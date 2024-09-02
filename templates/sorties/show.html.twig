@@ -100,7 +100,7 @@
         {% if isInscrit %}
             {# Bouton "Se désinscrire" visible seulement si l'utilisateur est inscrit #}
             <a href="{{ path('app_sorties_desinscription', {'id': sortie.id}) }}" class="btn btn-danger ms-2">Se désinscrire</a>
-        {% elseif etat.libelle not in ['Clôturée', 'Annulée']
+        {% elseif sortie.noEtat.libelle not in ['Clôturée', 'Annulée']
             and sortie.dateClotureInscription > 'now'|date('Y-m-d H:i:s')
             and cpt < sortie.nbInscriptionsMax %}
             {# Bouton "S'inscrire" visible seulement si l'utilisateur n'est pas inscrit,
