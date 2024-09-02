@@ -8,22 +8,34 @@
             <h1>Sorties du fond</h1>
 
         </header>
-        <div class="border border-2 border-dark rounded p-4">
+        <div class="border border-2 border-opacity-25 border-dark rounded p-4" style="background-color: #2A3440;
+    padding: 20px;
+    color: ivory;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 1);
+    margin: 20px auto;
+    max-width: 700px;">
             {{ form_start(searchForm) }}
             {{ form_row(searchForm.noLieu) }}
             {{ form_row(searchForm.nom) }}
             <div class="row">
-                <div class="col">{{ form_row(searchForm.dateDebut) }}</div>
-                <div class="col">{{ form_row(searchForm.dateFin) }}</div>
+                <div class="col d-flex align-items-center">
+                    <label for="{{ searchForm.dateDebut.vars.id }}" class="me-2">Du </label>
+                    {{ form_widget(searchForm.dateDebut, { 'attr': { 'class': 'form-control me-2' } }) }}
+                    <label for="{{ searchForm.dateFin.vars.id }}" class="me-2"> au </label>
+                    {{ form_widget(searchForm.dateFin, { 'attr': { 'class': 'form-control' } }) }}
+                </div>
             </div>
-            <h2>Plus de filtres</h2>
+            <div class="p-4">
+                <h3>Plus de filtres</h3>
+            </div>
             <div class="row">
                 <div class="col">{{ form_row(searchForm.orga) }}</div>
                 <div class="col">{{ form_row(searchForm.isInscrit) }}</div>
             </div>
             <div class="row">
-                <div class="col">{{ form_row(searchForm.isNotInscrit) }}</div>
                 <div class="col">{{ form_row(searchForm.passee) }}</div>
+                <div class="col">{{ form_row(searchForm.isNotInscrit) }}</div>
             </div>
             <div class="row text-center">
                 {{ form_row(searchForm.Submit) }}
@@ -31,6 +43,29 @@
             {{ form_end(searchForm) }}
         </div>
 
+        <div class="container">
+            <div class="row row-cols-1 row-cols-md-5 g-4 justify-content-center">
+                {% for sortie in sorties %}
+                    <div class="col">
+                        <div class="card h-100 d-flex flex-column">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">{{ sortie.nom }}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">{{ sortie.noLieu.nomLieu }}
+                                    ({{ sortie.noLieu.noVille.nomVille }})</h6>
+                                <p class="card-text">{{ sortie.descriptionInfos }}</p>
+                                <p class="card-text">{{ sortie.dateDebut | date('d M y') }}</p>
+                                <a href="{{ path('app_sorties_show', {'id': sortie.id}) }}"
+                                   class="btn btn-outline-info ms-2 mb-2">Détails</a>
+                                <button type="button" class="btn btn-primary position-relative ms-2">
+                                    S'inscrire<span
+                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">2/{{ sortie.nbInscriptionsMax }}</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
 
         <section class="sorties-list">
             <h2>Sorties</h2>
@@ -40,13 +75,10 @@
                     <th>Nom</th>
                     <th>Ville</th>
                     <th>Date Début</th>
-
                     <th>Durée</th>
-                    <th>Nb Max Inscriptions</th>
                     <th>Description</th>
-                    <th>État</th>
-                    <th>Photo</th>
                     <th>Actions</th>
+                    <th>Places</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -55,15 +87,17 @@
                         <td>{{ sortie.nom }}</td>
                         <td>{{ sortie.noLieu.noVille.nomVille }}</td>
                         <td>{{ sortie.dateDebut ? sortie.dateDebut|date('d-m-Y H:i') : '' }}</td>
-                        {# {{ sortie.dateClotureInscription ? sortie.dateClotureInscription|date('d-m-Y H:i') : '' }} #}
                         <td>{{ sortie.duree }}</td>
-                        <td>{{ sortie.nbInscriptionsMax }}</td>
                         <td>{{ sortie.descriptionInfos }}</td>
-                        <td>{{ sortie.noEtat.libelle }}</td>
-                        <td><img src="{{ sortie.urlPhoto }}" alt="Photo de {{ sortie.nom }}" class="sortie-photo"></td>
                         <td>
-                            <a href="{{ path('app_sorties_show', {'id': sortie.id}) }}">Afficher</a> |
-                            <a href="{{ path('app_sorties_edit', {'id': sortie.id}) }}">Éditer</a>
+                            <a href="{{ path('app_sorties_show', {'id': sortie.id}) }}"
+                               class="btn btn-primary">Détails</a>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary position-relative">
+                                S'inscrire<span
+                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">2/{{ sortie.nbInscriptionsMax }}</span>
+                            </button>
                         </td>
                     </tr>
                 {% else %}

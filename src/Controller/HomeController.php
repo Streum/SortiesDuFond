@@ -27,7 +27,9 @@ class HomeController extends AbstractController
         $form = $this->createForm(SearchType::class);
         $form->handleRequest($request);
 
-        $sorties = [];
+        $sorties = $sortiesRepository->findAll();
+
+        //$sorties = [];
         $user = $this->getUser();
 
         if ($form->isSubmitted() && $form->isValid()) {
