@@ -70,6 +70,9 @@ class Sorties
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $motifAnnulation = null;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dateFin = null;
+
     public function __construct()
     {
         $this->inscriptions = new ArrayCollection();
@@ -100,7 +103,7 @@ class Sorties
     public function setDateDebut(\DateTimeInterface $dateDebut): static
     {
         $this->dateDebut = $dateDebut;
-
+        $this->updateDateFin();
         return $this;
     }
 
@@ -137,7 +140,7 @@ class Sorties
     public function setDuree(?int $duree): static
     {
         $this->duree = $duree;
-
+        $this->updateDateFin();
         return $this;
     }
 
@@ -243,26 +246,12 @@ class Sorties
         return $this;
     }
 
-    public function getDateFin(): ?\DateTimeInterface
-    {
-        if ($this->dateDebut === null || $this->duree === null) {
-            return null;
-        }
-
-        $dateFin = (clone $this->dateDebut)->modify('+' . $this->duree . ' minutes');
-        return $dateFin;
-    }
-
-    #hello
-    // Nouvelle méthode pour vérifier les conditions d'inscription
     public function peutSInscrire(): bool
     {
-        // Vérifie si la date de clôture est dépassée
         if ($this->dateClotureInscription <= new \DateTime()) {
             return false;
         }
-
-        // Vérifie si le nombre maximum de participants est atteint
+        
         if ($this->inscriptions->count() >= $this->nbInscriptionsMax) {
             return false;
         }
@@ -294,8 +283,18 @@ class Sorties
         return $this;
     }
 
+    public function getdateFin(): ?\DateTimeInterface
+    {
+        return $this->dateFin;
+    }
 
-
-
+    private function updateDateFin(): void
+    {
+        if ($this->dateDebut && $this->duree) {
+            $this->dateFin = (clone $this->dateDebut)->modify('+' . $this->duree . ' minutes');
+        } else {
+            $this->dateFin = null;
+        }
+    }
 
 }
