@@ -68,21 +68,24 @@ class VillesFixtures extends Fixture implements FixtureGroupInterface
 (NULL, '2', 'Passage Pommeraye', 'Rue de la Fosse', '47.214', '-1.558'),
 (NULL, '2', 'Planète Sauvage', 'La Chevalerie', '47.176', '-1.733'),
 (NULL, '3', 'Aquarium de Niort', 'Avenue de la Rochelle', '46.313', '-0.461');
+
     ***
      */
 
     /*
-     * INSERT INTO `sorties` (`id`, `no_etat_id`, `no_lieu_id`, `no_participant_id`, `nom`, `date_debut`, `date_cloture_inscription`, `date_creation_sortie`, `duree`, `nb_inscriptions_max`, `description_infos`, `url_photo`) VALUES
-(NULL, '1', '1', '1', 'Promenade au Parc du Thabor', '2023-08-01 10:00:00', '2023-07-25 12:00:00', '2023-07-01 09:00:00', '120', '20', 'Une belle promenade matinale au Parc du Thabor.', '/images/thabor.jpg'),
-(NULL, '1', '3', '1', 'Visite du Musée des Beaux-Arts', '2024-08-30 14:00:00', '2024-08-28 12:00:00', '2024-08-15 09:00:00', '120', '15', 'Découverte des œuvres classiques au Musée des Beaux-Arts.', '/images/musee.jpg'),
-(NULL, '1', '4', '1', 'Exploration du Château des Ducs de Bretagne', '2024-09-03 09:30:00', '2024-09-01 12:00:00', '2024-08-20 10:00:00', '120', '30', 'Visite historique du célèbre Château des Ducs.', '/images/chateau.jpg'),
-(NULL, '1', '5', '1', 'Détente au Jardin des Plantes', '2024-09-04 11:00:00', '2024-09-02 12:00:00', '2024-08-21 10:00:00', '120', '25', 'Un moment de détente au cœur de la nature.', '/images/jardin.jpg'),
-(NULL, '1', '6', '1', 'Tour du Donjon de Niort', '2024-09-05 10:00:00', '2024-09-03 12:00:00', '2024-08-22 10:00:00', '120', '20', 'Montée dans l’historique Donjon de Niort.', '/images/donjon.jpg'),
-(NULL, '1', '7', '1', 'Visite du Musée Bernard d’Agesci', '2024-09-06 15:00:00', '2024-09-04 12:00:00', '2024-08-23 10:00:00', '120', '18', 'Découverte des collections du Musée Bernard d’Agesci.', '/images/bernard.jpg'),
-(NULL, '1', '8', '1', 'Découverte de la Cathédrale Saint-Corentin', '2024-09-07 09:00:00', '2024-09-05 12:00:00', '2024-08-24 10:00:00', '120', '22', 'Visite guidée de la magnifique cathédrale.', '/images/cathedrale.jpg'),
-(NULL, '1', '9', '1', 'Art et histoire au Musée des Beaux-Arts de Quimper', '2024-09-08 14:00:00', '2024-09-06 12:00:00', '2024-08-25 10:00:00', '120', '15', 'Une plongée dans l’art breton.', '/images/art_quimper.jpg'),
-(NULL, '1', '11', '1', 'Les Machines de l’île en action', '2024-09-09 10:30:00', '2024-09-07 12:00:00', '2024-08-26 10:00:00', '120', '30', 'Voir les éléphants géants et les machines fantastiques en action.', '/images/machines.jpg'),
-(NULL, '1', '12', '1', 'Balade sur l’Île de Versailles', '2024-09-10 11:00:00', '2024-09-08 12:00:00', '2024-08-27 10:00:00', '120', '25', 'Une balade tranquille sur l’Île de Versailles à Nantes.', '/images/versailles.jpg');
+     * INSERT INTO `sorties` (`id`, `no_etat_id`, `no_lieu_id`, `no_participant_id`, `nom`, `date_debut`, `date_cloture_inscription`, `date_creation_sortie`, `duree`, `nb_inscriptions_max`, `description_infos`, `url_photo`, `date_fin`) VALUES
+(NULL, '1', '1', '1', 'Promenade au Parc du Thabor', '2023-08-01 10:00:00', '2023-07-25 12:00:00', '2023-07-01 09:00:00', '120', '20', 'Une belle promenade matinale au Parc du Thabor.', '/images/thabor.jpg', '2023-08-01 12:00:00'), -- Rennes
+(NULL, '1', '2', '1', 'Visite du Musée des Beaux-Arts', '2024-08-30 14:00:00', '2024-08-28 12:00:00', '2024-08-15 09:00:00', '120', '15', 'Découverte des œuvres classiques au Musée des Beaux-Arts.', '/images/musee.jpg', '2024-08-30 16:00:00'), -- Rennes
+(NULL, '1', '3', '1', 'Exploration du Château des Ducs de Bretagne', '2024-09-03 09:30:00', '2024-09-01 12:00:00', '2024-08-20 10:00:00', '120', '30', 'Visite historique du célèbre Château des Ducs.', '/images/chateau.jpg', '2024-09-03 11:30:00'), -- Nantes
+(NULL, '1', '4', '1', 'Détente au Jardin des Plantes', '2024-09-04 11:00:00', '2024-09-02 12:00:00', '2024-08-21 10:00:00', '120', '25', 'Un moment de détente au cœur de la nature.', '/images/jardin.jpg', '2024-09-04 13:00:00'), -- Nantes
+(NULL, '1', '5', '1', 'Tour du Donjon de Niort', '2024-09-05 10:00:00', '2024-09-03 12:00:00', '2024-08-22 10:00:00', '120', '20', 'Montée dans l’historique Donjon de Niort.', '/images/donjon.jpg', '2024-09-05 12:00:00'), -- Niort
+(NULL, '1', '6', '1', 'Visite du Musée Bernard d’Agesci', '2024-09-06 15:00:00', '2024-09-04 12:00:00', '2024-08-23 10:00:00', '120', '18', 'Découverte des collections du Musée Bernard d’Agesci.', '/images/bernard.jpg', '2024-09-06 17:00:00'), -- Niort
+(NULL, '1', '7', '1', 'Découverte de la Cathédrale Saint-Corentin', '2024-09-07 09:00:00', '2024-09-05 12:00:00', '2024-08-24 10:00:00', '120', '22', 'Visite guidée de la magnifique cathédrale.', '/images/cathedrale.jpg', '2024-09-07 11:00:00'), -- Quimper
+(NULL, '1', '8', '1', 'Art et histoire au Musée des Beaux-Arts de Quimper', '2024-09-08 14:00:00', '2024-09-06 12:00:00', '2024-08-25 10:00:00', '120', '15', 'Une plongée dans l’art breton.', '/images/art_quimper.jpg', '2024-09-08 16:00:00'), -- Quimper
+(NULL, '1', '10', '1', 'Les Machines de l’île en action', '2024-09-09 10:30:00', '2024-09-07 12:00:00', '2024-08-26 10:00:00', '120', '30', 'Voir les éléphants géants et les machines fantastiques en action.', '/images/machines.jpg', '2024-09-09 12:30:00'), -- Nantes
+(NULL, '1', '11', '1', 'Balade sur l’Île de Versailles', '2024-09-10 11:00:00', '2024-09-08 12:00:00', '2024-08-27 10:00:00', '120', '25', 'Une balade tranquille sur l’Île de Versailles à Nantes.', '/images/versailles.jpg', '2024-09-10 13:00:00'); -- Nantes
+
+
      */
     /*
  *
