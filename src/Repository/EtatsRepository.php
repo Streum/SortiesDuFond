@@ -20,7 +20,8 @@ class EtatsRepository extends ServiceEntityRepository
         $this->em = $em;
     }
 
-    public function updateEtats(Sorties $sorties){
+    public function updateEtats(Sorties $sorties): ?Etats
+    {
         $now = new \DateTime();
 
         $etatCree = $this->findOneById(1);
@@ -43,6 +44,11 @@ class EtatsRepository extends ServiceEntityRepository
         if ($now > $sorties->getDateDebut() && $now < $sorties->getDateFin()){
             $sorties->setNoEtat($etatEnCours);
             $newEtat = $etatEnCours;
+        }
+
+        if($now > $sorties->getdateFin()){
+            $sorties->setNoEtat($etatPasse);
+            $newEtat = $etatPasse;
         }
 
         $this->em->flush();
