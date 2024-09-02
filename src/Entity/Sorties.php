@@ -252,7 +252,7 @@ class Sorties
         return $dateFin;
     }
 
-
+    #hello
     // Nouvelle méthode pour vérifier les conditions d'inscription
     public function peutSInscrire(): bool
     {

@@ -31,7 +31,7 @@ class SortiesController extends AbstractController
     #[Route('/', name: '_index', methods: ['GET'])]
     public function index(SortiesRepository $sortiesRepository): Response
     {
-
+        #hello
         $sorties = $sortiesRepository->findSortiesOneMonthOld();
         $cptBySortie = [];
 
