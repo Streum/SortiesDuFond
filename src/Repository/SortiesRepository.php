@@ -51,4 +51,19 @@ class SortiesRepository extends ServiceEntityRepository
 
         return $minutes;
     }
+
+
+    public function findSortiesOneMonthOld(): array
+    {
+        // Détermine la date un mois avant aujourd'hui
+        $oneMonthAgo = (new \DateTime())->modify('-1 month')->setTime(0, 0, 0);
+
+        // Crée une requête pour récupérer les sorties non archivés
+        return $this->createQueryBuilder('s')
+            ->where('s.dateDebut > :startDate')
+            ->setParameter('startDate', $oneMonthAgo)
+            ->getQuery()
+            ->getResult();
+    }
+
 }

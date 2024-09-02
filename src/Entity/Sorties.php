@@ -67,6 +67,7 @@ class Sorties
     #[ORM\JoinColumn(nullable: false)]
     private ?Participant $noParticipant = null;
 
+
     public function __construct()
     {
         $this->inscriptions = new ArrayCollection();
@@ -76,6 +77,7 @@ class Sorties
     {
         return $this->id;
     }
+
 
     public function getNom(): ?string
     {
@@ -266,5 +268,7 @@ class Sorties
 
         return true;
     }
+
+
 
 }

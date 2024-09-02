@@ -10,6 +10,7 @@ use App\Repository\EtatsRepository;
 use App\Repository\InscriptionsRepository;
 use App\Repository\SortiesRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,7 +31,8 @@ class SortiesController extends AbstractController
     #[Route('/', name: '_index', methods: ['GET'])]
     public function index(SortiesRepository $sortiesRepository): Response
     {
-        $sorties = $sortiesRepository->findAll();
+
+        $sorties = $sortiesRepository->findSortiesOneMonthOld();
         $cptBySortie = [];
 
         foreach ($sorties as $sortie) {
@@ -211,5 +213,6 @@ class SortiesController extends AbstractController
             'etat' => $etat,
         ], Response::HTTP_SEE_OTHER);
     }
+
 
 }
