@@ -100,8 +100,9 @@ INSERT INTO `etats` (`id`, `libelle`) VALUES
 (2, 'Ouverte'),
 (3, 'Cloturée'),
 (4, 'Activité en cours'),
-(5, 'passée'),
-(6, 'Annulée');
+(5, 'Passée'),
+(6, 'Annulée')
+(7, 'Archivée');
  *
  *INSERT INTO `sites` (`id`, `nom_site`) VALUES (NULL, 'Rennes'), (NULL, 'Nantes'), (NULL, 'Niort'), (NULL, 'Quimper');
  */

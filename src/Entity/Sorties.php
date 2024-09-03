@@ -251,7 +251,7 @@ class Sorties
         if ($this->dateClotureInscription <= new \DateTime()) {
             return false;
         }
-        
+
         if ($this->inscriptions->count() >= $this->nbInscriptionsMax) {
             return false;
         }
