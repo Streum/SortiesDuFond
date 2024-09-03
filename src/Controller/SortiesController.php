@@ -93,12 +93,17 @@ class SortiesController extends AbstractController
             'cpt' => $cpt,
             'isInscrit' => $isInscrit,
             'etat' => $etat,
+            'user' => $user,
         ]);
     }
 
     #[Route('/{id}/edit', name: '_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Sorties $sortie, EntityManagerInterface $entityManager): Response
     {
+        $user = $this->getUser();
+        if ($sortie->getNoParticipant() !== $user) {
+            throw $this->createAccessDeniedException('Access Denied');
+        }
         $form = $this->createForm(SortiesType::class, $sortie);
         $form->handleRequest($request);
 
@@ -117,6 +122,10 @@ class SortiesController extends AbstractController
     #[Route('/{id}', name: '_delete', methods: ['POST'])]
     public function delete(Request $request, Sorties $sortie, EntityManagerInterface $entityManager): Response
     {
+        $user = $this->getUser();
+        if ($sortie->getNoParticipant() !== $user) {
+            throw $this->createAccessDeniedException('Access Denied');
+        }
         if ($this->isCsrfTokenValid('delete' . $sortie->getId(), $request->get('_token'))) {
             $entityManager->remove($sortie);
             $entityManager->flush();
@@ -205,6 +214,10 @@ class SortiesController extends AbstractController
     #[Route('/{id}/publier', name: '_publication', methods: ['GET', 'POST'])]
     public function publishSortie(Sorties $sortie, Request $request, EntityManagerInterface $entityManager, EtatsRepository $etatsRepository, $id): Response
     {
+        $user = $this->getUser();
+        if ($sortie->getNoParticipant() !== $user) {
+            throw $this->createAccessDeniedException('Access Denied');
+        }
 
         $etat = $etatsRepository->openStatus($sortie);
 
@@ -219,7 +232,7 @@ class SortiesController extends AbstractController
         $user = $this->getUser();
 
         // Vérifier que l'utilisateur connecté est l'organisateur de la sortie
-        if ($user !== $sortie->getNoParticipant()) {
+        if ($user !== $sortie->getNoParticipant() || !$user->isAdministrateur()) {
             $this->addFlash('error', 'Vous n\'êtes pas autorisé à annuler cette sortie.');
             return $this->redirectToRoute('app_sorties_index');
         }

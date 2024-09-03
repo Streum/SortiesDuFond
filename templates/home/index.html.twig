@@ -68,48 +68,6 @@
             </div>
         </div>
 
-        <section class="sorties-list">
-            <h2>Sorties</h2>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Nom</th>
-                    <th>Ville</th>
-                    <th>Date Début</th>
-                    <th>Durée</th>
-                    <th>Description</th>
-                    <th>Actions</th>
-                    <th>Places</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for sortie in sorties %}
-                    <tr>
-                        <td>{{ sortie.nom }}</td>
-                        <td>{{ sortie.noLieu.noVille.nomVille }}</td>
-                        <td>{{ sortie.dateDebut ? sortie.dateDebut|date('d-m-Y H:i') : '' }}</td>
-                        <td>{{ sortie.duree }}</td>
-                        <td>{{ sortie.descriptionInfos }}</td>
-                        <td>
-                            <a href="{{ path('app_sorties_show', {'id': sortie.id}) }}"
-                               class="btn btn-primary">Détails</a>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-primary position-relative">
-                                S'inscrire<span
-                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">2/{{ sortie.nbInscriptionsMax }}</span>
-                            </button>
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="9">Aucune sortie trouvée</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </section>
-
         <!-- Boutons placés en bas de page -->
         <div class="d-flex justify-content-center">
             <a href="{{ path('app_lieux_new') }}" class="btn btn-primary ms-2">Ajouter un lieu</a>

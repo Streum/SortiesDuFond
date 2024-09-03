@@ -43,7 +43,12 @@ class VillesFixtures extends Fixture implements FixtureGroupInterface
     */
 
     /*
-     * INSERT INTO `villes` (`id`, `nom_ville`, `code_postal`) VALUES (NULL, 'Rennes', '35000'), (NULL, 'Nantes', '44000'), (NULL, 'Niort', '79000'), (NULL, 'Quimper', '29000');
+     * INSERT INTO villes (id, nom_ville, code_postal, url_photos) VALUES
+(1, 'Rennes', 35000, 'https://www.jds.fr/medias/image/opera-de-rennes-reservation-spectacle-visite-154660-920-0-F.webp'),
+(2, 'Nantes', 44000, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJN-Sf4luiV48th6QVS3VOYb6GBpRkEcgmwA&s'),
+(3, 'Niort', 79000, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2fz-KcFuVOA2E-RaTs4dCS99ysLZJS7AHsw&s'),
+(4, 'Quimper', 29000, 'https://www.trecobois.fr/wp-content/uploads/2021/07/quimper.jpg'),
+
      */
 
     /*
