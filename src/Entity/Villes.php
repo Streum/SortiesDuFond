@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\VillesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: VillesRepository::class)]
@@ -21,6 +22,9 @@ class Villes
 
     #[ORM\Column(length: 10)]
     private ?string $codePostal = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $urlPhotos = null;
 
 
 
@@ -51,6 +55,18 @@ class Villes
     public function setCodePostal(string $codePostal): static
     {
         $this->codePostal = $codePostal;
+
+        return $this;
+    }
+
+    public function getUrlPhotos(): ?string
+    {
+        return $this->urlPhotos;
+    }
+
+    public function setUrlPhotos(?string $urlPhotos): static
+    {
+        $this->urlPhotos = $urlPhotos;
 
         return $this;
     }
