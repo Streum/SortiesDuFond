@@ -236,11 +236,12 @@ class SortiesController extends AbstractController
     {
         $user = $this->getUser();
 
-        // Vérifier que l'utilisateur connecté est l'organisateur de la sortie
-        if ($user !== $sortie->getNoParticipant() || !$user->isAdministrateur()) {
+        // Vérifier que l'utilisateur connecté est l'organisateur de la sortie ou est administrateur
+        if ($user !== $sortie->getNoParticipant() && !$user->isAdministrateur()) {
             $this->addFlash('error', 'Vous n\'êtes pas autorisé à annuler cette sortie.');
             return $this->redirectToRoute('app_sorties_index');
         }
+
 
         // Vérifier que la sortie n'a pas déjà commencé
         if ($sortie->getDateDebut() <= new \DateTime()) {

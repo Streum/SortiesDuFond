@@ -87,9 +87,15 @@
                     {% if inscriptions is not empty %}
                         {% for inscription in inscriptions %}
                             <tr>
-                                <td>{{ inscription.noParticipant.pseudo }}</td>
+                                <td>
+                                    <a href="{{ path('app_participant_show', {'id': inscription.noParticipant.id}) }}" style="text-decoration: none; color: inherit;">
+                                        {{ inscription.noParticipant.pseudo }}
+                                    </a>
+                                </td>
                                 <td>{{ inscription.noParticipant.nom }}</td>
                             </tr>
+
+
                         {% endfor %}
                     {% else %}
                         <tr>
@@ -126,5 +132,6 @@
             <a href="{{ path('app_sorties_annuler', {'id': sortie.id}) }}" class="btn btn-warning ms-2">Annuler la sortie</a>
         {% endif %}
         <a href="{{ path('app_home') }}" class="btn btn-primary ms-2">Revenir a l'acceuil</a>
+
     </div>
 {% endblock %}
