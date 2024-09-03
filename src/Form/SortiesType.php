@@ -33,9 +33,6 @@ class SortiesType extends AbstractType
             ->add('descriptionInfos', TextType::class, [
                 'label' => 'Description',
             ])
-            ->add('urlPhoto', TextType::class, [
-                'label' => 'Lien de l\'image',
-            ])
             ->add('noLieu', EntityType::class, [
                 'class' => Lieux::class,
                 'choice_label' => 'nomLieu',

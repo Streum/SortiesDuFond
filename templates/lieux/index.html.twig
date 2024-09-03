@@ -25,41 +25,6 @@
         </div>
     </div>
 
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Nom du lieu</th>
-                        <th>Rue</th>
-                        <th>Latitude</th>
-                        <th>Longitude</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for lieux in lieuxes %}
-                        <tr>
-                            <td>{{ lieux.nomLieu }}</td>
-                            <td>{{ lieux.rue }}</td>
-                            <td>{{ lieux.latitude }}</td>
-                            <td>{{ lieux.longitude }}</td>
-                            <td>
-                                <a class="btn btn-primary" href="{{ path('app_lieux_show', {'id': lieux.id}) }}">Détails</a>
-                                <a class="btn btn-primary" href="{{ path('app_lieux_edit', {'id': lieux.id}) }}">Modifier</a>
-                            </td>
-                        </tr>
-                    {% else %}
-                        <tr>
-                            <td colspan="6">no records found</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
 <div class="d-flex justify-content-center">
     <a class="btn btn-primary ms-2" href="{{ path('app_lieux_new') }}">Nouveau lieu</a>
 </div>
