@@ -112,18 +112,15 @@
 
 
 
-        {# Affichage conditionnel des boutons d'inscription #}
-        {% if isInscrit %}
-            {# Bouton "Se désinscrire" visible seulement si l'utilisateur est inscrit #}
+
+        {% if isInscrit and sortie.noEtat.libelle != 'passée' %}
             <a href="{{ path('app_sorties_desinscription', {'id': sortie.id}) }}" class="btn btn-danger ms-2">Se désinscrire</a>
-        {% elseif sortie.noEtat.libelle not in ['Clôturée', 'Annulée']
+        {% elseif sortie.noEtat.libelle not in ['Clôturée', 'Annulée', 'passée']
             and sortie.dateClotureInscription > 'now'|date('Y-m-d H:i:s')
             and cpt < sortie.nbInscriptionsMax %}
-            {# Bouton "S'inscrire" visible seulement si l'utilisateur n'est pas inscrit,
-                que la sortie est encore ouverte, que la date de clôture n'est pas dépassée,
-                et que la limite des inscriptions n'est pas atteinte #}
             <a href="{{ path('app_sorties_inscription', {'id': sortie.id}) }}" class="btn btn-primary ms-2">S'inscrire</a>
         {% endif %}
+
         {% if user.getId() == sortie.noParticipant.getId() %}
             <a href="{{ path('app_sorties_edit', {'id': sortie.id}) }}" class="btn btn-success ms-2">Modifier</a>
             {{ include('sorties/_delete_form.html.twig') }}
@@ -131,7 +128,7 @@
         {% if user.isAdministrateur() or user.getId() == sortie.noParticipant.getId() %}
             <a href="{{ path('app_sorties_annuler', {'id': sortie.id}) }}" class="btn btn-warning ms-2">Annuler la sortie</a>
         {% endif %}
-        <a href="{{ path('app_home') }}" class="btn btn-primary ms-2">Revenir a l'acceuil</a>
+        <a href="{{ path('app_home') }}" class="btn btn-primary ms-2">Revenir a l'accueil</a>
 
     </div>
 {% endblock %}
