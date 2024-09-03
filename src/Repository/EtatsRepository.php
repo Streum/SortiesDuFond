@@ -37,7 +37,7 @@ class EtatsRepository extends ServiceEntityRepository
         }
 
         if($now > $sorties->getDateClotureInscription() && $now < $sorties->getDateDebut()){
-            $sorties->setNoEtat($etatPasse);
+            $sorties->setNoEtat($etatCloture);
             $newEtat = $etatCloture;
         }
 
@@ -71,6 +71,8 @@ class EtatsRepository extends ServiceEntityRepository
 
         return $etatOuvert;
     }
+
+
 
     //    /**
     //     * @return Etats[] Returns an array of Etats objects
