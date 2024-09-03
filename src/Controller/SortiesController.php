@@ -28,20 +28,25 @@ class SortiesController extends AbstractController
     }
 
     #[Route('/', name: '_index', methods: ['GET'])]
-    public function index(SortiesRepository $sortiesRepository): Response
+    public function index(SortiesRepository $sortiesRepository, Request $request): Response
     {
         #hello
-        $sorties = $sortiesRepository->findSortiesOneMonthOld();
+        $page = $request->query->getInt('page', 1);
+        $limit = 5; // Nombre de sorties par page
+
+        $paginator = $sortiesRepository->findPaginatedSorties($page, $limit);
         $cptBySortie = [];
 
-        foreach ($sorties as $sortie) {
+        foreach ($paginator as $sortie) {
             $inscriptions = $sortie->getInscriptions();
             $cptBySortie[$sortie->getId()] = count($inscriptions);
         }
 
         return $this->render('sorties/index.html.twig', [
-            'sorties' => $sorties,
             'cpt' => $cptBySortie,
+            'sorties' => $paginator,
+            'currentPage' => $page,
+            'totalPages' => ceil(count($paginator) / $limit),
         ]);
     }
 

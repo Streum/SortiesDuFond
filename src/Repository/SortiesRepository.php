@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Sorties;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -53,17 +54,15 @@ class SortiesRepository extends ServiceEntityRepository
     }
 
 
-    public function findSortiesOneMonthOld(): array
-    {
-        // Détermine la date un mois avant aujourd'hui
-        $oneMonthAgo = (new \DateTime())->modify('-1 month')->setTime(0, 0, 0);
 
-        // Crée une requête pour récupérer les sorties non archivés
-        return $this->createQueryBuilder('s')
-            ->where('s.dateDebut > :startDate')
-            ->setParameter('startDate', $oneMonthAgo)
-            ->getQuery()
-            ->getResult();
+    public function findPaginatedSorties(int $page, int $limit): Paginator
+    {
+        $query = $this->createQueryBuilder('s')
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
+            ->getQuery();
+
+        return new Paginator($query, true);
     }
 
 }

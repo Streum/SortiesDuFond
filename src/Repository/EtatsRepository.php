@@ -28,6 +28,7 @@ class EtatsRepository extends ServiceEntityRepository
         $etatCloture = $this->findOneById(3);
         $etatEnCours = $this->findOneById(4);
         $etatPasse = $this->findOneById(5);
+        $etatArchive = $this->findOneById(7);
 
         $newEtat = null;
 
@@ -49,6 +50,12 @@ class EtatsRepository extends ServiceEntityRepository
         if($now > $sorties->getdateFin()){
             $sorties->setNoEtat($etatPasse);
             $newEtat = $etatPasse;
+        }
+        // Détermine la date un mois avant aujourd'hui
+        $oneMonthAgo = (new \DateTime())->modify('-1 month')->setTime(0, 0, 0);
+        if($sorties->getDateDebut() < $oneMonthAgo){
+            $sorties->setNoEtat($etatArchive);
+            $newEtat = $etatArchive;
         }
 
         $this->em->flush();
