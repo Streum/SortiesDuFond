@@ -27,9 +27,14 @@ class HomeController extends AbstractController
         $form = $this->createForm(SearchType::class);
         $form->handleRequest($request);
 
-
         $sorties = $sortiesRepository->findAll();
 
+        $inscriptionsParSortie = [];
+
+        foreach ($sorties as $sortie) {
+            $inscriptionsParSortie[$sortie->getId()] = $sortie->getInscriptions()->count();
+            //ajouter updateStatus
+        }
 
         $queryBuilder = $sortiesRepository->createQueryBuilder('s');
 
@@ -87,13 +92,11 @@ class HomeController extends AbstractController
             $sorties = $queryBuilder->getQuery()->getResult();
         }
 
-
-
         return $this->render('home/index.html.twig', [
             'sorties' => $sorties,
             'villes' => $villesRepository->findAll(),
             'searchForm' => $form,
-
+            'inscriptionsParSortie' => $inscriptionsParSortie,
         ]);
     }
     #[Route('/administration', name: 'app_admin')]
@@ -101,5 +104,4 @@ class HomeController extends AbstractController
     {
         return $this->render('participant/admin.html.twig');
     }
-
 }
