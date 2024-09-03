@@ -41,6 +41,7 @@ header {
 }
 
 nav {
+    height: 80px;
     padding: 10px;
     text-align: center;
 }
@@ -50,19 +51,48 @@ nav a {
     text-decoration: none;
 }
 
-/* Styles pour les tablettes (écrans entre 768px et 1024px) */
+.navbar-logo{
+    height: 60px;
+    width: auto;
+}
+
+
+
 @media (min-width: 768px) and (max-width: 1024px) {
     .container {
         padding: 15px;
     }
 
-    nav {
-        text-align: left;
-    }
-
     .row-cols-md-5 > .col {
         flex: 0 0 33.333%;
         max-width: 33.333%;
+    }
+
+    nav {
+        text-align: right;
+    }
+
+    .navbar-nav {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .navbar-nav .nav-item .nav-link {
+        color: white;
+        padding: 10px 15px;
+    }
+
+    .navbar-nav .nav-item .nav-link:hover {
+        background-color: #495057;
+        color: #ffffff;
+    }
+
+    .collapse.navbar-collapse {
+        width: auto;
+        position: absolute;
+        right: 0;
+        top: 100%;
+        background-color: #343a40;
     }
 
 }
