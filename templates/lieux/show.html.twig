@@ -3,11 +3,19 @@
 {% block title %}Lieux{% endblock %}
 
 {% block body %}
+
     <h1 class="d-flex justify-content-center">Lieu</h1>
 
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-3">
+            <div class="col-md-6">
+           {% include 'cartes/_carte.html.twig' with {'latitude' : lieux.latitude, 'longitude' : lieux.longitude} %}
+            </div></div></div>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+
+
                 <table class="table">
                     <tbody>
                     <tr>
@@ -36,5 +44,6 @@
     <a class="btn btn-primary ms-2" href="{{ path('app_lieux_index') }}">Liste des lieux</a>
     <a class="btn btn-primary ms-2" href="{{ path('app_lieux_edit', {'id': lieux.id}) }}">Modifier</a>
 </div>
+
 
 {% endblock %}

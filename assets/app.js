@@ -2,9 +2,12 @@
 import './vendor/bootstrap/bootstrap.index.js';
 import './vendor/bootstrap/dist/css/bootstrap.min.css';
 import './bootstrap.js';
+import Modal from 'bootstrap';
 
 
 import './styles/app.css';
+
+
 
 document.addEventListener('DOMContentLoaded', function() {
     var checkbox1 = document.getElementById('search_isInscrit');

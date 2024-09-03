@@ -107,6 +107,11 @@
             </div>
         </div>
     </div>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+    {% include 'cartes/_carte.html.twig' with {'latitude' : sortie.noLieu.latitude, 'longitude' : sortie.noLieu.longitude} %}
+        </div></div></div>
 
     <div class="d-flex justify-content-center mt-4">
 
@@ -114,6 +119,10 @@
 
 
         {% if isInscrit and sortie.noEtat.libelle != 'passée' %}
+
+        {# Affichage conditionnel des boutons d'inscription #}
+        {% if isInscrit %}
+            {# Bouton "Se désinscrire" visible seulement si l'utilisateur est inscrit #}
             <a href="{{ path('app_sorties_desinscription', {'id': sortie.id}) }}" class="btn btn-danger ms-2">Se désinscrire</a>
         {% elseif sortie.noEtat.libelle not in ['Clôturée', 'Annulée', 'passée']
             and sortie.dateClotureInscription > 'now'|date('Y-m-d H:i:s')
@@ -127,6 +136,7 @@
         {% endif %}
         {% if user.isAdministrateur() or user.getId() == sortie.noParticipant.getId() %}
             <a href="{{ path('app_sorties_annuler', {'id': sortie.id}) }}" class="btn btn-warning ms-2">Annuler la sortie</a>
+        {% endif %}
         {% endif %}
         <a href="{{ path('app_home') }}" class="btn btn-primary ms-2">Revenir a l'accueil</a>
 
