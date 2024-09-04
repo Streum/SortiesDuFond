@@ -21,6 +21,9 @@ class SortiesRepository extends ServiceEntityRepository
     {
         $queryBuilder = $this->createQueryBuilder('s');
 
+        $queryBuilder->leftJoin('s.inscriptions', 'i')
+            ->addSelect('i');
+
         $queryBuilder->join('s.noEtat', 'e');
 
         $statesToInclude = [2, 3, 4];
@@ -28,10 +31,10 @@ class SortiesRepository extends ServiceEntityRepository
             $queryBuilder->andWhere('e.id IN (:states)')
                 ->setParameter('states', $statesToInclude);
         } else {
-            $statesToInclude[] = 5; // Ajout des sorties passées
+            $statesToInclude[] = 5;
             $queryBuilder->andWhere('e.id IN (:states)')
-                ->setParameter('states', $statesToInclude);
-            $queryBuilder->orWhere('s.dateFin < :now')
+                ->setParameter('states', $statesToInclude)
+                ->orWhere('s.dateFin < :now')
                 ->setParameter('now', new \DateTime());
         }
 
@@ -39,8 +42,8 @@ class SortiesRepository extends ServiceEntityRepository
             ->setParameter('states', $statesToInclude);
 
         if (!empty($data['noLieu'])) {
-            $queryBuilder->join('s.noLieu', 'l')
-                ->join('l.noVille', 'si')
+            $queryBuilder->leftJoin('s.noLieu', 'l')
+                ->leftJoin('l.noVille', 'si')
                 ->andWhere('si.id = :noLieu')
                 ->setParameter('noLieu', $data['noLieu']);
         }
@@ -73,8 +76,7 @@ class SortiesRepository extends ServiceEntityRepository
         }
 
         if (!empty($data['isInscrit'])) {
-            $queryBuilder->join('s.inscriptions', 'i')
-                ->andWhere('i.noParticipant = :participant')
+            $queryBuilder->andWhere('i.noParticipant = :participant')
                 ->setParameter('participant', $user);
         }
 

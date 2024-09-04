@@ -47,10 +47,9 @@
                             <div class="card-body d-flex flex-column">
                                 <img class="mb-2 img-fluid card-img-top" src="{{ sortie.noLieu.noVille.urlPhotos }}" alt="Photo de la ville">
                                 <h5 class="card-title">{{ sortie.nom }}</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">{{ sortie.noLieu.nomLieu }}
+                                <h6 class="card-subtitle mb-2 text-muted">{{ lieux[sortie.noLieu.id].nomLieu }}
                                     ({{ sortie.noLieu.noVille.nomVille }})</h6>
                                 <p class="card-text">{{ sortie.descriptionInfos }}</p>
-                                <p class="card-text">{{ sortie.noEtat.libelle }}</p>
                                 <p class="card-text">{{ sortie.dateDebut | date('d M Y') }}</p>
                                 <a href="{{ path('app_sorties_show', {'id': sortie.id}) }}"
                                    class="btn btn-outline-info ms-2 mb-2">Détails</a>

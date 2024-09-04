@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Form\SearchType;
 use App\Repository\EtatsRepository;
+use App\Repository\LieuxRepository;
 use App\Repository\SortiesRepository;
 use App\Repository\VillesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,7 +25,7 @@ class HomeController extends AbstractController
     }
 
     #[Route('/home', name: 'app_home')]
-    public function index(Request $request, SortiesRepository $sortiesRepository, VillesRepository $villesRepository, EtatsRepository $etatsRepository): Response
+    public function index(Request $request, SortiesRepository $sortiesRepository, VillesRepository $villesRepository, LieuxRepository $lieuxRepository, EtatsRepository $etatsRepository): Response
     {
         $form = $this->createForm(SearchType::class);
         $form->handleRequest($request);
@@ -35,14 +36,26 @@ class HomeController extends AbstractController
 
         $sorties = $sortiesRepository->findFilteredSorties($data, $user);
 
+        $lieuxIds = array_map(function($sortie) {
+            return $sortie->getNoLieu()->getId();
+        }, $sorties);
+
+        $lieux = $lieuxRepository->findLieuxByIds($lieuxIds);
+
+        $lieuxById = [];
+        foreach ($lieux as $lieu) {
+            $lieuxById[$lieu->getId()] = $lieu;
+        }
+
         $inscriptionsParSortie = [];
         foreach ($sorties as $sortie) {
-            $inscriptionsParSortie[$sortie->getId()] = $sortie->getInscriptions()->count();
-            $etatsRepository->updateEtats($sortie);
+            $inscriptionsParSortie[$sortie->getId()] = count($sortie->getInscriptions());
+            //$etatsRepository->updateEtats($sortie);
         }
 
         return $this->render('home/index.html.twig', [
             'sorties' => $sorties,
+            'lieux' => $lieuxById,
             'villes' => $villesRepository->findAll(),
             'searchForm' => $form,
             'inscriptionsParSortie' => $inscriptionsParSortie,
