@@ -17,21 +17,75 @@ class SortiesRepository extends ServiceEntityRepository
         parent::__construct($registry, Sorties::class);
     }
 
+    public function findFilteredSorties($data, $user)
+    {
+        $queryBuilder = $this->createQueryBuilder('s');
 
-    //    /**
-    //     * @return Sorties[] Returns an array of Sorties objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('s.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+        $queryBuilder->join('s.noEtat', 'e');
+
+        $statesToInclude = [2, 3, 4];
+        if (empty($data['passee'])) {
+            $queryBuilder->andWhere('e.id IN (:states)')
+                ->setParameter('states', $statesToInclude);
+        } else {
+            $statesToInclude[] = 5; // Ajout des sorties passées
+            $queryBuilder->andWhere('e.id IN (:states)')
+                ->setParameter('states', $statesToInclude);
+            $queryBuilder->orWhere('s.dateFin < :now')
+                ->setParameter('now', new \DateTime());
+        }
+
+        $queryBuilder->andWhere('e.id IN (:states)')
+            ->setParameter('states', $statesToInclude);
+
+        if (!empty($data['noLieu'])) {
+            $queryBuilder->join('s.noLieu', 'l')
+                ->join('l.noVille', 'si')
+                ->andWhere('si.id = :noLieu')
+                ->setParameter('noLieu', $data['noLieu']);
+        }
+
+        if (!empty($data['nom'])) {
+            $queryBuilder->andWhere('s.nom LIKE :nom')
+                ->setParameter('nom', '%' . $data['nom'] . '%');
+        }
+
+        if (!empty($data['dateDebut'])) {
+            $queryBuilder->andWhere('s.dateDebut >= :dateDebut OR s.dateFin >= :dateDebut')
+                ->setParameter('dateDebut', $data['dateDebut']);
+        }
+
+        if (!empty($data['dateFin'])) {
+            $queryBuilder->andWhere('s.dateDebut <= :dateFin OR s.dateFin <= :dateFin')
+                ->setParameter('dateFin', $data['dateFin']);
+        }
+
+        if (!empty($data['orga'])) {
+            $queryBuilder->join('s.noParticipant', 'p')
+                ->andWhere('p.id = :organisateur')
+                ->setParameter('organisateur', $user);
+        }
+
+        if (!empty($data['passee'])) {
+            // Inclure les sorties passées dans les résultats
+            $queryBuilder->andWhere('s.dateFin < :now')
+                ->setParameter('now', new \DateTime());
+        }
+
+        if (!empty($data['isInscrit'])) {
+            $queryBuilder->join('s.inscriptions', 'i')
+                ->andWhere('i.noParticipant = :participant')
+                ->setParameter('participant', $user);
+        }
+
+        if (!empty($data['isNotInscrit'])) {
+            $queryBuilder->leftJoin('s.inscriptions', 'i_not')
+                ->andWhere('i_not.noParticipant IS NULL OR i_not.noParticipant != :participant')
+                ->setParameter('participant', $user);
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 
     public function findOneBySomeField($value): ?Sorties
     {
