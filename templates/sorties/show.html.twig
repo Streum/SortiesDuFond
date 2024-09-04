@@ -115,29 +115,30 @@
 
     <div class="d-flex justify-content-center mt-4">
 
+        {% if sortie.noEtat.id != 5 %}
 
+            {% if isInscrit and sortie.noEtat.id in [2, 3] %}
+                <a href="{{ path('app_sorties_desinscription', {'id': sortie.id}) }}" class="btn btn-danger ms-2">Se désinscrire</a>
+            {% elseif not isInscrit and sortie.noEtat.id == 2
+                and sortie.dateClotureInscription > 'now'|date('Y-m-d H:i:s')
+                and cpt < sortie.nbInscriptionsMax %}
+                <a href="{{ path('app_sorties_inscription', {'id': sortie.id}) }}" class="btn btn-primary ms-2">S'inscrire</a>
+            {% endif %}
 
+            {% if user.getId() == sortie.noParticipant.getId() %}
+                <a href="{{ path('app_sorties_edit', {'id': sortie.id}) }}" class="btn btn-success ms-2">Modifier</a>
+            {% endif %}
 
-        {% if isInscrit and sortie.noEtat.libelle != 'passée' %}
+            {% if user.isAdministrateur() %}
+                {{ include('sorties/_delete_form.html.twig') }}
+            {% endif %}
 
-        {# Affichage conditionnel des boutons d'inscription #}
-        {% if isInscrit %}
-            {# Bouton "Se désinscrire" visible seulement si l'utilisateur est inscrit #}
-            <a href="{{ path('app_sorties_desinscription', {'id': sortie.id}) }}" class="btn btn-danger ms-2">Se désinscrire</a>
-        {% elseif sortie.noEtat.libelle not in ['Clôturée', 'Annulée', 'passée']
-            and sortie.dateClotureInscription > 'now'|date('Y-m-d H:i:s')
-            and cpt < sortie.nbInscriptionsMax %}
-            <a href="{{ path('app_sorties_inscription', {'id': sortie.id}) }}" class="btn btn-primary ms-2">S'inscrire</a>
+            {% if user.isAdministrateur() or user.getId() == sortie.noParticipant.getId() %}
+                <a href="{{ path('app_sorties_annuler', {'id': sortie.id}) }}" class="btn btn-warning ms-2">Annuler la sortie</a>
+            {% endif %}
+
         {% endif %}
 
-        {% if user.getId() == sortie.noParticipant.getId() %}
-            <a href="{{ path('app_sorties_edit', {'id': sortie.id}) }}" class="btn btn-success ms-2">Modifier</a>
-            {{ include('sorties/_delete_form.html.twig') }}
-        {% endif %}
-        {% if user.isAdministrateur() or user.getId() == sortie.noParticipant.getId() %}
-            <a href="{{ path('app_sorties_annuler', {'id': sortie.id}) }}" class="btn btn-warning ms-2">Annuler la sortie</a>
-        {% endif %}
-        {% endif %}
         <a href="{{ path('app_home') }}" class="btn btn-primary ms-2">Revenir a l'accueil</a>
 
     </div>
