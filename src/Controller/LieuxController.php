@@ -105,7 +105,7 @@ class LieuxController extends AbstractController
                 'name' => $lieu->getNomLieu(),
             ]), Response::HTTP_OK);
         }
-        
+
 
         return $this->render('lieux/edit_ajax.html.twig', [
             'form' => $form
