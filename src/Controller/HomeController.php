@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Form\SearchType;
+use App\Repository\EtatsRepository;
 use App\Repository\SortiesRepository;
 use App\Repository\VillesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,75 +22,23 @@ class HomeController extends AbstractController
         // Redirige la racine vers /home
         return $this->redirectToRoute('app_home');
     }
+
     #[Route('/home', name: 'app_home')]
-    public function index(Request $request, SortiesRepository $sortiesRepository, VillesRepository $villesRepository): Response
+    public function index(Request $request, SortiesRepository $sortiesRepository, VillesRepository $villesRepository, EtatsRepository $etatsRepository): Response
     {
         $form = $this->createForm(SearchType::class);
         $form->handleRequest($request);
 
-        $sorties = $sortiesRepository->findAll();
+        $user = $this->getUser();
+
+        $data = $form->isSubmitted() && $form->isValid() ? $form->getData() : [];
+
+        $sorties = $sortiesRepository->findFilteredSorties($data, $user);
 
         $inscriptionsParSortie = [];
-
         foreach ($sorties as $sortie) {
             $inscriptionsParSortie[$sortie->getId()] = $sortie->getInscriptions()->count();
-            //ajouter updateStatus
-        }
-
-        $queryBuilder = $sortiesRepository->createQueryBuilder('s');
-
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-            $user = $this->getUser();
-
-            if ($data['noLieu']) {
-                $queryBuilder->join('s.noLieu', 'l')
-                ->join('l.noVille', 'si')
-                ->andWhere('si.id = :noLieu')
-                    ->setParameter('noLieu', $data['noLieu']);
-            }
-
-            if ($data['nom']) {
-                $queryBuilder->andWhere('s.nom LIKE :nom')
-                    ->setParameter('nom', '%' . $data['nom'] . '%');
-            }
-
-            if ($data['dateDebut']) {
-                $queryBuilder->andWhere('s.dateDebut >= :dateDebut OR s.dateFin >= :dateDebut')
-                    ->setParameter('dateDebut', $data['dateDebut']);
-            }
-
-            if ($data['dateFin']) {
-                $queryBuilder->andWhere('s.dateDebut <= :dateFin OR s.dateFin <= :dateFin')
-                    ->setParameter('dateFin', $data['dateFin']);
-            }
-
-            if ($data['orga']) {
-
-                $queryBuilder->join('s.noParticipant', 'p')
-                    ->andWhere('p.id = :organisateur')
-                    ->setParameter('organisateur', $user);
-            }
-
-            if ($data['passee']) {
-                $queryBuilder->andWhere('s.dateFin < :now')
-                    ->setParameter('now', new \DateTime());
-            }
-
-            if ($data['isInscrit']) {
-                $queryBuilder->join('s.inscriptions', 'i')
-                ->andWhere('i.noParticipant = :participant')
-                    ->setParameter('participant', $user);
-            }
-
-            if ($data['isNotInscrit']) {
-                $queryBuilder->leftJoin('s.inscriptions', 'i_not')
-                ->andWhere('i_not.noParticipant IS NULL OR i_not.noParticipant != :participant')
-                    ->setParameter('participant', $user);
-            }
-
-            $sorties = $queryBuilder->getQuery()->getResult();
+            $etatsRepository->updateEtats($sortie);
         }
 
         return $this->render('home/index.html.twig', [
@@ -99,6 +48,7 @@ class HomeController extends AbstractController
             'inscriptionsParSortie' => $inscriptionsParSortie,
         ]);
     }
+
     #[Route('/administration', name: 'app_admin')]
     public function administration(): Response
     {

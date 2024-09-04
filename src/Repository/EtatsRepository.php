@@ -36,23 +36,23 @@ class EtatsRepository extends ServiceEntityRepository
             $newEtat = $etatCree;
         }
 
-        if($now > $sorties->getDateClotureInscription() && $now < $sorties->getDateDebut()){
+        if ($now > $sorties->getDateClotureInscription() && $now < $sorties->getDateDebut()) {
             $sorties->setNoEtat($etatCloture);
             $newEtat = $etatCloture;
         }
 
-        if ($now > $sorties->getDateDebut() && $now < $sorties->getDateFin()){
+        if ($now > $sorties->getDateDebut() && $now < $sorties->getDateFin()) {
             $sorties->setNoEtat($etatEnCours);
             $newEtat = $etatEnCours;
         }
 
-        if($now > $sorties->getdateFin()){
+        if ($now > $sorties->getdateFin()) {
             $sorties->setNoEtat($etatPasse);
             $newEtat = $etatPasse;
         }
-        // Détermine la date un mois avant aujourd'hui
+
         $oneMonthAgo = (new \DateTime())->modify('-1 month')->setTime(0, 0, 0);
-        if($sorties->getDateDebut() < $oneMonthAgo){
+        if ($sorties->getDateDebut() < $oneMonthAgo) {
             $sorties->setNoEtat($etatArchive);
             $newEtat = $etatArchive;
         }
@@ -62,7 +62,8 @@ class EtatsRepository extends ServiceEntityRepository
         return $newEtat;
     }
 
-    public function openStatus(Sorties $sorties){
+    public function openStatus(Sorties $sorties)
+    {
         $etatOuvert = $this->findOneById(2);
         $sorties->setNoEtat($etatOuvert);
 
@@ -71,30 +72,12 @@ class EtatsRepository extends ServiceEntityRepository
         return $etatOuvert;
     }
 
-
-
-    //    /**
-    //     * @return Etats[] Returns an array of Etats objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('e')
-    //            ->andWhere('e.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('e.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-        public function findOneById($value): ?Etats
-        {
-            return $this->createQueryBuilder('e')
-                ->andWhere('e.id = :val')
-                ->setParameter('val', $value)
-                ->getQuery()
-                ->getOneOrNullResult()
-            ;
-        }
+    public function findOneById($value): ?Etats
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.id = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }
