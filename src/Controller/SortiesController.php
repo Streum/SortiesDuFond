@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Inscriptions;
+use App\Entity\Lieux;
 use App\Entity\Participant;
 use App\Entity\Sorties;
 use App\Form\AnnulationType;
+use App\Form\LieuxType;
 use App\Form\SortiesType;
 use App\Repository\EtatsRepository;
 use App\Repository\InscriptionsRepository;
@@ -16,6 +18,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/sorties', name: 'app_sorties')]
 class SortiesController extends AbstractController
@@ -54,12 +57,15 @@ class SortiesController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager, SortiesRepository $sortiesRepository): Response
     {
         $sortie = new Sorties();
+
+
         $form = $this->createForm(SortiesType::class, $sortie);
+
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user = $this->security->getUser();
-
+            $user = $this->getUser();
             $sortie->setNoParticipant($user);
 
             $entityManager->persist($sortie);
@@ -70,11 +76,13 @@ class SortiesController extends AbstractController
 
         return $this->render('sorties/new.html.twig', [
             'sortie' => $sortie,
-            'form' => $form,
+            'formS' => $form->createView()
+
         ]);
     }
 
-    #[Route('/{id}', name: '_show', methods: ['GET'])]
+
+    #[Route('/{id}', name: '_show', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function show(Sorties $sortie, InscriptionsRepository $inscriptionsRepository, EtatsRepository $etatsRepository): Response
     {
         $user = $this->getUser();
@@ -102,7 +110,7 @@ class SortiesController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: '_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: '_edit', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
     public function edit(Request $request, Sorties $sortie, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
@@ -124,7 +132,7 @@ class SortiesController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: '_delete', methods: ['POST'])]
+    #[Route('/{id}', name: '_delete', methods: ['POST'], requirements: ['id' => '\d+'])]
     public function delete(Request $request, Sorties $sortie, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
@@ -139,7 +147,7 @@ class SortiesController extends AbstractController
         return $this->redirectToRoute('app_sorties_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/{id}/inscription', name: '_inscription', methods: ['GET', 'POST'])]
+    #[Route('/{id}/inscription', name: '_inscription', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
     public function registration(Request $request, EntityManagerInterface $entityManager, $id): Response
     {
         $inscription = new Inscriptions();
@@ -182,7 +190,7 @@ class SortiesController extends AbstractController
         return $this->redirectToRoute('app_sorties_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/{id}/desinscription', name: '_desinscription', methods: ['GET', 'POST'])]
+    #[Route('/{id}/desinscription', name: '_desinscription', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
     public function unregistration(Request $request, EntityManagerInterface $entityManager, $id): Response
     {
         $user = $this->getUser();
@@ -215,7 +223,7 @@ class SortiesController extends AbstractController
         return $this->redirectToRoute('app_sorties_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/{id}/publier', name: '_publication', methods: ['GET', 'POST'])]
+    #[Route('/{id}/publier', name: '_publication', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
     public function publishSortie(Sorties $sortie, Request $request, EntityManagerInterface $entityManager, EtatsRepository $etatsRepository, $id): Response
     {
         $user = $this->getUser();
@@ -230,7 +238,7 @@ class SortiesController extends AbstractController
         ], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/{id}/annuler', name: '_annuler', methods: ['GET', 'POST'])]
+    #[Route('/{id}/annuler', name: '_annuler', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
     public function annuler(Sorties $sortie, Request $request, EntityManagerInterface $entityManager, EtatsRepository $etatsRepository): Response
     {
         $user = $this->getUser();

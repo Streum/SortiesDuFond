@@ -119,7 +119,7 @@ class ParticipantController extends AbstractController
 
 
 
-    #[Route('/administration/participant/{id}', name: 'app_participant_show', methods: ['GET'])]
+    #[Route('/administration/participant/{id}', name: 'app_participant_show', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function show(Participant $participant, SortiesRepository $sortiesRepository): Response
     {
         $sorties = $sortiesRepository->findAll();
@@ -179,7 +179,7 @@ class ParticipantController extends AbstractController
             'form' => $form,
         ]);
     }
-    #[Route('/administration/participant/edit/{id}', name: 'app_participant_edit', methods: ['GET', 'POST'])]
+    #[Route('/administration/participant/edit/{id}', name: 'app_participant_edit', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
     public function edit(Request $request, Participant $participant, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(ParticipantAdminEditType::class, $participant);
@@ -220,7 +220,7 @@ class ParticipantController extends AbstractController
 
 
 
-    #[Route('/administration/participant/delete/{id}', name: 'app_participant_delete', methods: ['POST'])]
+    #[Route('/administration/participant/delete/{id}', name: 'app_participant_delete', methods: ['POST'], requirements: ['id' => '\d+'])]
     public function delete(
         Request $request,
         Participant $participant,
@@ -272,7 +272,7 @@ class ParticipantController extends AbstractController
         return $this->redirectToRoute('app_participant_index', [], Response::HTTP_SEE_OTHER);
     }
 
- #[Route('/administration/participant/actif/{id}', name: 'app_participant_actif', methods: ['POST', 'GET'])]
+ #[Route('/administration/participant/actif/{id}', name: 'app_participant_actif', methods: ['POST', 'GET'], requirements: ['id' => '\d+'])]
     public function setActif(
         Request $request,
         Participant $participant,

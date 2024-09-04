@@ -42,7 +42,7 @@ class AjouterVillesController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_ajouter_villes_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'app_ajouter_villes_show', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function show(Villes $ville): Response
     {
         return $this->render('ajouter_villes/show.html.twig', [
@@ -50,7 +50,7 @@ class AjouterVillesController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_ajouter_villes_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'app_ajouter_villes_edit', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
     public function edit(Request $request, Villes $ville, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(VillesType::class, $ville);
@@ -68,7 +68,7 @@ class AjouterVillesController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_ajouter_villes_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'app_ajouter_villes_delete', methods: ['POST'], requirements: ['id' => '\d+'])]
     public function delete(Request $request, Villes $ville, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$ville->getId(), $request->getPayload()->getString('_token'))) {

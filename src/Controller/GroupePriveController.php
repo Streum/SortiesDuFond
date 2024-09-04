@@ -72,7 +72,7 @@ class GroupePriveController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_groupe_prive_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'app_groupe_prive_show', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function show(GroupePrive $groupePrive, ParticipantRepository $participantRepository,
                          InscriptionGroupePriveRepository $inscriptionGroupePriveRepository): Response
     {
@@ -103,7 +103,7 @@ class GroupePriveController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_groupe_prive_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'app_groupe_prive_edit', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
     public function edit(
         Request $request,
         GroupePrive $groupePrive,
@@ -133,7 +133,7 @@ class GroupePriveController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_groupe_prive_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'app_groupe_prive_delete', methods: ['POST'], requirements: ['id' => '\d+'])]
     public function delete(Request $request, GroupePrive $groupePrive, EntityManagerInterface $entityManager): Response
     {
         // Vérifier que l'utilisateur connecté est le propriétaire du groupe
@@ -149,7 +149,7 @@ class GroupePriveController extends AbstractController
     }
 
 
-    #[Route('/addParticipants/{id}', name: 'app_groupe_prive_addParticipants')]
+    #[Route('/addParticipants/{id}', name: 'app_groupe_prive_addParticipants', requirements: ['id' => '\d+'])]
     public function addParticipants(
         Request $request,
         GroupePrive $groupePrive,
@@ -225,7 +225,7 @@ class GroupePriveController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-    #[Route('/deleteParticipants/{id}', name: 'app_groupe_prive_deleteParticipants')]
+    #[Route('/deleteParticipants/{id}', name: 'app_groupe_prive_deleteParticipants', requirements: ['id' => '\d+'])]
     public function deleteParticipants(
         Request $request,
         GroupePrive $groupePrive,

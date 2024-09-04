@@ -8,21 +8,27 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-4">
-                {{ form_start(form) }}
+                {{ form_start(formS) }}
 
-                {{ form_row(form.nom) }}
-                {{ form_row(form.dateDebut) }}
-                {{ form_row(form.duree) }}
-                {{ form_row(form.nbInscriptionsMax) }}
-                {{ form_row(form.descriptionInfos) }}
-                {{ form_row(form.noLieu) }}
-                {{ form_row(form.dateClotureInscription) }}
+                {{ form_row(formS.nom) }}
+                {{ form_row(formS.dateDebut) }}
+                {{ form_row(formS.duree) }}
+                {{ form_row(formS.nbInscriptionsMax) }}
+                {{ form_row(formS.descriptionInfos) }}
+                {{ form_row(formS.noLieu) }}
+                {{ form_row(formS.dateClotureInscription) }}
                 <div class="d-flex justify-content-center">
+                    <a href="#" class="btn btn-warning ms-2" {{ stimulus_controller('modal-form', {
+                        'formUrl': path('app_lieux_create_ajax'),
+                    }) }} data-action="modal-form#openModal">Créer un lieu</a>
+
+
                     <button class="btn btn-success ms-2" href="{{ path('app_sorties_new') }}">Créer</button>
                     <a class="btn btn-primary ms-2" href="{{ path('app_sorties_index') }}">Liste des sorties</a>
                 </div>
-                {{ form_end(form) }}
+                {{ form_end(formS) }}
             </div>
         </div>
     </div>
+    {% include 'part/_modal.html.twig' with { modalTitle: 'Ajouter un lieu'} %}
 {% endblock %}

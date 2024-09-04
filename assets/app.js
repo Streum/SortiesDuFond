@@ -9,6 +9,7 @@ import './styles/app.css';
 
 
 
+
 document.addEventListener('DOMContentLoaded', function() {
     var checkbox1 = document.getElementById('search_isInscrit');
     var checkbox2 = document.getElementById('search_isNotInscrit');
