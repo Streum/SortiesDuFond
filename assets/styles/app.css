@@ -17,6 +17,13 @@ h1, h2, h3, h4 {
     margin: auto;
 }
 
+.card img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    aspect-ratio: 16 / 9;
+}
+
 .row-cols-md-5 > .col {
     flex: 0 0 20%;
     max-width: 20%;
@@ -56,7 +63,15 @@ nav a {
     width: auto;
 }
 
-
+.search-box {
+    background-color: #2A3440;
+    padding: 20px;
+    color: ivory;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 1);
+    margin: 20px auto;
+    max-width: 700px;
+}
 
 @media (min-width: 768px) and (max-width: 1024px) {
     .container {
@@ -96,8 +111,6 @@ nav a {
     }
 
 }
-
-
 
 /* Styles pour les mobiles (écrans jusqu'à 767px) */
 @media (max-width: 767px) {

@@ -8,13 +8,7 @@
             <h1>Sorties du fond</h1>
         </header>
 
-        <div class="border border-2 border-opacity-25 border-dark rounded p-4" style="background-color: #2A3440;
-    padding: 20px;
-    color: ivory;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 1);
-    margin: 20px auto;
-    max-width: 700px;">
+        <div class="border border-2 border-opacity-25 border-dark rounded p-4 search-box">
 
             {{ form_start(searchForm) }}
             {{ form_row(searchForm.noLieu) }}
@@ -48,27 +42,25 @@
         <div class="container">
             <div class="row row-cols-1 row-cols-md-5 g-4 justify-content-center">
                 {% for sortie in sorties %}
-                    {% if (sortie.noEtat.id != 1) or (sortie.noEtat.id != 6) or (sortie.noEtat.id != 7) %}
                     <div class="col">
                         <div class="card h-100 d-flex flex-column">
                             <div class="card-body d-flex flex-column">
-                                <img src="{{ sortie.noLieu.noVille.urlPhotos }}" alt="Photo de la ville">
+                                <img class="mb-2 img-fluid card-img-top" src="{{ sortie.noLieu.noVille.urlPhotos }}" alt="Photo de la ville">
                                 <h5 class="card-title">{{ sortie.nom }}</h5>
                                 <h6 class="card-subtitle mb-2 text-muted">{{ sortie.noLieu.nomLieu }}
                                     ({{ sortie.noLieu.noVille.nomVille }})</h6>
                                 <p class="card-text">{{ sortie.descriptionInfos }}</p>
                                 <p class="card-text">{{ sortie.noEtat.libelle }}</p>
-                                <p class="card-text">{{ sortie.dateDebut | date('d M y') }}</p>
+                                <p class="card-text">{{ sortie.dateDebut | date('d M Y') }}</p>
                                 <a href="{{ path('app_sorties_show', {'id': sortie.id}) }}"
                                    class="btn btn-outline-info ms-2 mb-2">Détails</a>
-                                <button type="button" class="btn btn-primary position-relative ms-2">
+                                <a type="button" href="{{ path('app_sorties_inscription', {'id': sortie.id}) }}" class="btn btn-primary position-relative ms-2 mt-auto">
                                     S'inscrire<span
                                             class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{ sortie.inscriptions|length }}/{{ sortie.nbInscriptionsMax }}</span>
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>
-                    {% endif %}
                 {% endfor %}
             </div>
         </div>
