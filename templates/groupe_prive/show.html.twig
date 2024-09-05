@@ -3,36 +3,50 @@
 {% block title %}Groupes{% endblock %}
 
 {% block body %}
-    <h1>Groupes Privés</h1>
+    <h1 class="text-center m-2">Groupes Privés</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Label</th>
-                <td>{{ groupe_prive.label }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ groupe_prive.description }}</td>
-            </tr>
-            <tr>
-                <th>Participants</th>
-                <td>
-                    <ul>
-                        {% for inscrit in lesInscrits %}
-                            <li>{{ inscrit.nom }}</li>
-                        {% endfor %}
-                    </ul>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <th>Label</th>
+                        <td>{{ groupe_prive.label }}</td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td>{{ groupe_prive.description }}</td>
+                    </tr>
+                    <tr>
+                        <th>Participants</th>
+                        <td>
+                            <ul>
+                                {% for inscrit in lesInscrits %}
+                                    <li>{{ inscrit.nom }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-    <a class="btn btn-success ms-2" href="{{ path('app_groupe_prive_index') }}">Mes Groupes</a>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <a class="btn btn-success ms-2" href="{{ path('app_groupe_prive_index') }}">Mes Groupes</a>
+                <a class="btn btn-success ms-2" href="{{ path('app_groupe_prive_edit', {'id': groupe_prive.id}) }}">Modifier</a>
+                <a class="btn btn-success ms-2" href="{{ path('app_groupe_prive_addParticipants', {'id': groupe_prive.id}) }}">Ajouter des Participants</a>
+                <a class="btn btn-danger ms-2" href="{{ path('app_groupe_prive_deleteParticipants', {'id': groupe_prive.id}) }}">Supprimer des Participants</a>
+                <form method="post" action="{{ path('app_groupe_prive_delete', {'id': groupe_prive.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce groupe ?');" style="display: inline;">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ groupe_prive.id) }}">
+                    <button class="btn btn-danger ms-2">Supprimer</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
-    <a class="btn btn-success ms-2" href="{{ path('app_groupe_prive_edit', {'id': groupe_prive.id}) }}">Modifier</a>
-    <a class="btn btn-success ms-2" href="{{ path('app_groupe_prive_addParticipants', {'id': groupe_prive.id}) }}">Ajouter des Participants</a>
-    <a class="btn btn-danger ms-2" href="{{ path('app_groupe_prive_deleteParticipants', {'id': groupe_prive.id}) }}">Supprimer des Participants</a>
-
-    {{ include('groupe_prive/_delete_form.html.twig') }}
 {% endblock %}
