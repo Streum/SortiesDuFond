@@ -187,10 +187,14 @@ class GroupePriveController extends AbstractController
                 'choices' => $choices,
                 'expanded' => true,  // Utilisation des cases à cocher
                 'multiple' => true,  // Permettre la sélection multiple
-                'label' => 'Select Participants',
+                'label' => 'Choisir les participants',
+                'choice_attr' => function($choice, $key, $value) {
+                    return ['class' => 'custom-checkbox'];
+                },
             ])
-            ->add('submit', SubmitType::class, ['label' => 'Add Participants'])
+            ->add('submit', SubmitType::class, ['label' => 'Ajouter participants'])
             ->getForm();
+
 
         $form->handleRequest($request);
 
@@ -237,7 +241,7 @@ class GroupePriveController extends AbstractController
     {
         // Vérifier que l'utilisateur connecté est le propriétaire du groupe
         if ($groupePrive->getOwner() !== $this->getUser()) {
-            throw $this->createAccessDeniedException('Access Denied');
+            throw $this->createAccessDeniedException('Accès refusé');
         }
         // Récupérer tous les participants
         $participants = $participantRepository->findAll();
@@ -265,7 +269,7 @@ class GroupePriveController extends AbstractController
                 'multiple' => true,  // Permettre la sélection multiple
                 'label' => 'Select Participants',
             ])
-            ->add('submit', SubmitType::class, ['label' => 'Delete Participants'])
+            ->add('submit', SubmitType::class, ['label' => 'Supprimer les participants'])
             ->getForm();
 
         $form->handleRequest($request);
