@@ -83,8 +83,15 @@ class SortiesController extends AbstractController
 
 
     #[Route('/{id}', name: '_show', methods: ['GET'], requirements: ['id' => '\d+'])]
-    public function show(Sorties $sortie, InscriptionsRepository $inscriptionsRepository, EtatsRepository $etatsRepository): Response
+    public function show(int $id, InscriptionsRepository $inscriptionsRepository, EtatsRepository $etatsRepository, SortiesRepository $sortiesRepository): Response
     {
+
+        $sortie = $sortiesRepository->findSortieWithInscriptionsAndParticipants($id);
+
+        if (!$sortie) {
+            throw $this->createNotFoundException('Sortie non trouvée');
+        }
+
         $user = $this->getUser();
         $inscriptions = $sortie->getInscriptions();
         $cpt = $inscriptions->count();
@@ -92,12 +99,9 @@ class SortiesController extends AbstractController
 
         $isInscrit = false;
         if ($user instanceof Participant) {
-            $inscriptionExistante = $inscriptionsRepository->findOneBy([
-                'noParticipant' => $user,
-                'noSortie' => $sortie,
-            ]);
-
-            $isInscrit = ($inscriptionExistante !== null);
+            $isInscrit = $inscriptions->exists(function ($key, $inscription) use ($user) {
+                return $inscription->getNoParticipant() === $user;
+            });
         }
 
         return $this->render('sorties/show.html.twig', [
@@ -187,7 +191,7 @@ class SortiesController extends AbstractController
 
         $this->addFlash('success', 'Vous êtes inscrit à la sortie.');
 
-        return $this->redirectToRoute('app_sorties_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/{id}/desinscription', name: '_desinscription', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]

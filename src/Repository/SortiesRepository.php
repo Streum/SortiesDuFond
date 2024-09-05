@@ -89,6 +89,19 @@ class SortiesRepository extends ServiceEntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
+    public function findSortieWithInscriptionsAndParticipants(int $id): ?Sorties
+    {
+        return $this->createQueryBuilder('s')
+            ->leftJoin('s.inscriptions', 'i')
+            ->leftJoin('i.noParticipant', 'p')
+            ->addSelect('i')
+            ->addSelect('p')
+            ->where('s.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     public function findOneBySomeField($value): ?Sorties
     {
         return $this->createQueryBuilder('s')

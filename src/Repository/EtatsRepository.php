@@ -23,38 +23,33 @@ class EtatsRepository extends ServiceEntityRepository
     public function updateEtats(Sorties $sorties): ?Etats
     {
         $now = new \DateTime();
-
-        $etatCree = $this->findOneById(1);
-        $etatCloture = $this->findOneById(3);
-        $etatEnCours = $this->findOneById(4);
-        $etatPasse = $this->findOneById(5);
-        $etatArchive = $this->findOneById(7);
+        $etats = [
+            1 => $this->findOneById(1),
+            3 => $this->findOneById(3),
+            4 => $this->findOneById(4),
+            5 => $this->findOneById(5),
+            7 => $this->findOneById(7),
+        ];
 
         $newEtat = null;
 
         if ($now < $sorties->getDateDebut()) {
-            $newEtat = $etatCree;
-        }
-
-        if ($now > $sorties->getDateClotureInscription() && $now < $sorties->getDateDebut()) {
-            $sorties->setNoEtat($etatCloture);
-            $newEtat = $etatCloture;
-        }
-
-        if ($now > $sorties->getDateDebut() && $now < $sorties->getDateFin()) {
-            $sorties->setNoEtat($etatEnCours);
-            $newEtat = $etatEnCours;
-        }
-
-        if ($now > $sorties->getdateFin()) {
-            $sorties->setNoEtat($etatPasse);
-            $newEtat = $etatPasse;
+            $newEtat = $etats[1];
+        } elseif ($now > $sorties->getDateClotureInscription() && $now < $sorties->getDateDebut()) {
+            $sorties->setNoEtat($etats[3]);
+            $newEtat = $etats[3];
+        } elseif ($now > $sorties->getDateDebut() && $now < $sorties->getDateFin()) {
+            $sorties->setNoEtat($etats[4]);
+            $newEtat = $etats[4];
+        } elseif ($now > $sorties->getDateFin()) {
+            $sorties->setNoEtat($etats[5]);
+            $newEtat = $etats[5];
         }
 
         $oneMonthAgo = (new \DateTime())->modify('-1 month')->setTime(0, 0, 0);
         if ($sorties->getDateDebut() < $oneMonthAgo) {
-            $sorties->setNoEtat($etatArchive);
-            $newEtat = $etatArchive;
+            $sorties->setNoEtat($etats[7]);
+            $newEtat = $etats[7];
         }
 
         $this->em->flush();
