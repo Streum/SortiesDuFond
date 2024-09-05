@@ -349,7 +349,7 @@ class ParticipantController extends AbstractController
     {
         $form = $this->createFormBuilder()
             ->add('csvFile', FileType::class, [
-                'label' => 'CSV File (CSV format only)',
+                'label' => 'Fichier CSV',
                 'mapped' => false,
                 'required' => true,
                 'constraints' => [
@@ -370,7 +370,7 @@ class ParticipantController extends AbstractController
                     ])
                 ],
             ])
-            ->add('import', SubmitType::class, ['label' => 'Import Users'])
+            ->add('import', SubmitType::class, ['label' => 'Importer'])
             ->getForm();
 
         $form->handleRequest($request);

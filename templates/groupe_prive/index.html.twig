@@ -1,37 +1,41 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Groupes Prives{% endblock %}
+{% block title %}Groupes Privés{% endblock %}
 
 {% block body %}
-    <h1>Groupes Prives</h1>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Groupes Privés</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for groupe_prive in groupe_prives %}
+                        <tr>
+                            <td>{{ groupe_prive.label }}</td>
+                            <td>
+                                <a class="btn btn-primary btn-sm" href="{{ path('app_groupe_prive_show', {'id': groupe_prive.id}) }}">Détails</a>
 
-                <th>Nom</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for groupe_prive in groupe_prives %}
-            <tr>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="2" class="text-center">Aucun enregistrement trouvé</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-                <td>{{ groupe_prive.label }}</td>
-                <td>
-                    <a class="btn btn-success ms-2" href="{{ path('app_groupe_prive_show', {'id': groupe_prive.id}) }}">Détails</a>
-                    <a class="btn btn-success ms-2" href="{{ path('app_groupe_prive_edit', {'id': groupe_prive.id}) }}">Modifier</a>
-                    <a class="btn btn-success ms-2" href="{{ path('app_groupe_prive_addParticipants', {'id': groupe_prive.id}) }}">Ajouter des Participants</a>
-                    <a class="btn btn-danger ms-2" href="{{ path('app_groupe_prive_deleteParticipants', {'id': groupe_prive.id}) }}">Supprimer des Participants</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a  class="btn btn-success ms-2" href="{{ path('app_groupe_prive_new') }}">Create new</a>
+        <div class="text-center mt-3">
+            <a class="btn btn-success" href="{{ path('app_groupe_prive_new') }}">Créer un nouveau groupe</a>
+        </div>
+    </div>
 {% endblock %}

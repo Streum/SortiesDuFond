@@ -3,9 +3,19 @@
 {% block title %}Importer Utilisateurs{% endblock %}
 
 {% block body %}
-    <h1>Import Users from CSV</h1>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Importer des Utilisateurs à partir d'un fichier CSV</h1>
 
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    {{ form_end(form) }}
+        <div class="card shadow-m">
+            <div class="card-body">
+                {{ form_start(form) }}
+                <div class="mb-3">
+                    {{ form_label(form) }}
+                    {{ form_widget(form) }}
+                    {{ form_errors(form) }}
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}
