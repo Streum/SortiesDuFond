@@ -32,7 +32,7 @@
 
     <a class="btn btn-success ms-2" href="{{ path('app_groupe_prive_edit', {'id': groupe_prive.id}) }}">Modifier</a>
     <a class="btn btn-success ms-2" href="{{ path('app_groupe_prive_addParticipants', {'id': groupe_prive.id}) }}">Ajouter des Participants</a>
-    
+
     {% if lesInscrits|length > 0 %}
         <a class="btn btn-danger ms-2" href="{{ path('app_groupe_prive_deleteParticipants', {'id': groupe_prive.id}) }}">Supprimer des Participants</a>
     {% endif %}
