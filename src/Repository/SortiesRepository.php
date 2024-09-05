@@ -86,6 +86,8 @@ class SortiesRepository extends ServiceEntityRepository
                 ->setParameter('participant', $user);
         }
 
+        $queryBuilder->orderBy('s.dateDebut', 'ASC');
+
         return $queryBuilder->getQuery()->getResult();
     }
 
@@ -122,7 +124,15 @@ class SortiesRepository extends ServiceEntityRepository
         return $minutes;
     }
 
-
+    public function findSortiesByOrganizer($user)
+    {
+        return $this->createQueryBuilder('s')
+            ->where('s.noParticipant = :user')
+            ->setParameter('user', $user)
+            ->orderBy('s.dateDebut', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
     public function findPaginatedSorties(int $page, int $limit): Paginator
     {
