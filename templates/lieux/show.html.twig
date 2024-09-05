@@ -42,7 +42,9 @@
 
 <div class="d-flex justify-content-center">
     <a class="btn btn-primary ms-2" href="{{ path('app_lieux_index') }}">Liste des lieux</a>
+    {% if is_granted('ROLE_ADMIN') %}
     <a class="btn btn-primary ms-2" href="{{ path('app_lieux_edit', {'id': lieux.id}) }}">Modifier</a>
+    {% endif %}
 </div>
 
 

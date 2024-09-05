@@ -14,10 +14,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
-#[Route('/lieux')]
+
 class LieuxController extends AbstractController
 {
-    #[Route('/', name: 'app_lieux_index', methods: ['GET'])]
+    #[Route('/lieux', name: 'app_lieux_index', methods: ['GET'])]
     public function index(LieuxRepository $lieuxRepository): Response
     {
         return $this->render('lieux/index.html.twig', [
@@ -25,7 +25,7 @@ class LieuxController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_lieux_new', methods: ['GET', 'POST'])]
+    #[Route('/lieux/new', name: 'app_lieux_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $lieux = new Lieux();
@@ -45,7 +45,7 @@ class LieuxController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_lieux_show', methods: ['GET'], requirements: ['id' => '\d+'])]
+    #[Route('/lieux/{id}', name: 'app_lieux_show', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function show(Lieux $lieux): Response
     {
         return $this->render('lieux/show.html.twig', [
@@ -53,7 +53,7 @@ class LieuxController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_lieux_edit', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
+    #[Route('/administration/lieux/{id}/edit', name: 'app_lieux_edit', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
     public function edit(Request $request, Lieux $lieux, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(LieuxType::class, $lieux);
@@ -71,7 +71,7 @@ class LieuxController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_lieux_delete', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[Route('/administration/lieux/{id}', name: 'app_lieux_delete', methods: ['POST'], requirements: ['id' => '\d+'])]
     public function delete(Request $request, Lieux $lieux, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$lieux->getId(), $request->getPayload()->getString('_token'))) {

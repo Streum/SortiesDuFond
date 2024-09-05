@@ -9,15 +9,17 @@
         <div class="row justify-content-center">
             {% for lieux in lieuxes %}
                 <div class="col-md-3 mb-4">
-                    <div class="card" style="width: 100%;">
-                        <img class="card-img-top" src="{{ asset('/uploads/photos/rennes.jpg')}}" alt="Card image cap">
+                    <div class="card" style="width: 100%; height: 300px;">
+
                         <div class="card-body">
                             <h5 class="card-title">{{ lieux.nomLieu }}</h5>
                             <p class="card-text">{{ lieux.noVille.nomVille }}</p>
                             <p class="card-text">{{ lieux.rue }}</p>
                             <p class="card-text">Latitude : {{ lieux.latitude }} - Longitude : {{ lieux.longitude }}</p>
-                            <a class="btn btn-primary" href="{{ path('app_lieux_show', {'id': lieux.id}) }}">Détails</a>
-                            <a class="btn btn-success" href="{{ path('app_lieux_edit', {'id': lieux.id}) }}">Modifier</a>
+                            <a class="btn btn-outline-primary" href="{{ path('app_lieux_show', {'id': lieux.id}) }}">Détails</a>
+                            {% if is_granted('ROLE_ADMIN') %}
+                            <a class="btn btn-outline-success" href="{{ path('app_lieux_edit', {'id': lieux.id}) }}">Modifier</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -26,7 +28,7 @@
     </div>
 
 <div class="d-flex justify-content-center">
-    <a class="btn btn-primary ms-2" href="{{ path('app_lieux_new') }}">Nouveau lieu</a>
+    <a class="btn btn-outline-primary ms-2" href="{{ path('app_lieux_new') }}">Nouveau lieu</a>
 </div>
 
 {% endblock %}

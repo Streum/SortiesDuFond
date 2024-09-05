@@ -24,8 +24,10 @@
                             <td>
                                 <a class="btn btn-primary ms-2"
                                    href="{{ path('app_ajouter_villes_show', {'id': ville.id}) }}">Détails</a>
+                                {% if is_granted('ROLE_ADMIN') %}
                                 <a class="btn btn-primary ms-2"
                                    href="{{ path('app_ajouter_villes_edit', {'id': ville.id}) }}">Modifier</a>
+                                {% endif %}
                             </td>
                         </tr>
                     {% else %}
