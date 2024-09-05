@@ -33,7 +33,7 @@ class Sorties
     private ?\DateTimeInterface $dateClotureInscription = null;
 
     #[ORM\Column(nullable: true)]
-    #[Assert\GreaterThan(30, message: "La sortie doit durer au moins 30 minutes.")]
+    #[Assert\GreaterThan(29, message: "La sortie doit durer au moins 30 minutes.")]
     private ?int $duree = null;
 
     #[ORM\Column]
