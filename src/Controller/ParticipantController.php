@@ -23,6 +23,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Constraints\File;
 
 
@@ -53,61 +54,6 @@ class ParticipantController extends AbstractController
             'participant' => $participant,
         ]);
     }
-    #[Route('/participant/edit', name: 'app_participant_edit_profil', methods: ['GET', 'POST'])]
-    public function editProfil(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, Security $security): Response
-    {
-        // Récupérer l'utilisateur connecté
-        $participant = $security->getUser();
-
-        if ($participant->isAdministrateur()) {
-            $form = $this->createForm(ParticipantEditType::class, $participant);
-        } else {
-            $form = $this->createForm(ParticipantType::class, $participant);
-        }
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Gestion de l'upload de la photo
-            /** @var UploadedFile $photoFile */
-            $photoFile = $form->get('photo')->getData();
-
-            if ($photoFile) {
-                $newFilename = uniqid().'.'.$photoFile->guessExtension();
-
-                try {
-                    $photoFile->move(
-                        $this->getParameter('photos_directory'),
-                        $newFilename
-                    );
-                } catch (FileException $e) {
-                    // Gérer l'erreur si le fichier ne peut pas être déplacé
-                }
-
-                $participant->setPhoto($newFilename);
-            }
-            // Vérifiez si le mot de passe a été modifié
-            if ($form->get('plainPassword')->getData()) {
-                $participant->setPassword(
-                    $userPasswordHasher->hashPassword(
-                        $participant,
-                        $form->get('plainPassword')->getData()
-                    )
-                );
-            }
-
-            // Enregistrez les modifications dans la base de données
-            $entityManager->flush();
-
-            // Redirection après succès
-            return $this->redirectToRoute('app_user', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('participant/edit.html.twig', [
-            'participant' => $participant,
-            'form' => $form->createView(), // Corrigez ici pour passer le formulaire à la vue
-        ]);
-    }
 
     #[Route('/administration/participant', name: 'app_participant_index', methods: ['GET'])]
     public function index(ParticipantRepository $participantRepository): Response
@@ -119,18 +65,22 @@ class ParticipantController extends AbstractController
 
 
 
-    #[Route('/administration/participant/{id}', name: 'app_participant_show', methods: ['GET'], requirements: ['id' => '\d+'])]
+    #[Route('/participant/{id}', name: 'app_participant_show', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function show(Participant $participant, SortiesRepository $sortiesRepository): Response
     {
         $sorties = $sortiesRepository->findAll();
+
         foreach ($sorties as $sortie) {
-            if ($sortie->getNoParticipant()===$participant)
-            $participant->addSortie($sortie);
+            if ($sortie->getNoParticipant() === $participant) {
+                $participant->addSortie($sortie);
+            }
         }
+
         return $this->render('participant/show.html.twig', [
             'participant' => $participant,
         ]);
     }
+
     #[Route('/administration/new', name: 'app_participant_new', methods: ['GET', 'POST'])]
     public function new(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
@@ -215,6 +165,76 @@ class ParticipantController extends AbstractController
         return $this->render('participant/edit.html.twig', [
             'participant' => $participant,
             'form' => $form,
+        ]);
+    }
+
+    #[Route('/participant/edit/{id}', name: 'app_participant_edit_profil', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
+    #[IsGranted('ROLE_USER')]
+    public function editProfil(
+        Request $request,
+        UserPasswordHasherInterface $userPasswordHasher,
+        EntityManagerInterface $entityManager,
+        Security $security,
+        Participant $participant // L'utilisateur dont le profil est à modifier
+    ): Response {
+        // Récupérer l'utilisateur connecté
+        $currentUser = $security->getUser();
+
+        // Vérifier si l'utilisateur connecté est soit un admin soit le propriétaire du profil
+        if (!$currentUser->isAdministrateur() && $currentUser !== $participant) {
+            // Si l'utilisateur connecté n'est ni admin ni propriétaire du profil, refuser l'accès
+            throw $this->createAccessDeniedException("Vous ne pouvez modifier que votre propre profil.");
+        }
+
+        // Choisir le bon formulaire selon si l'utilisateur est admin ou non
+        if ($currentUser->isAdministrateur()) {
+            $form = $this->createForm(ParticipantEditType::class, $participant);
+        } else {
+            $form = $this->createForm(ParticipantType::class, $participant);
+        }
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Gestion de l'upload de la photo
+            /** @var UploadedFile $photoFile */
+            $photoFile = $form->get('photo')->getData();
+
+            if ($photoFile) {
+                $newFilename = uniqid().'.'.$photoFile->guessExtension();
+
+                try {
+                    $photoFile->move(
+                        $this->getParameter('photos_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // Gérer l'erreur si le fichier ne peut pas être déplacé
+                }
+
+                $participant->setPhoto($newFilename);
+            }
+
+            // Vérification et hashage du mot de passe si modifié
+            if ($form->get('plainPassword')->getData()) {
+                $participant->setPassword(
+                    $userPasswordHasher->hashPassword(
+                        $participant,
+                        $form->get('plainPassword')->getData()
+                    )
+                );
+            }
+
+            // Enregistrer les modifications dans la base de données
+            $entityManager->flush();
+
+            // Redirection après succès
+            return $this->redirectToRoute('app_user', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('participant/edit.html.twig', [
+            'participant' => $participant,
+            'form' => $form->createView(),
         ]);
     }
 

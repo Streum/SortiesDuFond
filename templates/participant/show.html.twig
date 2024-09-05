@@ -83,7 +83,10 @@
             {% if is_granted('ROLE_ADMIN') %}
                 <a href="{{ path('app_participant_index') }}" class="btn btn-primary mx-2">Liste d'utilisateurs</a>
             {% endif %}
-            <a href="{{ path('app_participant_edit_profil') }}" class="btn btn-success mx-2">Modifier le profil</a>
+            {% if is_granted('ROLE_ADMIN') or app.user.id == participant.id %}
+                <a href="{{ path('app_participant_edit_profil', {'id': participant.id}) }}" class="btn btn-success mx-2">Modifier le profil</a>
+            {% endif %}
+
         </div>
     </div>
 {% endblock %}
