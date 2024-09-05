@@ -32,3 +32,17 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+window.addEventListener('load', function() {
+    const logo = document.querySelector('.logo');
+    logo.classList.add('animate-logo');
+});
+
+window.addEventListener('load', function() {
+    const cards = document.querySelectorAll('.card');
+    cards.forEach((card, index) => {
+        setTimeout(() => {
+            card.classList.add('show-card');
+        }, index * 150);
+    });
+});

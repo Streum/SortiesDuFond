@@ -39,6 +39,18 @@
             {{ form_end(searchForm) }}
         </div>
 
+        Le problème vient probablement du fait que le bouton "Détails" et le bouton "S'inscrire" n'ont pas la bonne structure dans la disposition verticale (flex-column) que tu as appliquée à la carte.
+
+        Il y a une petite erreur sur le deuxième bouton "S'inscrire", qui doit également avoir un mt-2 pour que les deux boutons ne se chevauchent pas lorsqu'ils sont poussés vers le bas. Voici les modifications à apporter :
+
+        Assure-toi que le bouton "S'inscrire" est bien séparé du bouton "Détails" avec un mt-2.
+        Utilise mt-auto uniquement pour le bouton "Détails" pour le pousser en bas. Le bouton "S'inscrire" devrait avoir un espacement régulier avec le mt-2.
+
+        Voici un code mis à jour qui devrait résoudre ce problème :
+        Code corrigé :
+
+        html
+
         <div class="container">
             <div class="row row-cols-1 row-cols-md-5 g-4 justify-content-center">
                 {% for sortie in sorties %}
@@ -51,9 +63,11 @@
                                     ({{ sortie.noLieu.noVille.nomVille }})</h6>
                                 <p class="card-text">{{ sortie.descriptionInfos }}</p>
                                 <p class="card-text">{{ sortie.dateDebut | date('d M Y') }}</p>
+                                <!-- Bouton Détails fixé en bas avec mt-auto -->
                                 <a href="{{ path('app_sorties_show', {'id': sortie.id}) }}"
-                                   class="btn btn-outline-info ms-2 mb-2">Détails</a>
-                                <a type="button" href="{{ path('app_sorties_inscription', {'id': sortie.id}) }}" class="btn btn-primary position-relative ms-2 mt-auto">
+                                   class="btn btn-outline-info ms-2 mt-auto">Détails</a>
+                                <!-- Bouton S'inscrire avec un espacement mt-2, mais non fixé en bas -->
+                                <a type="button" href="{{ path('app_sorties_inscription', {'id': sortie.id}) }}" class="signup-button btn btn-primary position-relative ms-2 mt-2">
                                     S'inscrire<span
                                             class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{ sortie.inscriptions|length }}/{{ sortie.nbInscriptionsMax }}</span>
                                 </a>
