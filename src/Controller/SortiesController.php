@@ -71,7 +71,7 @@ class SortiesController extends AbstractController
             $entityManager->persist($sortie);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_sorties_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('sorties/new.html.twig', [
@@ -191,7 +191,7 @@ class SortiesController extends AbstractController
 
         $this->addFlash('success', 'Vous êtes inscrit à la sortie.');
 
-        return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_sorties_show', ['id' => $id]);
     }
 
     #[Route('/{id}/desinscription', name: '_desinscription', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
@@ -224,20 +224,20 @@ class SortiesController extends AbstractController
 
         $this->addFlash('success', 'Vous avez été désinscrit de la sortie.');
 
-        return $this->redirectToRoute('app_sorties_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/{id}/publier', name: '_publication', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
-    public function publishSortie(Sorties $sortie, Request $request, EntityManagerInterface $entityManager, EtatsRepository $etatsRepository, $id): Response
+    public function publishSortie(Sorties $sortie, EtatsRepository $etatsRepository, $id): Response
     {
         $user = $this->getUser();
         if ($sortie->getNoParticipant() !== $user) {
-            throw $this->createAccessDeniedException('Access Denied');
+            throw $this->createAccessDeniedException('Accès refusé');
         }
 
         $etat = $etatsRepository->openStatus($sortie);
 
-        return $this->redirectToRoute('app_sorties_index', [
+        return $this->redirectToRoute('app_home', [
             'etat' => $etat,
         ], Response::HTTP_SEE_OTHER);
     }
@@ -276,6 +276,22 @@ class SortiesController extends AbstractController
         return $this->render('sorties/annuler.html.twig', [
             'sortie' => $sortie,
             'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/sorties/mes-sorties', name: '_mes_sorties', methods: ['GET'])]
+    public function mySorties(): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user instanceof Participant) {
+            throw $this->createAccessDeniedException('Vous devez être connecté pour voir vos sorties.');
+        }
+
+        $sorties = $this->sortiesRepository->findSortiesByOrganizer($user);
+
+        return $this->render('sorties/messorties.html.twig', [
+            'sorties' => $sorties,
         ]);
     }
 
