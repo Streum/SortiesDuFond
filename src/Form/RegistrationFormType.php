@@ -62,9 +62,10 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Enregistrer',
+                'attr' => ['class' => 'btn btn-primary']
             ])
             ->add('agreeTerms', CheckboxType::class, [
-                'label' => 'J\'agrée les conditions',
+                'label' => 'J\'accepte les conditions',
                 'mapped' => false,
                 'constraints' => [
                     new IsTrue([
