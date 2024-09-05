@@ -38,7 +38,7 @@
                         <a href="{{ path('app_participant_show', {'id': participant.id}) }}" class="btn btn-outline-primary btn-sm">Détails</a>
                         <a href="{{ path('app_participant_edit', {'id': participant.id}) }}" class="btn btn-outline-primary btn-sm">Modifier</a>
                         {% if participant.actif %}
-                            <a href="{{ path('app_participant_actif', {'id': participant.id}) }}" class="btn btn-outline-warning btn-sm">Désactiver</a>
+                            <a href="{{ path('app_participant_actif', {'id': participant.id}) }}" class="btn btn-outline-danger btn-sm">Désactiver</a>
                         {% else %}
                             <a href="{{ path('app_participant_actif', {'id': participant.id}) }}" class="btn btn-outline-success btn-sm">Activer</a>
                         {% endif %}
