@@ -1,45 +1,29 @@
 /* Styles de base pour tous les écrans */
 
-.grid-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Deux colonnes de largeur égale */
-    gap: 20px; /* Espacement entre les colonnes */
-    margin-bottom: 40px; /* Espace sous la grille */
-}
-
-.info-section {
-    padding: 20px;
-    border-radius: 8px;
-}
-
-.map-section {
-    padding: 20px;
-    background-color: #f8f9fa; /* Optionnel : couleur de fond pour différencier les sections */
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optionnel : ombre pour un effet de profondeur */
-}
-
-.participants-section {
-    max-width: 800px;
-    width: 100%;
-}
-
-.participants-section table {
-    margin-top: 20px;
-}
-
-
 body {
     font-family: 'Source Sans 3', sans-serif;
     background-image: url("/uploads/photos/ivoryBackground.jpg");
     margin: 0;
     padding: 0;
+    height: 100%;
 }
 
-h1, h2, h3, h4 {
+h1 {
     font-family: "Roboto Condensed", sans-serif;
     font-optical-sizing: auto;
     font-style: normal;
+    color: #2A3440;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+h2, h3, h4 {
+    font-family: "Roboto Condensed", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+ul {
+    list-style-type: none;
 }
 
 .card {
@@ -78,6 +62,21 @@ h1, h2, h3, h4 {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
+}
+
+.table {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table thead th {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.table tbody tr {
+    border-bottom: 1px solid #dee2e6;
 }
 
 header {
@@ -130,6 +129,60 @@ nav a {
     transform: scale(1.05);
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
 }
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Deux colonnes de largeur égale */
+    gap: 20px; /* Espacement entre les colonnes */
+    margin-bottom: 40px; /* Espace sous la grille */
+}
+
+.info-section {
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.map-section {
+    padding: 20px;
+}
+
+.participants-section {
+    max-width: 800px;
+    width: 100%;
+}
+
+.participants-section table {
+    margin-top: 20px;
+}
+
+.checkbox-container {
+    background-color: rgba(255, 255, 255, 0.2); /* Fond blanc avec 20% d'opacité */
+    padding: 20px; /* Pour ajouter un peu d'espace autour du contenu */
+    border-radius: 10px; /* Pour arrondir les coins du conteneur */
+}
+
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 5 colonnes */
+    gap: 10px; /* Espacement entre les checkboxes */
+    justify-items: center; /* Centrer les items */
+    margin-top: 20px;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-item label {
+    margin-left: 8px;
+}
+
+.checkbox-item input {
+    margin-right: 5px; /* Espacement entre la case et le texte */
+    transform: scale(1.2); /* Pour agrandir un peu les checkboxes si tu le souhaites */
+}
+
 
 @media (min-width: 768px) and (max-width: 1024px) {
     .container {
