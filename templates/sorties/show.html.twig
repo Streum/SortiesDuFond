@@ -6,8 +6,9 @@
     <h1 class="d-flex justify-content-center">Sorties</h1>
 
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
+        <div class="grid-container">
+            <!-- Informations de la sortie -->
+            <div class="info-section">
                 <table class="table">
                     <tbody>
                     <tr>
@@ -38,16 +39,15 @@
                         <th>Description</th>
                         <td>{{ sortie.descriptionInfos }}</td>
                     </tr>
-
                     <tr>
                         <th>État de la Sortie</th>
                         <td>{{ sortie.noEtat.libelle }}</td>
                     </tr>
                     {% if sortie.motifAnnulation %}
-                    <tr>
-                        <th>Motif annulation :</th>
-                        <td>{{ sortie.motifAnnulation }}</td>
-                    </tr>
+                        <tr>
+                            <th>Motif annulation :</th>
+                            <td>{{ sortie.motifAnnulation }}</td>
+                        </tr>
                     {% endif %}
                     <tr>
                         <th>Photo</th>
@@ -71,10 +71,18 @@
                         <a href="{{ path('app_sorties_publication', {'id': sortie.id} ) }}"
                            class="btn btn-success ms-2">Publier</a>
                     {% endif %}
-
-
                 </div>
+            </div>
 
+            <!-- Carte -->
+            <div class="map-section">
+                {% include 'cartes/_carte.html.twig' with {'latitude' : sortie.noLieu.latitude, 'longitude' : sortie.noLieu.longitude} %}
+            </div>
+        </div>
+
+        <!-- Liste des participants -->
+        <div class="d-flex justify-content-center mt-4">
+            <div class="participants-section">
                 <h2>Liste des participants</h2>
                 <table class="table">
                     <thead>
@@ -88,14 +96,13 @@
                         {% for inscription in inscriptions %}
                             <tr>
                                 <td>
-                                    <a href="{{ path('app_participant_show', {'id': inscription.noParticipant.id}) }}" style="text-decoration: none; color: inherit;">
+                                    <a href="{{ path('app_participant_show', {'id': inscription.noParticipant.id}) }}"
+                                       style="text-decoration: none; color: inherit;">
                                         {{ inscription.noParticipant.pseudo }}
                                     </a>
                                 </td>
                                 <td>{{ inscription.noParticipant.nom }}</td>
                             </tr>
-
-
                         {% endfor %}
                     {% else %}
                         <tr>
@@ -107,16 +114,9 @@
             </div>
         </div>
     </div>
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-    {% include 'cartes/_carte.html.twig' with {'latitude' : sortie.noLieu.latitude, 'longitude' : sortie.noLieu.longitude} %}
-        </div></div></div>
 
     <div class="d-flex justify-content-center mt-4">
-
         {% if sortie.noEtat.id != 5 %}
-
             {% if isInscrit and sortie.noEtat.id in [2, 3] %}
                 <a href="{{ path('app_sorties_desinscription', {'id': sortie.id}) }}" class="btn btn-danger ms-2">Se désinscrire</a>
             {% elseif not isInscrit and sortie.noEtat.id == 2
@@ -136,10 +136,8 @@
             {% if user.isAdministrateur() or user.getId() == sortie.noParticipant.getId() %}
                 <a href="{{ path('app_sorties_annuler', {'id': sortie.id}) }}" class="btn btn-warning ms-2">Annuler la sortie</a>
             {% endif %}
-
         {% endif %}
 
-        <a href="{{ path('app_home') }}" class="btn btn-primary ms-2">Revenir a l'accueil</a>
-
+        <a href="{{ path('app_home') }}" class="btn btn-primary ms-2">Revenir à l'accueil</a>
     </div>
 {% endblock %}

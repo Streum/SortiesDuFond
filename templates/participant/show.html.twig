@@ -11,30 +11,15 @@
                 <img src="{{ asset('uploads/photos/' ~ participant.photo) }}" alt="Photo de profil" class="img-fluid rounded-circle shadow-sm w-75">
             </div>
             <div class="col-md-8">
-                <div class="user-info">
-                    <div class="mb-3">
-                        <strong>Email:</strong>
-                        <p>{{ participant.email }}</p>
-                    </div>
-                    <div class="mb-3">
-                        <strong>Pseudo:</strong>
-                        <p>{{ participant.pseudo }}</p>
-                    </div>
-                    <div class="mb-3">
-                        <strong>Nom:</strong>
-                        <p>{{ participant.nom }}</p>
-                    </div>
-                    <div class="mb-3">
-                        <strong>Prénom:</strong>
-                        <p>{{ participant.prenom }}</p>
-                    </div>
-                    <div class="mb-3">
-                        <strong>Téléphone:</strong>
-                        <p>{{ participant.telephone }}</p>
-                    </div>
-                    <div class="mb-3">
+                <ul class="list-group">
+                    <li class="list-group-item"><strong>Email:</strong> {{ participant.email }}</li>
+                    <li class="list-group-item"><strong>Pseudo:</strong> {{ participant.pseudo }}</li>
+                    <li class="list-group-item"><strong>Nom:</strong> {{ participant.nom }}</li>
+                    <li class="list-group-item"><strong>Prénom:</strong> {{ participant.prenom }}</li>
+                    <li class="list-group-item"><strong>Téléphone:</strong> {{ participant.telephone }}</li>
+                    <li class="list-group-item">
                         <strong>Sorties Organisées:</strong>
-                        <p>
+                        <div>
                             {% if participant.sorties|length > 0 %}
                                 <select class="form-select">
                                     {% for sortie in participant.sorties %}
@@ -44,11 +29,11 @@
                             {% else %}
                                 <em>Aucune sortie associée</em>
                             {% endif %}
-                        </p>
-                    </div>
-                    <div class="mb-3">
+                        </div>
+                    </li>
+                    <li class="list-group-item">
                         <strong>Sorties auxquelles vous êtes inscrit:</strong>
-                        <p>
+                        <div>
                             {% if participant.inscriptions|length > 0 %}
                                 <select class="form-select">
                                     {% for inscription in participant.inscriptions %}
@@ -58,24 +43,17 @@
                             {% else %}
                                 <em>Aucune sortie associée</em>
                             {% endif %}
-                        </p>
-                    </div>
-
+                        </div>
+                    </li>
                     {% if is_granted('ROLE_ADMIN') %}
-                        <div class="mb-3">
-                            <strong>Administrateur:</strong>
-                            <p>{{ participant.administrateur ? 'Oui' : 'Non' }}</p>
-                        </div>
-                        <div class="mb-3">
-                            <strong>Actif:</strong>
-                            <p>{{ participant.actif ? 'Oui' : 'Non' }}</p>
-                        </div>
-                        <div class="mb-3">
+                        <li class="list-group-item"><strong>Administrateur:</strong> {{ participant.administrateur ? 'Oui' : 'Non' }}</li>
+                        <li class="list-group-item"><strong>Actif:</strong> {{ participant.actif ? 'Oui' : 'Non' }}</li>
+                        <li class="list-group-item">
                             <strong>Rôles:</strong>
                             <pre>{{ participant.roles|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
-                        </div>
+                        </li>
                     {% endif %}
-                </div>
+                </ul>
             </div>
         </div>
 
@@ -86,7 +64,6 @@
             {% if is_granted('ROLE_ADMIN') or app.user.id == participant.id %}
                 <a href="{{ path('app_participant_edit_profil', {'id': participant.id}) }}" class="btn btn-success mx-2">Modifier le profil</a>
             {% endif %}
-
         </div>
     </div>
 {% endblock %}

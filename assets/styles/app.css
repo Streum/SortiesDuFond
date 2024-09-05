@@ -1,7 +1,37 @@
 /* Styles de base pour tous les écrans */
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Deux colonnes de largeur égale */
+    gap: 20px; /* Espacement entre les colonnes */
+    margin-bottom: 40px; /* Espace sous la grille */
+}
+
+.info-section {
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.map-section {
+    padding: 20px;
+    background-color: #f8f9fa; /* Optionnel : couleur de fond pour différencier les sections */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optionnel : ombre pour un effet de profondeur */
+}
+
+.participants-section {
+    max-width: 800px;
+    width: 100%;
+}
+
+.participants-section table {
+    margin-top: 20px;
+}
+
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #FFFFF0;
+    font-family: 'Source Sans 3', sans-serif;
+    background-image: url("/uploads/photos/ivoryBackground.jpg");
     margin: 0;
     padding: 0;
 }
