@@ -134,19 +134,33 @@ class GroupePriveController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_groupe_prive_delete', methods: ['POST'], requirements: ['id' => '\d+'])]
-    public function delete(Request $request, GroupePrive $groupePrive, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, GroupePrive $groupePrive, EntityManagerInterface $entityManager, InscriptionGroupePriveRepository $inscriptionGroupePriveRepository): Response
     {
-        // Vérifier que l'utilisateur connecté est le propriétaire du groupe
+        // Vérifier que l'utilisateur connecté est bien le propriétaire du groupe
         if ($groupePrive->getOwner() !== $this->getUser()) {
-            throw $this->createAccessDeniedException('Access Denied');
+            throw $this->createAccessDeniedException('Accès refusé');
         }
-        if ($this->isCsrfTokenValid('delete'.$groupePrive->getId(), $request->getPayload()->getString('_token'))) {
+
+        // Valider le token CSRF
+        if ($this->isCsrfTokenValid('delete'.$groupePrive->getId(), $request->request->get('_token'))) {
+
+            // Récupérer les inscriptions liées à ce groupe privé
+            $lesInscriptions = $inscriptionGroupePriveRepository->findBy(['groupePrive' => $groupePrive]);
+
+            // Supprimer toutes les inscriptions liées au groupe, si nécessaire
+            foreach ($lesInscriptions as $inscription) {
+                $entityManager->remove($inscription);
+            }
+
+            // Supprimer le groupe lui-même
             $entityManager->remove($groupePrive);
             $entityManager->flush();
         }
 
+        // Rediriger vers la liste des groupes privés
         return $this->redirectToRoute('app_groupe_prive_index', [], Response::HTTP_SEE_OTHER);
     }
+
 
 
     #[Route('/addParticipants/{id}', name: 'app_groupe_prive_addParticipants', requirements: ['id' => '\d+'])]
