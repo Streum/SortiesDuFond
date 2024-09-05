@@ -16,13 +16,13 @@
                 {{ form_row(formS.nbInscriptionsMax) }}
                 {{ form_row(formS.descriptionInfos) }}
                 {{ form_row(formS.noLieu) }}
+                <div class="d-flex justify-content-center">
+                <a href="#" class="btn btn-warning ms-2 mb-3" {{ stimulus_controller('modal-form', {
+                    'formUrl': path('app_lieux_create_ajax'),
+                }) }} data-action="modal-form#openModal">Créer un lieu</a>
+                </div>
                 {{ form_row(formS.dateClotureInscription) }}
                 <div class="d-flex justify-content-center">
-                    <a href="#" class="btn btn-warning ms-2" {{ stimulus_controller('modal-form', {
-                        'formUrl': path('app_lieux_create_ajax'),
-                    }) }} data-action="modal-form#openModal">Créer un lieu</a>
-
-
                     <button class="btn btn-success ms-2" href="{{ path('app_sorties_new') }}">Créer</button>
                     <a class="btn btn-primary ms-2" href="{{ path('app_sorties_index') }}">Liste des sorties</a>
                 </div>
