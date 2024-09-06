@@ -82,7 +82,7 @@ class LieuxController extends AbstractController
         return $this->redirectToRoute('app_lieux_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/create_ajax', name: 'app_lieux_create_ajax')]
+    #[Route('/lieux/create_ajax', name: 'app_lieux_create_ajax', methods: ['GET', 'POST'])]
     public function createAjax(Request $request, EntityManagerInterface $em): Response
     {
 
