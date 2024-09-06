@@ -394,10 +394,10 @@ class ParticipantController extends AbstractController
                         $this->getParameter('csv_directory') . '/' . $newFilename
                     );
 
-                    $this->addFlash('success', 'Users have been imported successfully.');
+                    $this->addFlash('success', 'Les utilisateurs ont été importés avec succés.');
 
                 } catch (FileException $e) {
-                    $this->addFlash('error', 'There was an error uploading the file.');
+                    $this->addFlash('error', 'Une erreur est survenue lors de l\import de fichier csv.');
                 }
             }
 

@@ -145,7 +145,7 @@ class GroupePriveController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$groupePrive->getId(), $request->request->get('_token'))) {
 
             // Récupérer les inscriptions liées à ce groupe privé
-            $lesInscriptions = $inscriptionGroupePriveRepository->findBy(['groupePrive' => $groupePrive]);
+            $lesInscriptions = $inscriptionGroupePriveRepository->findBy(['noGroupe' => $groupePrive]);
 
             // Supprimer toutes les inscriptions liées au groupe, si nécessaire
             foreach ($lesInscriptions as $inscription) {
