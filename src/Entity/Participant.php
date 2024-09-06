@@ -10,12 +10,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_PSEUDO', fields: ['pseudo'])]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
-#[UniqueEntity(fields: ['pseudo'], message: 'There is already an account with this pseudo')]
+#[UniqueEntity(fields: ['email'], message: 'Il y a déjà un compte enregistré avec cet email')]
+#[UniqueEntity(fields: ['pseudo'], message: 'Il y a déjà un compte enregistré avec ce pseudo')]
 class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -24,18 +25,22 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Assert\Email(message: "L'adresse email n'est pas valide.", mode: 'strict')]
     private ?string $email = null;
 
     #[ORM\Column(length: 30)]
     private ?string $pseudo = null;
 
     #[ORM\Column(length: 30)]
+    #[Assert\Regex(pattern: "/^[a-zA-ZÀ-ÖØ-öø-ÿ\s'\-]+$/", message: "Le nom ne peut contenir que des lettres, des espaces, des apostrophes ou des tirets.")]
     private ?string $nom = null;
 
     #[ORM\Column(length: 30)]
+    #[Assert\Regex(pattern: "/^[a-zA-ZÀ-ÖØ-öø-ÿ\s'\-]+$/", message: "Le prénom ne peut contenir que des lettres, des espaces, des apostrophes ou des tirets.")]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 15, nullable: true)]
+    #[Assert\Regex(pattern: "/^(\+33|0|0033)[1-9](\d{2}){4}$/", message: "Le numéro de téléphone doit être valide et commencer par 0 ou +33, sans caractères spéciaux.")]
     private ?string $telephone = null;
 
     #[ORM\Column(type: Types::BOOLEAN)]
