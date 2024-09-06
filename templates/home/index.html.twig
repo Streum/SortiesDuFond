@@ -49,7 +49,6 @@
                                 <h5 class="card-title">{{ sortie.nom }}</h5>
                                 <h6 class="card-subtitle mb-2 text-muted">{{ lieux[sortie.noLieu.id].nomLieu }}
                                     ({{ sortie.noLieu.noVille.nomVille }})</h6>
-                                <p class="card-text">{{ sortie.descriptionInfos }}</p>
                                 <p class="card-text">{{ sortie.dateDebut | date('d M Y') }}</p>
                                 <a href="{{ path('app_sorties_show', {'id': sortie.id}) }}"
                                    class="btn btn-outline-info ms-2 mt-auto transition-button">Détails</a>
