@@ -137,19 +137,38 @@ class SortiesController extends AbstractController
     }
 
     #[Route('/{id}', name: '_delete', methods: ['POST'], requirements: ['id' => '\d+'])]
-    public function delete(Request $request, Sorties $sortie, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Sorties $sortie, EntityManagerInterface $entityManager, InscriptionsRepository $inscriptionsRepository): Response
     {
+        // Récupérer l'utilisateur actuellement connecté
         $user = $this->getUser();
+
+        // Vérifier que l'utilisateur connecté est bien le participant de la sortie
         if ($sortie->getNoParticipant() !== $user) {
-            throw $this->createAccessDeniedException('Access Denied');
+            throw $this->createAccessDeniedException('Accès refusé');
         }
+
+        // Vérifier la validité du token CSRF
         if ($this->isCsrfTokenValid('delete' . $sortie->getId(), $request->get('_token'))) {
+
+            // Trouver les inscriptions liées à la sortie
+            $inscriptions = $inscriptionsRepository->findBy(['noSortie' => $sortie]);
+
+            // Boucle pour supprimer chaque inscription liée à cette sortie
+            foreach ($inscriptions as $inscription) {
+                $entityManager->remove($inscription);
+            }
+
+            // Supprimer la sortie elle-même
             $entityManager->remove($sortie);
+
+            // Appliquer les changements à la base de données
             $entityManager->flush();
         }
 
+        // Rediriger vers la page index des sorties
         return $this->redirectToRoute('app_sorties_index', [], Response::HTTP_SEE_OTHER);
     }
+
 
     #[Route('/{id}/inscription', name: '_inscription', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
     public function registration(Request $request, EntityManagerInterface $entityManager, $id): Response
