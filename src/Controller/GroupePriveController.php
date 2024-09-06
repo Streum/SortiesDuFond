@@ -234,7 +234,9 @@ class GroupePriveController extends AbstractController
             $entityManager->flush();
 
             // Rediriger après l'inscription
-            return $this->redirectToRoute('app_groupe_prive_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_groupe_prive_show', [
+                'id' => $groupePrive->getId(),
+            ], Response::HTTP_SEE_OTHER);
         }
 
         // Rendre le formulaire dans le template
@@ -314,7 +316,9 @@ class GroupePriveController extends AbstractController
             $entityManager->flush();
 
             // Rediriger après l'inscription
-            return $this->redirectToRoute('app_groupe_prive_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_groupe_prive_show', [
+                'id' => $groupePrive->getId(),
+            ], Response::HTTP_SEE_OTHER);
         }
 
         // Rendre le formulaire dans le template

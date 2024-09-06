@@ -37,7 +37,6 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8 text-center">
-                <a class="btn btn-success ms-2" href="{{ path('app_groupe_prive_index') }}">Mes Groupes</a>
                 <a class="btn btn-success ms-2" href="{{ path('app_groupe_prive_edit', {'id': groupe_prive.id}) }}">Modifier</a>
                 <a class="btn btn-success ms-2"
                    href="{{ path('app_groupe_prive_addParticipants', {'id': groupe_prive.id}) }}">Ajouter des
@@ -51,7 +50,7 @@
                       onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce groupe ?');"
                       style="display: inline;">
                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ groupe_prive.id) }}">
-                    <button class="btn btn-danger ms-2">Supprimer</button>
+                    <button class="btn btn-danger ms-2">Supprimer le groupe</button>
                 </form>
             </div>
         </div>
