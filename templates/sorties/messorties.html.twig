@@ -7,7 +7,7 @@
 
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-10">
                 {% if sorties is empty %}
                     <p>Aucune sortie trouvée.</p>
                 {% else %}
@@ -16,6 +16,7 @@
                         <tr>
                             <th>Nom</th>
                             <th>Date de Début</th>
+                            <th>Etat</th>
                             <th>Actions</th>
                         </tr>
                         </thead>
@@ -26,6 +27,7 @@
                                     <p>{{ sortie.nom }}</p>
                                 </td>
                                 <td>{{ sortie.dateDebut|date('d/m/Y H:i') }}</td>
+                                <td>{{ sortie.noEtat.libelle }}</td>
                                 <td>
                                     <a href="{{ path('app_sorties_show', {'id': sortie.id}) }}" class="btn btn-outline-primary">Détails</a>
                                     {% if sortie.noEtat.id == 1 %}
