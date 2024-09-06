@@ -129,7 +129,7 @@ class SortiesRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('s')
             ->where('s.noParticipant = :user')
             ->setParameter('user', $user)
-            ->orderBy('s.dateDebut', 'ASC')
+            ->orderBy('s.noEtat', 'ASC')
             ->getQuery()
             ->getResult();
     }
